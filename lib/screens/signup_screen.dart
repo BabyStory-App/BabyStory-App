@@ -1,7 +1,7 @@
 import 'package:babystory/screens/login_screen.dart';
 import 'package:babystory/utils/color.dart';
 import 'package:babystory/utils/style.dart';
-import 'package:babystory/widgets/inputForm.dart';
+import 'package:babystory/widgets/input_form.dart';
 import 'package:flutter/material.dart';
 
 class SignupScreen extends StatefulWidget {
