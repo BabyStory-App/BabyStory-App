@@ -52,3 +52,9 @@ app.*.map.json
 .env.test.local
 .env.production
 .env.production.local
+
+# google auth
+ios/Runner/GoogleService-Info.plist
+ios/firebase_app_id_file.json
+android/app/google-services.json
+ios/Runner.xcodeproj/project.pbxproj
