@@ -10,4 +10,7 @@ class ColorProps {
 
   static const Color lightblack = Color.fromRGBO(0, 0, 0, 0.5);
   static const Color lightgray = Color.fromRGBO(224, 224, 224, 1);
+
+  static const Color textBlack = Colors.black87;
+  static const Color textgray = Color.fromRGBO(0, 0, 0, 0.5);
 }

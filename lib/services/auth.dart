@@ -1,23 +1,34 @@
 import 'package:babystory/error/error.dart';
-import 'package:babystory/models/user.dart' as my_user;
+import 'package:babystory/models/perent.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthServices {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  late my_user.User? _user;
+  late Perent? _user;
 
-  my_user.User? get user => _user;
+  Perent? get user => _user;
 
-  my_user.User _getMyUserFromFirebaseUser(
-      {required User user,
-      String? nickname,
-      my_user.SignInMethod? signInMethod}) {
-    return my_user.User(
+  Future<Perent?> getUser() async {
+    User? user = _firebaseAuth.currentUser;
+    if (user == null) return null;
+    return Perent(
+      uid: user.uid,
+      email: user.email!,
+      nickname: user.displayName ?? 'User',
+      signInMethod: SignInMethod.email,
+      photoURL: user.photoURL,
+      emailVerified: user.emailVerified,
+    );
+  }
+
+  Perent _getMyUserFromFirebaseUser(
+      {required User user, String? nickname, SignInMethod? signInMethod}) {
+    return Perent(
       uid: user.uid,
       email: user.email!,
       nickname: user.displayName ?? nickname ?? '',
-      signInMethod: signInMethod ?? my_user.SignInMethod.email,
+      signInMethod: signInMethod ?? SignInMethod.email,
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
     );
@@ -35,7 +46,7 @@ class AuthServices {
         _user = _getMyUserFromFirebaseUser(
             user: credential.user!,
             nickname: nickname,
-            signInMethod: my_user.SignInMethod.email);
+            signInMethod: SignInMethod.email);
         return null;
       }
       return AuthError(
@@ -64,7 +75,7 @@ class AuthServices {
           await _firebaseAuth.signInWithCredential(googleCredential);
       if (credential.user != null) {
         _user = _getMyUserFromFirebaseUser(
-            user: credential.user!, signInMethod: my_user.SignInMethod.google);
+            user: credential.user!, signInMethod: SignInMethod.google);
         return null;
       }
       return AuthError(
@@ -87,7 +98,7 @@ class AuthServices {
           .signInWithEmailAndPassword(email: email, password: password);
       if (credential.user != null) {
         _user = _getMyUserFromFirebaseUser(
-            user: credential.user!, signInMethod: my_user.SignInMethod.email);
+            user: credential.user!, signInMethod: SignInMethod.email);
         return null;
       }
       return AuthError(

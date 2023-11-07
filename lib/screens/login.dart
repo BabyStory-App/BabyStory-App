@@ -1,5 +1,4 @@
 import 'package:babystory/error/error.dart';
-import 'package:babystory/screens/home.dart';
 import 'package:babystory/screens/signup.dart';
 import 'package:babystory/services/auth.dart';
 import 'package:babystory/utils/alert.dart';
@@ -7,6 +6,7 @@ import 'package:babystory/utils/color.dart';
 import 'package:babystory/utils/style.dart';
 import 'package:babystory/utils/validate.dart';
 import 'package:babystory/widgets/input_form.dart';
+import 'package:babystory/widgets/router.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _authServices.user!.printUserinfo();
     if (!mounted) return;
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const HomeScreen()));
+        MaterialPageRoute(builder: (context) => NavBarRouter()));
   }
 
   Future<void> loginWithEmailAndPassword() async {

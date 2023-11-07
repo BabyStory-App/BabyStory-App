@@ -1,4 +1,5 @@
 import 'package:babystory/screens/login.dart';
+import 'package:babystory/screens/profile.dart';
 import 'package:babystory/services/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +14,10 @@ class _HomeScreenState extends State<HomeScreen> {
   final AuthServices _authServices = AuthServices();
 
   Future<void> signOut() async {
-    _authServices.signOut();
+    // _authServices.signOut();
     if (!mounted) return;
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const LoginScreen()));
+        .push(MaterialPageRoute(builder: (context) => HomeScreen()));
   }
 
   @override

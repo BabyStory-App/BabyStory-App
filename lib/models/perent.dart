@@ -1,9 +1,11 @@
+import 'package:babystory/models/baby.dart';
+
 enum SignInMethod {
   email,
   google,
 }
 
-class User {
+class Perent {
   final String uid;
   String email;
   String nickname;
@@ -11,14 +13,18 @@ class User {
   bool emailVerified;
 
   String? photoURL;
+  List<Baby> babies;
+  String? description;
 
-  User({
+  Perent({
     required this.uid,
     required this.email,
     required this.nickname,
     required this.signInMethod,
     this.photoURL,
     this.emailVerified = false,
+    this.babies = const [],
+    this.description,
   });
 
   void printUserinfo() {
@@ -28,5 +34,6 @@ class User {
     print('signInMethod: $signInMethod');
     print('photoURL: $photoURL');
     print('emailVerified: $emailVerified');
+    print('description: $description');
   }
 }
