@@ -1,6 +1,10 @@
 enum CryIntensity { low, medium, high }
 
+List<String> CryIntensityList = CryIntensity.values.map((e) => e.name).toList();
+
 enum CryType { hunger, pain, diaper, sleep }
+
+List<String> CryTypeList = CryType.values.map((e) => e.name).toList();
 
 class CryState {
   DateTime time;

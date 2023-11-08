@@ -1,19 +1,21 @@
-import 'package:babystory/models/cry_state.dart';
-
 class BabyStateRecord {
   final DateTime recordDate;
+  String title;
+  String description;
   double? weight;
   double? height;
   double? headCircumference;
-  List<String>? photoURL;
-  CryState? cryState;
+  List<String> photoURL;
 
   BabyStateRecord({
     required this.recordDate,
+    required this.title,
+    required this.description,
     this.weight,
     this.height,
     this.headCircumference,
-    this.photoURL,
-    this.cryState,
-  });
+    this.photoURL = const [],
+  }) {
+    photoURL = List<String>.empty();
+  }
 }

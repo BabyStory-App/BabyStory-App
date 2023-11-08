@@ -5,6 +5,8 @@ enum SignInMethod {
   google,
 }
 
+List<String> SignInMethodList = SignInMethod.values.map((e) => e.name).toList();
+
 class Perent {
   final String uid;
   String email;
@@ -21,11 +23,13 @@ class Perent {
     required this.email,
     required this.nickname,
     required this.signInMethod,
-    this.photoURL,
     this.emailVerified = false,
+    this.photoURL,
     this.babies = const [],
     this.description,
-  });
+  }) {
+    babies = List<Baby>.empty();
+  }
 
   void printUserinfo() {
     print('uid: $uid');

@@ -45,6 +45,7 @@ dependencies:
   logger: ^2.0.2+1
   flutter_svg: ^2.0.9
   curved_labeled_navigation_bar: ^2.0.2
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

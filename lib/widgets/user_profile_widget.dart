@@ -50,11 +50,19 @@ class UserProfileWidget extends StatelessWidget {
             MaterialPageRoute(builder: (context) => const EditProfileScreen()),
           ),
           child: Container(
-            width: 30,
-            height: 30,
+            width: 34,
+            height: 34,
             decoration: BoxDecoration(
-                color: ColorProps.bgPink,
-                borderRadius: BorderRadius.circular(15)),
+                color: ColorProps.bgWhite,
+                borderRadius: BorderRadius.circular(18),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 1,
+                    blurRadius: 5,
+                    offset: const Offset(0, 1), // changes position of shadow
+                  )
+                ]),
             child: const Icon(
               Icons.edit,
               color: ColorProps.textBlack,
