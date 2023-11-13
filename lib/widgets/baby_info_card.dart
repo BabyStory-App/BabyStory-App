@@ -1,7 +1,9 @@
 import 'package:babystory/models/baby.dart';
 import 'package:babystory/utils/color.dart';
+import 'package:babystory/widgets/avatar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class BabyInfoCard extends StatefulWidget {
@@ -13,6 +15,11 @@ class BabyInfoCard extends StatefulWidget {
 }
 
 class _BabyInfoCardState extends State<BabyInfoCard> {
+  XFile? imageFile;
+  DateTime? birthDate;
+  String bloodTypeString = describeEnum(BloodType.unknown);
+  String genderString = describeEnum(Gender.unknown);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,19 +41,18 @@ class _BabyInfoCardState extends State<BabyInfoCard> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-                padding: const EdgeInsets.only(top: 28),
-                width: 112,
-                height: 140,
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(90),
-                    child: Image.network(
-                      widget.baby.state.photoURL.isNotEmpty
-                          ? widget.baby.state.photoURL[0]
-                          : 'https://m.media-amazon.com/images/I/51SLlh1nW5L._AC_UF1000,1000_QL80_.jpg',
-                      fit: BoxFit.cover,
-                    ))),
-            const SizedBox(height: 24),
+            const SizedBox(height: 32),
+            Avatar(
+                radius: 52,
+                borderRadius: 3,
+                avatarSize: 72,
+                imageUri: widget.baby.state.photoURL.isNotEmpty
+                    ? widget.baby.state.photoURL[0]
+                    : 'https://m.media-amazon.com/images/I/51SLlh1nW5L._AC_UF1000,1000_QL80_.jpg',
+                onImageChanged: (XFile? file) {
+                  imageFile = file;
+                }),
+            const SizedBox(height: 32),
             Row(
               children: [
                 const SizedBox(
@@ -85,25 +91,25 @@ class _BabyInfoCardState extends State<BabyInfoCard> {
                   ),
                 ),
                 const SizedBox(width: 10),
-                // underline input form
                 Expanded(
-                  child: DropdownMenu<String>(
-                    width: 220,
-                    inputDecorationTheme: const InputDecorationTheme(
-                      border: UnderlineInputBorder(),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: Container(
+                      height: 1.5,
+                      color: ColorProps.gray,
                     ),
-                    initialSelection: describeEnum(widget.baby.gender),
-                    onSelected: (String? value) {
-                      // // This is called when the user selects an item.
-                      // setState(() {
-                      //   dropdownValue = value!;
-                      // });
+                    value: genderString,
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        setState(() {
+                          genderString = newValue;
+                        });
+                      }
                     },
-                    dropdownMenuEntries:
-                        GenderList.map<DropdownMenuEntry<String>>(
-                            (String value) {
-                      return DropdownMenuEntry<String>(
-                          value: value, label: value);
+                    items: GenderList.map<DropdownMenuItem<String>>(
+                        (String value) {
+                      return DropdownMenuItem<String>(
+                          value: value, child: Text(value));
                     }).toList(),
                   ),
                 ),
@@ -125,23 +131,24 @@ class _BabyInfoCardState extends State<BabyInfoCard> {
                 const SizedBox(width: 10),
                 // underline input form
                 Expanded(
-                  child: DropdownMenu<String>(
-                    width: 220,
-                    inputDecorationTheme: const InputDecorationTheme(
-                      border: UnderlineInputBorder(),
+                  child: DropdownButton<String>(
+                    underline: Container(
+                      height: 1.5,
+                      color: ColorProps.gray,
                     ),
-                    initialSelection: describeEnum(widget.baby.bloodType),
-                    onSelected: (String? value) {
-                      // // This is called when the user selects an item.
-                      // setState(() {
-                      //   dropdownValue = value!;
-                      // });
+                    isExpanded: true,
+                    value: bloodTypeString,
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        setState(() {
+                          bloodTypeString = newValue;
+                        });
+                      }
                     },
-                    dropdownMenuEntries:
-                        BloodTypeList.map<DropdownMenuEntry<String>>(
-                            (String value) {
-                      return DropdownMenuEntry<String>(
-                          value: value, label: value);
+                    items: BloodTypeList.map<DropdownMenuItem<String>>(
+                        (String value) {
+                      return DropdownMenuItem<String>(
+                          value: value, child: Text(value));
                     }).toList(),
                   ),
                 ),
@@ -176,15 +183,16 @@ class _BabyInfoCardState extends State<BabyInfoCard> {
                     onPressed: () => showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
-                            firstDate: DateTime.now(),
+                            firstDate: DateTime(2000),
                             lastDate: DateTime.now())
                         .then((selectedDate) {
                       setState(() {
-                        // set state of birthDate
+                        birthDate = selectedDate;
                       });
                     }),
                     child: Text(
-                      DateFormat('yyyy-MM-dd').format(widget.baby.birthDate),
+                      DateFormat('yyyy-MM-dd')
+                          .format(birthDate ?? widget.baby.birthDate),
                       style: const TextStyle(color: ColorProps.textBlack),
                     ),
                   ),
