@@ -1,6 +1,7 @@
 import 'package:babystory/models/baby.dart';
 import 'package:babystory/models/baby_state_record.dart';
 import 'package:babystory/models/perent.dart';
+import 'package:babystory/screens/setting.dart';
 import 'package:babystory/utils/color.dart';
 import 'package:babystory/widgets/baby_info_card.dart';
 import 'package:babystory/widgets/horizontal_swiper_cards.dart';
@@ -78,7 +79,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: ColorProps.textBlack),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () => Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                              builder: (context) => SettingScreen())),
                       icon: const Icon(Icons.settings),
                       color: ColorProps.textBlack,
                     )
