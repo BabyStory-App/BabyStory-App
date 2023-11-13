@@ -61,6 +61,7 @@ dependencies:
       url: https://github.com/jja08111/flutter_foreground_service_plugin.git
       ref: 8a09c7b0aeb9d31204147fe6ee126c8a52471e3a
   flutter_launcher_icons: ^0.13.1
+  image_picker: ^1.0.4
 
 dev_dependencies:
   flutter_test:

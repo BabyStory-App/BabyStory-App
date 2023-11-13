@@ -9,7 +9,10 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 
 class NavBarRouter extends StatefulWidget {
+  const NavBarRouter({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _NavBarRouterState createState() => _NavBarRouterState();
 }
 

@@ -10,4 +10,45 @@ class Alert {
     );
     return true;
   }
+
+  static Future<void> confirmAlert({
+    required BuildContext context,
+    required String title,
+    required String content,
+    Function? onAccept,
+    Function? onCancel,
+    String acceptText = '확인',
+    String cancelText = '취소',
+  }) async {
+    onAccept ??= (() async {});
+    onCancel ??= (() async {});
+
+    return showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: <Widget>[
+            TextButton(
+              child: Text(cancelText),
+              onPressed: () async {
+                onCancel!().then((value) {
+                  Navigator.pop(context);
+                });
+              },
+            ),
+            TextButton(
+              child: Text(acceptText),
+              onPressed: () async {
+                onAccept!().then((value) {
+                  Navigator.pop(context);
+                });
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
 }

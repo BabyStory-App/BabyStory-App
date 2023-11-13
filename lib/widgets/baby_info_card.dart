@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class BabyInfoCard extends StatefulWidget {
-  Baby baby;
-  BabyInfoCard({super.key, required this.baby});
+  final Baby baby;
+  const BabyInfoCard({super.key, required this.baby});
 
   @override
   State<BabyInfoCard> createState() => _BabyInfoCardState();

@@ -16,7 +16,7 @@ class UserProfileWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Container(
+        SizedBox(
             width: 48,
             height: 48,
             child: ClipRRect(
