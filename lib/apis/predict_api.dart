@@ -20,7 +20,8 @@ class PredictApi {
     }
 
     try {
-      var uri = Uri.parse(baseroot);
+      var uri = Uri.parse("$baseroot/baby/predict");
+      print("uri: $baseroot/baby/predict");
 
       // post file and uid(user_id)
       var request = http.MultipartRequest('POST', uri)
@@ -36,6 +37,8 @@ class PredictApi {
       } else {
         debugPrint("Upload failed with status: ${response.statusCode}.");
       }
+      print("json");
+      print(json);
       return CryState.fromJson(json);
     } catch (e) {
       debugPrintStack();

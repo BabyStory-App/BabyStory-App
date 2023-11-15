@@ -10,7 +10,8 @@ class RecordService {
 
   RecordService() {
     detectCry = DetectCryService(
-        modelPath: 'assets/models/lite-model_yamnet_tflite_1.tflite',
+        modelPath:
+            'assets/models/lite-model_yamnet_classification_tflite_1.tflite',
         csvPath: 'assets/models/yamnet_class_map.csv');
   }
 
@@ -27,7 +28,7 @@ class RecordService {
     }
 
     while (true) {
-      debugPrint("Start recording");
+      debugPrint("Start recording!!!");
 
       final file = File(filePath);
 
@@ -47,7 +48,7 @@ class RecordService {
 
       await Future.delayed(const Duration(seconds: 3));
 
-      debugPrint("Stop recording");
+      debugPrint("Stop recording!!!");
       await record.stop();
 
       // 아이의 울음소리인지 판단한다.

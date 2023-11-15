@@ -62,7 +62,8 @@ class _NavBarRouterState extends State<NavBarRouter> {
           ],
           color: ColorProps.bgPink,
           buttonBackgroundColor: ColorProps.bgBlue,
-          backgroundColor: ColorProps.bgWhite,
+          backgroundColor:
+              _page == 1 ? ColorProps.orangeYello : ColorProps.bgWhite,
           animationCurve: Curves.easeInOut,
           animationDuration: const Duration(milliseconds: 400),
           onTap: (index) {

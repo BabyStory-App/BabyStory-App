@@ -1,67 +1,84 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
 import 'package:flutter/services.dart';
-import 'package:wav/wav.dart';
+import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
 
-class DetectCryService {
-  late String modelPath;
-  late String csvPath;
+class TfTest extends StatefulWidget {
+  const TfTest({super.key});
+
+  @override
+  State<TfTest> createState() => _TfTestState();
+}
+
+class _TfTestState extends State<TfTest> {
+  final String modelPath =
+      'assets/models/lite-model_yamnet_classification_tflite_1.tflite';
+  final String csvPath = 'assets/models/yamnet_class_map.csv';
   late tfl.Interpreter interpreter;
-  static const List<String> babyClasses = ['Crying', 'Baby cry'];
 
-  DetectCryService({required this.modelPath, required this.csvPath});
+  @override
+  void initState() {
+    super.initState();
+    loadModelAsset();
+  }
+
+  @override
+  void dispose() {
+    interpreter.close();
+    super.dispose();
+  }
 
   Future<void> loadModelAsset() async {
     interpreter = await tfl.Interpreter.fromAsset(modelPath);
 
-    debugPrint(interpreter.runtimeType.toString());
+    print(interpreter.runtimeType);
     if (interpreter.runtimeType == Null) {
-      debugPrint('interpreter is null');
+      print('interpreter is null');
     }
 
     var inputTensor = interpreter.getInputTensor(0);
     var inputShape = inputTensor.shape;
     var inputType = inputTensor.type;
-    debugPrint("Input shape: $inputShape");
-    debugPrint("Input type: $inputType");
+    print("Input shape: $inputShape");
+    print("Input type: $inputType");
 
     var outputTensor = interpreter.getOutputTensor(0);
     var outputShape = outputTensor.shape;
     var outputType = outputTensor.type;
-    debugPrint("\nOutput shape: $outputShape");
-    debugPrint("Output type: $outputType\n");
+    print("\nOutput shape: $outputShape");
+    print("Output type: $outputType\n");
   }
 
-  Future<bool> isBabyCry(String filePath) async {
-    var input = await readWav(filePath);
-    // var output = List.generate(6, (index) => List.filled(521, 0.0));
-    // var input = List<double>.filled(48000, Random.secure().nextDouble());
+  Future<void> predict() async {
+    var input = List<double>.filled(48000, Random.secure().nextDouble());
     // var output = List.generate(6, (index) => List<double>.filled(521, 0.0));
     var output = [List<double>.filled(521, 0.0)];
-    // debugPrint('filePath: $filePath');
-    debugPrint('input length: ${input.length}');
+
+    print(input.length); // 1
+    // print(input[0].length); // 48000
+    print(input.runtimeType); // List<List<dynamic>>
+    print(input[0].runtimeType); // List<dynamic>
+    print("");
+    print(output.length);
+    print(output[0].length);
+    print(output.runtimeType);
+    print(output[0].runtimeType);
 
     // inference
     interpreter.run(input, output);
     try {} catch (e) {
-      debugPrint("ERROR");
-      debugPrint(e.toString());
+      print("ERROR");
+      print(e);
     }
 
-    // debugPrint the output
+    print("output");
+    print(output.length);
+    print(output);
+    // print the output
     var classes = await getYamNetClasses();
     var predictMap = _getNameFromScore(classes, output[0], 5);
     printScoreMap(predictMap);
-    return defineCryByPrediction(predictMap);
-  }
-
-  Future<List<double>> readWav(String filePath) async {
-    final wav = await Wav.readFile(filePath);
-    var mono = wav.toMono();
-
-    return mono;
   }
 
   Future<List<String>> getYamNetClasses() async {
@@ -87,17 +104,6 @@ class DetectCryService {
     return displayNames;
   }
 
-  bool defineCryByPrediction(Map<String, double> predictMap) {
-    var targetList = predictMap.keys.toList();
-
-    for (String target in targetList) {
-      if (babyClasses.contains(target)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   Map<String, double> _getNameFromScore(
       List<String> classes, List<double> prediction, int n) {
     var indexedPrediction = prediction.asMap().entries.toList();
@@ -115,5 +121,19 @@ class DetectCryService {
     predictMap.forEach((key, value) {
       debugPrint('$key: ${value.toStringAsFixed(2)}');
     });
+  }
+
+  Future<void> main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await predict();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: TextButton(
+      onPressed: () => main(),
+      child: const Text("Click", style: TextStyle(fontSize: 32)),
+    ));
   }
 }

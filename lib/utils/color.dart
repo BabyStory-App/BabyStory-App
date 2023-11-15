@@ -11,6 +11,7 @@ class ColorProps {
   static const Color pink = Color.fromRGBO(240, 98, 146, 1);
   static const Color brown = Color.fromRGBO(161, 136, 127, 1);
   static const Color gray = Color(0xffCCCCCC);
+  static const Color orangeYello = Color.fromRGBO(255, 239, 199, 0.97);
 
   static const Color lightblack = Color.fromRGBO(0, 0, 0, 0.5);
   static const Color lightgray = Color.fromRGBO(224, 224, 224, 1);

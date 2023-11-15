@@ -25,11 +25,20 @@ class CryState {
   });
 
   CryState.fromJson(Map<String, dynamic> json) {
-    time = json['time'] ?? DateTime.now();
+    // time = json['time'] ?? DateTime.now();
+    time = DateTime.now();
+    print("time: $time");
     predictMap = _getTypeFromStateMap(json['predictMap']);
-    type = predictMap.keys.toList()[0] as CryType;
-    intensity = CryIntensity.values[json['intensity']];
+    print("predictMap: $predictMap");
+    print(predictMap.keys.toList()[0]);
+    // type = predictMap.keys.toList()[0] as CryType;
+    type = CryType.awake;
+    print("type: $type");
+    // intensity = CryIntensity.values[json['intensity']];
+    // print("intensity: $intensity");
+    intensity = CryIntensity.high;
     audioURL = json['audioURL'];
+    print("audioURL: $audioURL");
   }
 
   Map<String, double> _getTypeFromStateMap(Map<String, dynamic> stateMap) {
@@ -59,5 +68,13 @@ class CryState {
       returnMap[keys[i]] = predictMap[keys[i]]!;
     }
     return returnMap;
+  }
+
+  void printBabyState() {
+    print('time: $time');
+    print('type: $type');
+    print('intensity: $intensity');
+    print('predictMap: $predictMap');
+    print('audioURL: $audioURL');
   }
 }
