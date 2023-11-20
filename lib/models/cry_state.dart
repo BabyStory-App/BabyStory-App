@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 enum CryIntensity { low, medium, high }
 
 List<String> CryIntensityList = CryIntensity.values.map((e) => e.name).toList();
@@ -39,6 +41,11 @@ class CryState {
     intensity = CryIntensity.high;
     audioURL = json['audioURL'];
     print("audioURL: $audioURL");
+  }
+
+  //return type of CryState as String
+  String getType() {
+    return describeEnum(type);
   }
 
   Map<String, double> _getTypeFromStateMap(Map<String, dynamic> stateMap) {

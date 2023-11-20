@@ -35,26 +35,25 @@ class DetectCryService {
   }
 
   Future<bool> isBabyCry(String filePath) async {
-    var input = await readWav(filePath);
-    // var output = List.generate(6, (index) => List.filled(521, 0.0));
-    // var input = List<double>.filled(48000, Random.secure().nextDouble());
-    // var output = List.generate(6, (index) => List<double>.filled(521, 0.0));
-    var output = [List<double>.filled(521, 0.0)];
-    // debugPrint('filePath: $filePath');
-    debugPrint('input length: ${input.length}');
+    // var input = await readWav(filePath);
+    // var output = [List<double>.filled(521, 0.0)];
+    // debugPrint('input length: ${input.length}');
 
-    // inference
-    interpreter.run(input, output);
-    try {} catch (e) {
-      debugPrint("ERROR");
-      debugPrint(e.toString());
-    }
+    // // inference
+    // interpreter.run(input, output);
+    // try {} catch (e) {
+    //   debugPrint("ERROR");
+    //   debugPrint(e.toString());
+    // }
 
-    // debugPrint the output
-    var classes = await getYamNetClasses();
-    var predictMap = _getNameFromScore(classes, output[0], 5);
-    printScoreMap(predictMap);
-    return defineCryByPrediction(predictMap);
+    // // debugPrint the output
+    // var classes = await getYamNetClasses();
+    // var predictMap = _getNameFromScore(classes, output[0], 5);
+    // printScoreMap(predictMap);
+    // return defineCryByPrediction(predictMap);
+
+    // await Future.delayed(const Duration(seconds: 1));
+    return true;
   }
 
   Future<List<double>> readWav(String filePath) async {

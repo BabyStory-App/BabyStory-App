@@ -230,7 +230,7 @@ class _ListenWigetState extends State<ListenWiget>
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: ColorProps.orangeYello,
+        color: ColorProps.orangeYellow,
       ),
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,

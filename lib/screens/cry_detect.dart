@@ -1,8 +1,8 @@
 import 'package:babystory/models/cry_state.dart';
+import 'package:babystory/widgets/cry_result_wrapper.dart';
 import 'package:babystory/widgets/listen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CryDetectScreen extends StatefulWidget {
   const CryDetectScreen({super.key});
@@ -13,6 +13,7 @@ class CryDetectScreen extends StatefulWidget {
 
 class _CryDetectScreenState extends State<CryDetectScreen> {
   CryState? cryState;
+  final GlobalKey detailContainerKey = GlobalKey();
 
   Future<void> alertBabyCry(BuildContext context, CryState cry) async {
     return showDialog<void>(
@@ -47,9 +48,11 @@ class _CryDetectScreenState extends State<CryDetectScreen> {
       cryState = value;
       if (cryState != null) {
         print(cryState!.getPredictMap(limit: 2));
-        alertBabyCry(context, cryState!);
+        // alertBabyCry(context, cryState!);
       }
     });
+    Scrollable.ensureVisible(detailContainerKey.currentContext!,
+        duration: const Duration(seconds: 1), curve: Curves.linearToEaseOut);
   }
 
   @override
@@ -58,6 +61,10 @@ class _CryDetectScreenState extends State<CryDetectScreen> {
       child: Column(
         children: [
           ListenWiget(onBabyStateUpdate: _updateBabyState),
+          CryResultWrapperWidget(
+            containerKey: detailContainerKey,
+            cryState: cryState,
+          ),
         ],
       ),
     );
