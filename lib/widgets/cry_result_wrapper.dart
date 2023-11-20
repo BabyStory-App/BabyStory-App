@@ -14,8 +14,8 @@ class CryResultWrapperWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: ColorProps.orangeYellow,
-      height: MediaQuery.of(context).size.height,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+      height: MediaQuery.of(context).size.height * 0.9,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 32),
       key: containerKey,
       child: cryState == null
           ? const Center(
@@ -25,7 +25,13 @@ class CryResultWrapperWidget extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: Colors.black54,
                   )))
-          : CryResultWidget(cryState: cryState!),
+          : Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: ColorProps.whiteOpacity03),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: CryResultWidget(cryState: cryState!),
+            ),
     );
   }
 }

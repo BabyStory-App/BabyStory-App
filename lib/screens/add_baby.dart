@@ -5,6 +5,7 @@ import 'package:babystory/utils/color.dart';
 import 'package:babystory/widgets/avatar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -27,6 +28,9 @@ class _AddBabyScreenState extends State<AddBabyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // for fullscreen
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+
     return Scaffold(
       backgroundColor: ColorProps.bgWhite,
       body: Stack(

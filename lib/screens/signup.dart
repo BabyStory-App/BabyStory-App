@@ -8,6 +8,7 @@ import 'package:babystory/utils/validate.dart';
 import 'package:babystory/widgets/input_form.dart';
 import 'package:babystory/widgets/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -67,6 +68,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // for fullscreen
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
     return Scaffold(
       backgroundColor: ColorProps.bgWhite,
       body: Stack(

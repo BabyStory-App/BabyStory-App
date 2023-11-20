@@ -7,6 +7,7 @@ import 'package:babystory/utils/color.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class NavBarRouter extends StatefulWidget {
   const NavBarRouter({super.key});
@@ -25,6 +26,9 @@ class _NavBarRouterState extends State<NavBarRouter> {
 
   @override
   Widget build(BuildContext context) {
+    // for fullscreen
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+
     return Scaffold(
         backgroundColor: ColorProps.bgWhite,
         bottomNavigationBar: CurvedNavigationBar(
