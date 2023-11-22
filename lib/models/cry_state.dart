@@ -4,9 +4,43 @@ enum CryIntensity { low, medium, high }
 
 List<String> CryIntensityList = CryIntensity.values.map((e) => e.name).toList();
 
+CryIntensity getCryIntensityFromString(String intensity) {
+  switch (intensity) {
+    case 'low':
+      return CryIntensity.low;
+    case 'medium':
+      return CryIntensity.medium;
+    case 'high':
+      return CryIntensity.high;
+    default:
+      return CryIntensity.medium;
+  }
+}
+
 enum CryType { sad, hug, diaper, hungry, sleepy, awake, uncomfortable }
 
 List<String> CryTypeList = CryType.values.map((e) => e.name).toList();
+
+CryType getCryTypeFromString(String type) {
+  switch (type) {
+    case 'sad':
+      return CryType.sad;
+    case 'hug':
+      return CryType.hug;
+    case 'diaper':
+      return CryType.diaper;
+    case 'hungry':
+      return CryType.hungry;
+    case 'sleepy':
+      return CryType.sleepy;
+    case 'awake':
+      return CryType.awake;
+    case 'uncomfortable':
+      return CryType.uncomfortable;
+    default:
+      return CryType.uncomfortable;
+  }
+}
 
 class CryState {
   late DateTime time;
@@ -27,20 +61,11 @@ class CryState {
   });
 
   CryState.fromJson(Map<String, dynamic> json) {
-    // time = json['time'] ?? DateTime.now();
-    time = DateTime.now();
-    print("time: $time");
+    time = DateTime.parse(json['time']);
     predictMap = _getTypeFromStateMap(json['predictMap']);
-    print("predictMap: $predictMap");
-    print(predictMap.keys.toList()[0]);
-    // type = predictMap.keys.toList()[0] as CryType;
-    type = CryType.awake;
-    print("type: $type");
-    // intensity = CryIntensity.values[json['intensity']];
-    // print("intensity: $intensity");
-    intensity = CryIntensity.high;
+    type = getCryTypeFromString(predictMap.keys.toList()[0]);
+    intensity = getCryIntensityFromString(json['intensity']);
     audioURL = json['audioURL'];
-    print("audioURL: $audioURL");
   }
 
   //return type of CryState as String
