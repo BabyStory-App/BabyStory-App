@@ -20,8 +20,8 @@ class PredictApi {
     }
 
     try {
-      var uri = Uri.parse("$baseroot/baby/predict");
-      print("uri: $baseroot/baby/predict");
+      var uri = Uri.parse("$baseroot/cry/predict");
+      print("uri: $baseroot/cry/predict");
 
       // post file and uid(user_id)
       var request = http.MultipartRequest('POST', uri)
