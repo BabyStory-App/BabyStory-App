@@ -1,6 +1,6 @@
 import 'package:babystory/models/baby_state_record.dart';
 import 'package:babystory/models/cry_state.dart';
-import 'package:babystory/models/perent.dart';
+import 'package:babystory/models/parent.dart';
 
 enum Gender {
   male,
@@ -24,7 +24,7 @@ class Baby {
   String name;
   Gender gender;
   DateTime birthDate;
-  Perent perent;
+  Parent parent;
   BabyStateRecord state;
   BloodType bloodType;
   List<BabyStateRecord> stateRecords;
@@ -33,7 +33,7 @@ class Baby {
   Baby({
     required this.name,
     required this.birthDate,
-    required this.perent,
+    required this.parent,
     required this.state,
     this.gender = Gender.unknown,
     this.bloodType = BloodType.unknown,

@@ -1,4 +1,4 @@
-import 'package:babystory/models/perent.dart';
+import 'package:babystory/models/parent.dart';
 import 'package:babystory/screens/cry_detect.dart';
 import 'package:babystory/screens/home.dart';
 import 'package:babystory/screens/profile.dart';
@@ -18,7 +18,7 @@ class NavBarRouter extends StatefulWidget {
 }
 
 class _NavBarRouterState extends State<NavBarRouter> {
-  late Perent perent;
+  late Parent parent;
 
   int _page = 0;
   final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
@@ -87,7 +87,7 @@ class _NavBarRouterState extends State<NavBarRouter> {
                 children: [
                   HomeScreen(),
                   CryDetectScreen(),
-                  ProfileScreen(perent: snapshot.data!),
+                  ProfileScreen(parent: snapshot.data!),
                 ],
               );
             }

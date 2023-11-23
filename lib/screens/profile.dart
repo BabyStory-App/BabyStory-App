@@ -1,6 +1,6 @@
 import 'package:babystory/models/baby.dart';
 import 'package:babystory/models/baby_state_record.dart';
-import 'package:babystory/models/perent.dart';
+import 'package:babystory/models/parent.dart';
 import 'package:babystory/screens/add_baby.dart';
 import 'package:babystory/screens/setting.dart';
 import 'package:babystory/utils/color.dart';
@@ -11,8 +11,8 @@ import 'package:babystory/widgets/user_profile_widget.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final Perent perent;
-  const ProfileScreen({super.key, required this.perent});
+  final Parent parent;
+  const ProfileScreen({super.key, required this.parent});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -27,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Baby(
         name: '아기1',
         birthDate: DateTime.now(),
-        perent: widget.perent,
+        parent: widget.parent,
         state: BabyStateRecord(
           recordDate: DateTime.now(),
           title: 'initialize state',
@@ -71,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  UserProfileWidget(perent: widget.perent),
+                  UserProfileWidget(parent: widget.parent),
                   const SizedBox(
                     height: 48,
                   ),

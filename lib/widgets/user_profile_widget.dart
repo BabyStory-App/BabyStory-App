@@ -1,14 +1,14 @@
-import 'package:babystory/models/perent.dart';
+import 'package:babystory/models/parent.dart';
 import 'package:babystory/screens/edit_profile.dart';
 import 'package:babystory/utils/color.dart';
 import 'package:flutter/material.dart';
 
 class UserProfileWidget extends StatelessWidget {
-  final Perent perent;
+  final Parent parent;
 
   const UserProfileWidget({
     super.key,
-    required this.perent,
+    required this.parent,
   });
 
   @override
@@ -21,20 +21,20 @@ class UserProfileWidget extends StatelessWidget {
             height: 48,
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(40),
-                child: Image.network(perent.photoURL ??
+                child: Image.network(parent.photoURL ??
                     'https://qph.cf2.quoracdn.net/main-thumb-1529746431-200-ilmthkmwexpgmbqqgkiwdanovfosliym.jpeg'))),
         const SizedBox(width: 20),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(perent.nickname,
+              Text(parent.nickname,
                   style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(221, 7, 6, 6))),
               const SizedBox(height: 2),
-              Text(perent.description ?? '사랑으로 보살피는 부모',
+              Text(parent.description ?? '사랑으로 보살피는 부모',
                   style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.normal,

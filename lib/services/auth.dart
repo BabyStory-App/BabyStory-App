@@ -1,18 +1,18 @@
 import 'package:babystory/error/error.dart';
-import 'package:babystory/models/perent.dart';
+import 'package:babystory/models/parent.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthServices {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  late Perent? _user;
+  late Parent? _user;
 
-  Perent? get user => _user;
+  Parent? get user => _user;
 
-  Future<Perent?> getUser() async {
+  Future<Parent?> getUser() async {
     User? user = _firebaseAuth.currentUser;
     if (user == null) return null;
-    return Perent(
+    return Parent(
       uid: user.uid,
       email: user.email!,
       nickname: user.displayName ?? 'User',
@@ -22,9 +22,9 @@ class AuthServices {
     );
   }
 
-  Perent _getMyUserFromFirebaseUser(
+  Parent _getMyUserFromFirebaseUser(
       {required User user, String? nickname, SignInMethod? signInMethod}) {
-    return Perent(
+    return Parent(
       uid: user.uid,
       email: user.email!,
       nickname: user.displayName ?? nickname ?? '',

@@ -7,7 +7,7 @@ enum SignInMethod {
 
 List<String> SignInMethodList = SignInMethod.values.map((e) => e.name).toList();
 
-class Perent {
+class Parent {
   final String uid;
   String email;
   String nickname;
@@ -18,7 +18,7 @@ class Perent {
   List<Baby> babies;
   String? description;
 
-  Perent({
+  Parent({
     required this.uid,
     required this.email,
     required this.nickname,
