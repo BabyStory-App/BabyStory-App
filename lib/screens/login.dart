@@ -1,4 +1,6 @@
+import 'package:babystory/apis/parent_api.dart';
 import 'package:babystory/error/error.dart';
+import 'package:babystory/models/parent.dart';
 import 'package:babystory/screens/signup.dart';
 import 'package:babystory/services/auth.dart';
 import 'package:babystory/utils/alert.dart';
@@ -9,6 +11,7 @@ import 'package:babystory/widgets/input_form.dart';
 import 'package:babystory/widgets/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,13 +25,19 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   final AuthServices _authServices = AuthServices();
+  final ParentApi _parentApi = ParentApi();
 
-  void checkErrorAndNavigate(AuthError? authError) {
+  bool checkAuthError(AuthError? authError) {
     if (authError != null) {
-      if (!mounted) return;
+      if (!mounted) return false;
       Alert.show(context, authError.message, () => false);
+      return false;
     }
     _authServices.user!.printUserinfo();
+    return true;
+  }
+
+  void moveToHome() {
     if (!mounted) return;
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => NavBarRouter()));
@@ -55,12 +64,31 @@ class _LoginScreenState extends State<LoginScreen> {
 
     AuthError? authError = await _authServices.loginWithEmailAndPassword(
         email: email, password: password);
-    checkErrorAndNavigate(authError);
+    await checkErrorAndNavigate(authError);
   }
 
   Future<void> loginWithGoogle() async {
     AuthError? authError = await _authServices.loginWithGoogle();
-    checkErrorAndNavigate(authError);
+    await checkErrorAndNavigate(authError);
+  }
+
+  Future<void> checkErrorAndNavigate(AuthError? authError) async {
+    if (checkAuthError(authError)) {
+      Parent? parent = _authServices.user;
+      if (parent != null) {
+        parent.printUserinfo();
+        var isCreated = await _parentApi.createParent(parent: parent);
+        if (isCreated != null) {
+          var prefs = await SharedPreferences.getInstance();
+          await prefs.setString('x-jwt', isCreated);
+
+          print("get saved jwt token");
+          print(prefs.getString('x-jwt'));
+          print("move to home!");
+          moveToHome();
+        }
+      }
+    }
   }
 
   @override

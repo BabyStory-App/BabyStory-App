@@ -1,3 +1,5 @@
+import 'package:babystory/apis/baby_api.dart';
+import 'package:babystory/apis/parent_api.dart';
 import 'package:babystory/models/baby.dart';
 import 'package:babystory/models/baby_state_record.dart';
 import 'package:babystory/models/parent.dart';
@@ -20,9 +22,12 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late List<Baby> babies;
+  final BabyApi _babyApi = BabyApi();
 
   @override
   void initState() {
+    print("inside profile screen");
+    print(widget.parent.jwt);
     babies = [
       Baby(
         name: '아기1',
@@ -78,21 +83,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-            HorizontalSwiperCards(
-              viewportFraction: 0.9,
-              cardGap: 6,
-              height: 452,
-              cards: List.generate(babies.length + 1, (index) {
-                if (index == babies.length) {
-                  return GestureDetector(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const AddBabyScreen())),
-                    child: const AddBabyCard(),
-                  );
-                }
-                return BabyInfoCard(baby: babies[index]);
-              }),
-            )
+            FutureBuilder(
+                future: _babyApi.getBabies(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData &&
+                      snapshot.connectionState == ConnectionState.done) {
+                    return HorizontalSwiperCards(
+                        viewportFraction: 0.9,
+                        cardGap: 6,
+                        height: 452,
+                        cards: List.generate(babies.length + 1, (index) {
+                          if (index == babies.length) {
+                            return GestureDetector(
+                              onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AddBabyScreen())),
+                              child: const AddBabyCard(),
+                            );
+                          }
+                          return BabyInfoCard(baby: babies[index]);
+                        }));
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                })
           ],
         ),
       ),

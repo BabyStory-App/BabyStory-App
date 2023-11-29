@@ -55,26 +55,12 @@ class _TfTestState extends State<TfTest> {
     // var output = List.generate(6, (index) => List<double>.filled(521, 0.0));
     var output = [List<double>.filled(521, 0.0)];
 
-    print(input.length); // 1
-    // print(input[0].length); // 48000
-    print(input.runtimeType); // List<List<dynamic>>
-    print(input[0].runtimeType); // List<dynamic>
-    print("");
-    print(output.length);
-    print(output[0].length);
-    print(output.runtimeType);
-    print(output[0].runtimeType);
-
     // inference
     interpreter.run(input, output);
     try {} catch (e) {
-      print("ERROR");
       print(e);
     }
 
-    print("output");
-    print(output.length);
-    print(output);
     // print the output
     var classes = await getYamNetClasses();
     var predictMap = _getNameFromScore(classes, output[0], 5);

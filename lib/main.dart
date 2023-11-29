@@ -26,10 +26,9 @@ class MyApp extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const NavBarRouter();
-          } else {
-            return const LoginScreen();
+            return NavBarRouter();
           }
+          return const LoginScreen();
         },
       ),
     );

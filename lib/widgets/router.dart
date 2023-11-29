@@ -8,6 +8,7 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NavBarRouter extends StatefulWidget {
   const NavBarRouter({super.key});
@@ -82,6 +83,7 @@ class _NavBarRouterState extends State<NavBarRouter> {
           builder: (context, snapshot) {
             if (snapshot.hasData &&
                 snapshot.connectionState == ConnectionState.done) {
+              // snapshot.data!.printUserinfo();
               return IndexedStack(
                 index: _page,
                 children: [

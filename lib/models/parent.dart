@@ -17,6 +17,7 @@ class Parent {
   String? photoURL;
   List<Baby> babies;
   String? description;
+  String? jwt;
 
   Parent({
     required this.uid,
@@ -27,8 +28,27 @@ class Parent {
     this.photoURL,
     this.babies = const [],
     this.description,
+    this.jwt,
   }) {
     babies = List<Baby>.empty();
+  }
+
+  // from json
+  factory Parent.fromJson(Map<String, dynamic> json) {
+    Map<String, dynamic> parent = json['parent'];
+    String jwt = json['x-jwt'];
+    return Parent(
+      uid: parent['uid'],
+      email: parent['email'],
+      nickname: parent['nickname'],
+      signInMethod: SignInMethod.values.firstWhere(
+          (e) => e.name == parent['signInMethod'],
+          orElse: () => SignInMethod.email),
+      emailVerified: parent['emailVerified'],
+      photoURL: parent['photoId'],
+      babies: [],
+      description: parent['description'],
+    );
   }
 
   void printUserinfo() {
@@ -39,5 +59,6 @@ class Parent {
     print('photoURL: $photoURL');
     print('emailVerified: $emailVerified');
     print('description: $description');
+    print('jwt: $jwt');
   }
 }

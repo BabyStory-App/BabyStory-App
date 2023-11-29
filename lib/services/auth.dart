@@ -1,17 +1,34 @@
+import 'package:babystory/apis/parent_api.dart';
 import 'package:babystory/error/error.dart';
 import 'package:babystory/models/parent.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthServices {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final ParentApi _parentApi = ParentApi();
   late Parent? _user;
 
   Parent? get user => _user;
 
   Future<Parent?> getUser() async {
+    // await signOut();
+    // return null;
     User? user = _firebaseAuth.currentUser;
-    if (user == null) return null;
+    if (user == null) {
+      await signOut();
+      return null;
+    }
+
+    var token = await _parentApi.getJwtToken(uid: user.uid);
+    if (token == null) {
+      return null;
+    }
+
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setString('x-jwt', token);
+
     return Parent(
       uid: user.uid,
       email: user.email!,
@@ -19,6 +36,7 @@ class AuthServices {
       signInMethod: SignInMethod.email,
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
+      jwt: token,
     );
   }
 
