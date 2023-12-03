@@ -60,6 +60,7 @@ class Baby {
   late List<BabyStateRecord> stateRecords;
   late List<CryState> cryStates;
   late String? photoId;
+  late String? id;
 
   Baby({
     required this.name,
@@ -71,6 +72,7 @@ class Baby {
     this.stateRecords = const [],
     this.cryStates = const [],
     this.photoId,
+    this.id,
   }) {
     stateRecords = List<BabyStateRecord>.empty();
     cryStates = List<CryState>.empty();
@@ -92,10 +94,12 @@ class Baby {
     stateRecords = [];
     cryStates = [];
     photoId = json['photoId'];
+    id = json['id'];
   }
 
   // print all infomation of baby
   void printInfo() {
+    print('id: $id');
     print('name: $name');
     print('gender: $gender');
     print('birthDate: $birthDate');

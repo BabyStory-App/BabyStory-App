@@ -1,34 +1,52 @@
+import 'package:babystory/apis/baby_api.dart';
+import 'package:babystory/apis/raws_api.dart';
+import 'package:babystory/models/baby.dart';
+import 'package:babystory/models/parent.dart';
 import 'package:babystory/screens/login.dart';
 import 'package:babystory/screens/profile.dart';
 import 'package:babystory/services/auth.dart';
+import 'package:babystory/utils/color.dart';
+import 'package:babystory/widgets/avatar.dart';
+import 'package:babystory/widgets/home_widget.dart';
+import 'package:babystory/widgets/inspect_baby_not_exists.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final Parent parent;
+  const HomeScreen({super.key, required this.parent});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final AuthServices _authServices = AuthServices();
-
-  Future<void> signOut() async {
-    // _authServices.signOut();
-    if (!mounted) return;
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => HomeScreen()));
-  }
+  final _babyApi = BabyApi();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Center(
-        child: GestureDetector(
-          onTap: () => signOut(),
-          child: const Text('Home'),
-        ),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 40, bottom: 10),
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: FutureBuilder(
+              future: _babyApi.getBabies(parent: widget.parent),
+              builder: (getBabyContext, getBabiesSnapshot) {
+                if (getBabiesSnapshot.hasData &&
+                    getBabiesSnapshot.connectionState == ConnectionState.done) {
+                  if (getBabiesSnapshot.data!.isEmpty) {
+                    return InspectBabyNotExist(parent: widget.parent);
+                  }
+                  return HomeWidget(
+                      parent: widget.parent, babies: getBabiesSnapshot.data!);
+                }
+                return const Center(child: CircularProgressIndicator());
+              },
+            ),
+          ),
+        ]),
       ),
     );
   }

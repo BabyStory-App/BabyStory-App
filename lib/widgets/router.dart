@@ -87,7 +87,7 @@ class _NavBarRouterState extends State<NavBarRouter> {
               return IndexedStack(
                 index: _page,
                 children: [
-                  HomeScreen(),
+                  HomeScreen(parent: snapshot.data!),
                   CryDetectScreen(),
                   ProfileScreen(parent: snapshot.data!),
                 ],

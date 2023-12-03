@@ -62,6 +62,8 @@ dependencies:
       ref: 8a09c7b0aeb9d31204147fe6ee126c8a52471e3a
   flutter_launcher_icons: ^0.13.1
   image_picker: ^1.0.4
+  syncfusion_flutter_charts: ^23.2.6
+  dropdown_button2: ^2.3.9
 
 dev_dependencies:
   flutter_test:

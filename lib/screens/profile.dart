@@ -87,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           parent: widget.parent,
                                           onAddBaby: () {
                                             print("onAddBaby");
-                                            setState(() {});
+                                            // setState(() {});
                                           }))),
                               child: const AddBabyCard(),
                             );
