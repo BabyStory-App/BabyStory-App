@@ -7,6 +7,7 @@ class ColorProps {
   static const Color bgLightGray = Color.fromRGBO(248, 248, 248, 1);
   static const Color bgBrown = Color(0xffEAD0B7);
   static const Color bgGray = Color(0xffE6E6E6);
+  static const Color bgOrange = Color.fromRGBO(253, 146, 15, 0.7);
 
   static const Color pink = Color.fromRGBO(240, 98, 146, 1);
   static const Color brown = Color.fromRGBO(161, 136, 127, 1);

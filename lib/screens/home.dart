@@ -25,29 +25,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 40, bottom: 10),
-        child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: FutureBuilder(
-              future: _babyApi.getBabies(parent: widget.parent),
-              builder: (getBabyContext, getBabiesSnapshot) {
-                if (getBabiesSnapshot.hasData &&
-                    getBabiesSnapshot.connectionState == ConnectionState.done) {
-                  if (getBabiesSnapshot.data!.isEmpty) {
-                    return InspectBabyNotExist(parent: widget.parent);
-                  }
-                  return HomeWidget(
-                      parent: widget.parent, babies: getBabiesSnapshot.data!);
+    return Padding(
+      padding: const EdgeInsets.only(top: 40, bottom: 10),
+      child: Column(children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: FutureBuilder(
+            future: _babyApi.getBabies(parent: widget.parent),
+            builder: (getBabyContext, getBabiesSnapshot) {
+              if (getBabiesSnapshot.hasData &&
+                  getBabiesSnapshot.connectionState == ConnectionState.done) {
+                if (getBabiesSnapshot.data!.isEmpty) {
+                  return InspectBabyNotExist(parent: widget.parent);
                 }
-                return const Center(child: CircularProgressIndicator());
-              },
-            ),
+                return HomeWidget(
+                    parent: widget.parent, babies: getBabiesSnapshot.data!);
+              }
+              return const Center(child: CircularProgressIndicator());
+            },
           ),
-        ]),
-      ),
+        ),
+      ]),
     );
   }
 }

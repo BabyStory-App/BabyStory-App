@@ -35,7 +35,7 @@ class UserProfileWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(parent.nickname,
+              Text(parent.nickname == '' ? '재원E' : parent.nickname,
                   style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
