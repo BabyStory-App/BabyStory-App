@@ -18,4 +18,14 @@ class BabyStateRecord {
   }) {
     photoURL = List<String>.empty();
   }
+
+  void printInfo() {
+    print('recordDate: $recordDate');
+    print('title: $title');
+    print('description: $description');
+    print('weight: $weight');
+    print('height: $height');
+    print('headCircumference: $headCircumference');
+    print('photoURL: $photoURL');
+  }
 }

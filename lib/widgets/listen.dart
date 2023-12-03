@@ -22,9 +22,7 @@ void startForegroundService() async {
   );
 }
 
-void globalForegroundService() {
-  debugPrint("current datetime is ${DateTime.now()}");
-}
+void globalForegroundService() {}
 
 class ListenWiget extends StatefulWidget {
   final Function(CryState) onBabyStateUpdate;

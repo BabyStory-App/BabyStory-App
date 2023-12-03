@@ -61,4 +61,8 @@ class Parent {
     print('description: $description');
     print('jwt: $jwt');
   }
+
+  void printInfo() {
+    printUserinfo();
+  }
 }

@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:babystory/apis/baby_api.dart';
 import 'package:babystory/models/baby.dart';
+import 'package:babystory/models/parent.dart';
+import 'package:babystory/utils/alert.dart';
 import 'package:babystory/utils/color.dart';
 import 'package:babystory/widgets/avatar.dart';
 import 'package:flutter/foundation.dart';
@@ -10,7 +13,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class AddBabyScreen extends StatefulWidget {
-  const AddBabyScreen({super.key});
+  final Parent parent;
+  Function? onAddBaby;
+  AddBabyScreen({super.key, required this.parent, this.onAddBaby});
 
   @override
   State<AddBabyScreen> createState() => _AddBabyScreenState();
@@ -21,9 +26,60 @@ class _AddBabyScreenState extends State<AddBabyScreen> {
   String bloodTypeString = describeEnum(BloodType.unknown);
   String genderString = describeEnum(Gender.unknown);
   DateTime? birthDate;
+  final TextEditingController _nameController = TextEditingController();
+  final _babyApi = BabyApi();
 
   void addNewBaby() async {
-    print(imageFile?.path ?? 'no image');
+    if (_nameController.text.isEmpty) {
+      Alert.show(context, '아기의 이름을 입력해주세요.', () => false);
+    } else if (birthDate == null) {
+      Alert.show(context, '아기의 생년월일을 입력해주세요.', () => false);
+    } else {
+      var baby = await _babyApi.createBaby(
+          createBabyInput: CreateBabyInput(
+              name: _nameController.text,
+              birthDate: birthDate!,
+              genderString: genderString,
+              bloodTypeString: bloodTypeString,
+              photoUrl: imageFile?.path),
+          parent: widget.parent);
+      if (baby != null) {
+        if (!mounted) return;
+        await showDialog<void>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("축하합니다!"),
+              content: Text("${baby.name} 아기가 등록되었습니다."),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('확인'),
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            );
+          },
+        );
+        if (!mounted) return;
+        widget.onAddBaby?.call();
+        Navigator.pop(context);
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // print("inside add baby screen");
+    // widget.parent.printInfo();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -78,9 +134,9 @@ class _AddBabyScreenState extends State<AddBabyScreen> {
                                   imageFile = file;
                                 }),
                             const SizedBox(height: 42),
-                            const Row(
+                            Row(
                               children: [
-                                SizedBox(
+                                const SizedBox(
                                   width: 64,
                                   child: Text(
                                     '이름: ',
@@ -90,11 +146,12 @@ class _AddBabyScreenState extends State<AddBabyScreen> {
                                         fontWeight: FontWeight.normal),
                                   ),
                                 ),
-                                SizedBox(width: 10),
+                                const SizedBox(width: 10),
                                 // underline input form
                                 Expanded(
                                   child: TextField(
-                                    decoration: InputDecoration(
+                                    controller: _nameController,
+                                    decoration: const InputDecoration(
                                       border: UnderlineInputBorder(),
                                       hintText: "아기의 이름을 입력해주세요",
                                     ),

@@ -1,3 +1,4 @@
+import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/models/parent.dart';
 import 'package:babystory/screens/edit_profile.dart';
 import 'package:babystory/utils/color.dart';
@@ -16,13 +17,19 @@ class UserProfileWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SizedBox(
+        Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: ColorProps.gray,
+                width: 2.0,
+              ),
+              borderRadius: BorderRadius.circular(40),
+            ),
             width: 48,
             height: 48,
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(40),
-                child: Image.network(parent.photoURL ??
-                    'https://qph.cf2.quoracdn.net/main-thumb-1529746431-200-ilmthkmwexpgmbqqgkiwdanovfosliym.jpeg'))),
+                child: Image.network(RawsApi.getProfileLink(parent.photoURL)))),
         const SizedBox(width: 20),
         Expanded(
           child: Column(

@@ -21,25 +21,10 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late List<Baby> babies;
   final BabyApi _babyApi = BabyApi();
 
   @override
   void initState() {
-    print("inside profile screen");
-    print(widget.parent.jwt);
-    babies = [
-      Baby(
-        name: '아기1',
-        birthDate: DateTime.now(),
-        parent: widget.parent,
-        state: BabyStateRecord(
-          recordDate: DateTime.now(),
-          title: 'initialize state',
-          description: 'initialize state',
-        ),
-      )
-    ];
     super.initState();
   }
 
@@ -84,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             FutureBuilder(
-                future: _babyApi.getBabies(),
+                future: _babyApi.getBabies(parent: widget.parent),
                 builder: (context, snapshot) {
                   if (snapshot.hasData &&
                       snapshot.connectionState == ConnectionState.done) {
@@ -92,17 +77,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         viewportFraction: 0.9,
                         cardGap: 6,
                         height: 452,
-                        cards: List.generate(babies.length + 1, (index) {
-                          if (index == babies.length) {
+                        cards:
+                            List.generate(snapshot.data!.length + 1, (index) {
+                          if (index == snapshot.data!.length) {
                             return GestureDetector(
-                              onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AddBabyScreen())),
+                              onTap: () =>
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => AddBabyScreen(
+                                          parent: widget.parent,
+                                          onAddBaby: () {
+                                            print("onAddBaby");
+                                            setState(() {});
+                                          }))),
                               child: const AddBabyCard(),
                             );
                           }
-                          return BabyInfoCard(baby: babies[index]);
+                          return BabyInfoCard(baby: snapshot.data![index]);
                         }));
                   } else {
                     return const Center(child: CircularProgressIndicator());

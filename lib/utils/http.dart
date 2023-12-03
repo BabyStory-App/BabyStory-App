@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -11,7 +12,7 @@ class HttpUtils {
     baseroot = dotenv.env['API_BASE_ROOT'] ?? '';
   }
 
-  Future<Map<String, dynamic>?> get({
+  Future<dynamic> get({
     required String url,
     Map<String, String>? headers,
     Map<String, String>? querys,
@@ -39,11 +40,9 @@ class HttpUtils {
   Future<Map<String, dynamic>?> post({
     required String url,
     Map<String, String>? headers,
-    Map<String, String>? querys,
     Map<String, dynamic>? body,
   }) async {
     headers ??= {};
-    querys ??= {};
     body ??= {};
     try {
       var uri = Uri.parse('$baseroot$url');
@@ -62,6 +61,43 @@ class HttpUtils {
     } catch (e) {
       debugPrintStack();
       debugPrint(e.toString());
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> postMultipart({
+    required String url,
+    Map<String, String>? headers,
+    Map<String, String>? fields,
+    required String? filePath,
+  }) async {
+    fields ??= {};
+    try {
+      var uri = Uri.parse('$baseroot$url');
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'Accept': 'application/json',
+          ...?headers,
+        })
+        ..fields.addAll(fields);
+
+      if (filePath != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath('file', filePath),
+        );
+      }
+
+      var response = await request.send();
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseData = await response.stream.bytesToString();
+        return jsonDecode(responseData);
+      }
+      return null;
+    } catch (e) {
+      debugPrintStack();
+      print("Get error on postMultipart");
+      print(e);
       return null;
     }
   }

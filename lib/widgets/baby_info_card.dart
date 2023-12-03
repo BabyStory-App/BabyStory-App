@@ -1,3 +1,4 @@
+import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/models/baby.dart';
 import 'package:babystory/utils/color.dart';
 import 'package:babystory/widgets/avatar.dart';
@@ -17,11 +18,12 @@ class BabyInfoCard extends StatefulWidget {
 class _BabyInfoCardState extends State<BabyInfoCard> {
   XFile? imageFile;
   DateTime? birthDate;
-  String bloodTypeString = describeEnum(BloodType.unknown);
-  String genderString = describeEnum(Gender.unknown);
+  late String bloodTypeString = describeEnum(widget.baby.bloodType);
+  late String genderString = describeEnum(widget.baby.gender);
 
   @override
   Widget build(BuildContext context) {
+    widget.baby.printInfo();
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -46,9 +48,7 @@ class _BabyInfoCardState extends State<BabyInfoCard> {
                 radius: 52,
                 borderRadius: 3,
                 avatarSize: 72,
-                imageUri: widget.baby.state.photoURL.isNotEmpty
-                    ? widget.baby.state.photoURL[0]
-                    : 'https://m.media-amazon.com/images/I/51SLlh1nW5L._AC_UF1000,1000_QL80_.jpg',
+                imageUri: RawsApi.getProfileLink(widget.baby.photoId),
                 onImageChanged: (XFile? file) {
                   imageFile = file;
                 }),
