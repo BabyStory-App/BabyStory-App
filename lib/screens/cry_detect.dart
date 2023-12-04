@@ -1,11 +1,14 @@
 import 'package:babystory/models/cry_state.dart';
+import 'package:babystory/models/parent.dart';
 import 'package:babystory/widgets/cry_result_wrapper.dart';
 import 'package:babystory/widgets/listen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CryDetectScreen extends StatefulWidget {
-  const CryDetectScreen({super.key});
+  final Parent parent;
+
+  const CryDetectScreen({super.key, required this.parent});
 
   @override
   State<CryDetectScreen> createState() => _CryDetectScreenState();
@@ -60,7 +63,8 @@ class _CryDetectScreenState extends State<CryDetectScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          ListenWiget(onBabyStateUpdate: _updateBabyState),
+          ListenWiget(
+              onBabyStateUpdate: _updateBabyState, parent: widget.parent),
           CryResultWrapperWidget(
             containerKey: detailContainerKey,
             cryState: cryState,

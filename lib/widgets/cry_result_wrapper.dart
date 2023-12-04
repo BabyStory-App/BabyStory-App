@@ -14,7 +14,7 @@ class CryResultWrapperWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: ColorProps.orangeYellow,
-      height: MediaQuery.of(context).size.height,
+      height: MediaQuery.of(context).size.height * 1.2,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 32),
       key: containerKey,
       child: cryState == null

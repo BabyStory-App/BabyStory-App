@@ -74,6 +74,7 @@ class HttpUtils {
     fields ??= {};
     try {
       var uri = Uri.parse('$baseroot$url');
+      print("send request $baseroot$url");
 
       var request = http.MultipartRequest('POST', uri)
         ..headers.addAll({

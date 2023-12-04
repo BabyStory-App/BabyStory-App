@@ -1,4 +1,5 @@
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:babystory/models/parent.dart';
 import 'package:babystory/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -26,7 +27,10 @@ void globalForegroundService() {}
 
 class ListenWiget extends StatefulWidget {
   final Function(CryState) onBabyStateUpdate;
-  const ListenWiget({super.key, required this.onBabyStateUpdate});
+  final Parent parent;
+
+  const ListenWiget(
+      {super.key, required this.onBabyStateUpdate, required this.parent});
 
   @override
   State<ListenWiget> createState() => _ListenWigetState();
@@ -167,6 +171,9 @@ class _ListenWigetState extends State<ListenWiget>
 
     startForegroundService();
     bool hasDetected = await _record.waitSound(filePath, () => isListening);
+    // await Future.delayed(const Duration(seconds: 1));
+    // print("여기어때");
+    // bool hasDetected = true;
 
     if (hasDetected && listenState == 'listening') {
       _noti.showNotification('Hear-is', '아이가 울고 있어요! 원인을 분석중입니다...');
@@ -179,7 +186,8 @@ class _ListenWigetState extends State<ListenWiget>
 
   Future<CryState> _sendToServer(String filepath) async {
     debugPrint("Send to server with file $filepath");
-    var babyState = await _predictApi.getPrediction(filePath: filepath);
+    var babyState = await _predictApi.getPrediction(
+        filePath: filepath, jwt: widget.parent.jwt);
     // print(babyState.getPredictMap(limit: 2).toString());
     babyState.printBabyState();
     return babyState;

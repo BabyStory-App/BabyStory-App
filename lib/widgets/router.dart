@@ -88,7 +88,7 @@ class _NavBarRouterState extends State<NavBarRouter> {
                 index: _page,
                 children: [
                   HomeScreen(parent: snapshot.data!),
-                  CryDetectScreen(),
+                  CryDetectScreen(parent: snapshot.data!),
                   ProfileScreen(parent: snapshot.data!),
                 ],
               );
