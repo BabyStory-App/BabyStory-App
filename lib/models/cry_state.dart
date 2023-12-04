@@ -50,6 +50,7 @@ class CryState {
   late Map<String, double> predictMap;
 
   double? duration;
+  int? id;
 
   CryState({
     required this.time,
@@ -58,14 +59,19 @@ class CryState {
     required this.predictMap,
     this.audioURL,
     this.duration,
+    this.id,
   });
 
   CryState.fromJson(Map<String, dynamic> json) {
+    print("received json: ");
+    print(json);
     time = DateTime.parse(json['time']);
     predictMap = _getTypeFromStateMap(json['predictMap']);
     type = getCryTypeFromString(predictMap.keys.toList()[0]);
     intensity = getCryIntensityFromString(json['intensity']);
-    audioURL = json['audioURL'];
+    audioURL = json['audioId'];
+    duration = json['duration'];
+    id = json['id'];
   }
 
   //return type of CryState as String
@@ -108,5 +114,11 @@ class CryState {
     print('intensity: $intensity');
     print('predictMap: $predictMap');
     print('audioURL: $audioURL');
+    print('duration: $duration');
+    print('id: $id');
+  }
+
+  void printInfo() {
+    printBabyState();
   }
 }
