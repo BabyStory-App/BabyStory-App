@@ -38,4 +38,27 @@ class CryApi {
       return [];
     }
   }
+
+  Future<Map<String, dynamic>?> inspect({required Baby baby}) async {
+    try {
+      var jwt = baby.parent.jwt;
+      if (jwt == null) {
+        debugPrint('uid is null in inspect');
+        return {};
+      }
+
+      var json = await httpUtils.get(url: '/cry/inspect', headers: {
+        'Authorization': 'Bearer $jwt',
+        'babyId': baby.id ?? '',
+      });
+      if (json == null) {
+        return {};
+      }
+
+      return json;
+    } catch (e) {
+      debugPrint('Error in inspect: $e');
+      return {};
+    }
+  }
 }

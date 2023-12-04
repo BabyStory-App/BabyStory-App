@@ -11,6 +11,9 @@ class RawsApi {
   static String baseroot = dotenv.env['API_BASE_ROOT'] ?? '';
 
   static String getProfileLink(String? fileId) {
+    if (fileId != null && fileId.contains('http')) {
+      return fileId;
+    }
     return "$baseroot/raws/profile/${fileId ?? 'default_profile_image'}";
   }
 

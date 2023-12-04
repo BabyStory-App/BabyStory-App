@@ -85,10 +85,4 @@ class BabyApi {
       return null;
     }
   }
-
-  Future<Map<String, dynamic>?> inspect({required Baby baby}) async {
-    // return dummy data after 0.5 seconds
-    await Future.delayed(const Duration(milliseconds: 500));
-    return {"asd": "asd"};
-  }
 }

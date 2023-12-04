@@ -1,4 +1,5 @@
 import 'package:babystory/apis/baby_api.dart';
+import 'package:babystory/apis/cry_api.dart';
 import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/models/baby.dart';
 import 'package:babystory/models/parent.dart';
@@ -17,7 +18,7 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
-  final _babyApi = BabyApi();
+  final CryApi _cryApi = CryApi();
   late Baby _selectedBaby = widget.babies[0];
 
   @override
@@ -80,11 +81,13 @@ class _HomeWidgetState extends State<HomeWidget> {
           height: 48,
         ),
         FutureBuilder(
-          future: _babyApi.inspect(baby: widget.babies[0]),
+          future: _cryApi.inspect(baby: widget.babies[0]),
           builder: (getBabyContext, getBabiesSnapshot) {
             if (getBabiesSnapshot.hasData &&
                 getBabiesSnapshot.connectionState == ConnectionState.done) {
-              return CryInspectMain(selectedBaby: _selectedBaby);
+              return CryInspectMain(
+                  selectedBaby: _selectedBaby,
+                  inspectData: getBabiesSnapshot.data!);
             }
             return const Center(child: CircularProgressIndicator());
           },
