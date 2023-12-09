@@ -200,7 +200,8 @@ class DetailInfoRender {
                   Container(
                     height: 15,
                     width: width *
-                        (state.toLowerCase() == 'uncomfortable' ? 0.32 : 0.5) *
+                        // (state.toLowerCase() == 'uncomfortable' ? 0.32 : 0.5) *
+                        0.5 *
                         p1,
                     decoration: const BoxDecoration(
                       color: Color.fromRGBO(222, 252, 185, 1),
@@ -233,7 +234,8 @@ class DetailInfoRender {
                   Container(
                     height: 15,
                     width: width *
-                        (state.toLowerCase() == 'uncomfortable' ? 0.32 : 0.5) *
+                        // (state.toLowerCase() == 'uncomfortable' ? 0.32 : 0.5) *
+                        0.5 *
                         p2,
                     decoration: const BoxDecoration(
                       color: ColorProps.bgPink,

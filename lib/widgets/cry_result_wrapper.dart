@@ -19,12 +19,46 @@ class CryResultWrapperWidget extends StatelessWidget {
       key: containerKey,
       child: cryState == null
           ? const Center(
-              child: Text('  울음이 감지되지 않았습니다.',
+              child: Column(
+              children: [
+                Text(
+                  '울음을 들려주세요',
                   style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54,
-                  )))
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black54),
+                ),
+                SizedBox(
+                  height: 48,
+                ),
+                Text(
+                  '위 버튼을 눌러 울음을 들려주세요!',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black54),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  '울음의 원인과 해결방안을 알려드려요!',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black54),
+                ),
+                // going up icon with circle background with opcacity 0.4
+                SizedBox(
+                  height: 30,
+                ),
+                Icon(
+                  Icons.arrow_circle_up,
+                  size: 48,
+                  color: Colors.black45,
+                ),
+              ],
+            ))
           : Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
