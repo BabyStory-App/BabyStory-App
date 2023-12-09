@@ -4,6 +4,12 @@ enum CryIntensity { low, medium, high }
 
 List<String> CryIntensityList = CryIntensity.values.map((e) => e.name).toList();
 
+List<String> CryIntensityKoreanList = ['약함', '보통', '강함'];
+
+String getCryIntensityKorean(CryIntensity intensity) {
+  return CryIntensityKoreanList[CryIntensityList.indexOf(intensity.name)];
+}
+
 CryIntensity getCryIntensityFromString(String intensity) {
   switch (intensity) {
     case 'low':
@@ -20,6 +26,33 @@ CryIntensity getCryIntensityFromString(String intensity) {
 enum CryType { sad, hug, diaper, hungry, sleepy, awake, uncomfortable }
 
 List<String> CryTypeList = CryType.values.map((e) => e.name).toList();
+
+List<String> CryTypeKoreanList = ['슬픔', '허그', '기저귀', '배고픔', '졸림', '깨어남', '불편함'];
+
+List<String> CryTypeDescKoreanList = [
+  '슬퍼요',
+  '안아주세요',
+  '기저귀를 갈아주세요',
+  '배고파요',
+  '졸려요',
+  '깨어났어요',
+  '불편해요'
+];
+
+String getCryTypeKorean(CryType type, {bool desc = false}) {
+  if (desc) {
+    return CryTypeDescKoreanList[CryTypeList.indexOf(type.name)];
+  }
+  return CryTypeKoreanList[CryTypeList.indexOf(type.name)];
+}
+
+String getStrCryTypeKorean(String type, {bool desc = false}) {
+  print('type: $type');
+  if (desc) {
+    return CryTypeDescKoreanList[CryTypeList.indexOf(type.toLowerCase())];
+  }
+  return CryTypeKoreanList[CryTypeList.indexOf(type.toLowerCase())];
+}
 
 CryType getCryTypeFromString(String type) {
   switch (type) {

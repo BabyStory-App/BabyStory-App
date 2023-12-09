@@ -1,6 +1,7 @@
 import 'package:babystory/apis/baby_api.dart';
 import 'package:babystory/apis/cry_api.dart';
 import 'package:babystory/models/baby.dart';
+import 'package:babystory/models/cry_state.dart';
 import 'package:babystory/screens/cry_list.dart';
 import 'package:babystory/utils/color.dart';
 import 'package:babystory/widgets/cry_page_navigate_widget.dart';
@@ -220,6 +221,8 @@ class _CryInspectMainState extends State<CryInspectMain> {
 
   Column chart3(Map<String, dynamic> typeFreq) {
     var typeFreqKeys = typeFreq.keys.toList();
+    typeFreqKeys = List.generate(
+        typeFreqKeys.length, (i) => getStrCryTypeKorean(typeFreqKeys[i]));
     var typeFreqValues = typeFreq.values.toList().cast<int>();
     int maxIdx = typeFreqKeys.length - 1;
 
@@ -316,7 +319,7 @@ class _CryInspectMainState extends State<CryInspectMain> {
     var ordinalList = List.generate(
         types.length,
         (index) => OrdinalData(
-            domain: types[index],
+            domain: getStrCryTypeKorean(types[index]),
             measure: durations[index],
             color: colorList[index]));
 

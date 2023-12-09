@@ -43,7 +43,11 @@ class _CryRecordListItemState extends State<CryRecordListItem> {
     try {
       await player.setFilePath(filePath);
     } catch (e) {
-      await player.setAsset('assets/samples/test.wav');
+      try {
+        await player.setAsset('assets/samples/test.wav');
+      } catch (e) {
+        print(e);
+      }
     }
     await player.setLoopMode(LoopMode.one);
     await player.pause();
@@ -58,9 +62,9 @@ class _CryRecordListItemState extends State<CryRecordListItem> {
       isplaying = !isplaying;
     });
     if (isplaying) {
-      await player.pause();
-    } else {
       await player.play();
+    } else {
+      await player.pause();
     }
   }
 
@@ -82,10 +86,13 @@ class _CryRecordListItemState extends State<CryRecordListItem> {
               height: 36,
             )),
         title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(describeEnum(widget.cryState.type)),
-          const SizedBox(height: 2),
+          Text(getCryTypeKorean(widget.cryState.type, desc: true),
+              style:
+                  const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
+          const SizedBox(height: 4),
         ]),
-        subtitle: Text(bannerDateFormat.format(widget.cryState.time)),
+        subtitle: Text(bannerDateFormat.format(widget.cryState.time),
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400)),
         children: <Widget>[
           const Divider(
             thickness: 1.0,
@@ -110,7 +117,7 @@ class _CryRecordListItemState extends State<CryRecordListItem> {
                           children: [
                             Text(detailDateFormat.format(widget.cryState.time),
                                 style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold)),
+                                    fontSize: 14, fontWeight: FontWeight.bold)),
                             const SizedBox(height: 4),
                             _intensityAndTimeWidget(widget.cryState.intensity,
                                 widget.cryState.duration),
@@ -140,7 +147,7 @@ class _CryRecordListItemState extends State<CryRecordListItem> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  renderPredictionInfo(widget.cryState, 350),
+                  renderPredictionInfo(widget.cryState, 250),
                 ],
               ),
             ),
@@ -158,38 +165,38 @@ class _CryRecordListItemState extends State<CryRecordListItem> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Text("울음 강도:",
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500)),
         const SizedBox(width: 3),
-        Text(describeEnum(intensity),
+        Text(getCryIntensityKorean(intensity),
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 12,
               fontWeight: intensity == CryIntensity.high
                   ? FontWeight.bold
                   : FontWeight.w400,
               color: intensity == CryIntensity.low
                   ? Colors.blue
                   : intensity == CryIntensity.medium
-                      ? Colors.orange
+                      ? Colors.orange[700]
                       : Colors.red,
             )),
         const SizedBox(width: 8),
         const Text('][',
             style: TextStyle(
-                fontSize: 11,
+                fontSize: 10,
                 fontWeight: FontWeight.w800,
                 color: ColorProps.gray)),
         const SizedBox(width: 8),
         const Text("울음 시간:",
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500)),
         const SizedBox(width: 3),
         Text("${cryTime.toStringAsFixed(1)}초",
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 12,
               fontWeight: cryTime > 11 ? FontWeight.bold : FontWeight.w400,
               color: cryTime < 6
                   ? Colors.blue
                   : cryTime < 11
-                      ? Colors.orange
+                      ? Colors.orange[700]
                       : Colors.red,
             )),
       ],
@@ -210,17 +217,17 @@ class _CryRecordListItemState extends State<CryRecordListItem> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(keys[0],
+              Text(getStrCryTypeKorean(keys[0]),
                   style: const TextStyle(
                     fontSize: 13,
                   )),
-              const SizedBox(height: 10),
-              Text(keys[1],
+              const SizedBox(height: 13),
+              Text(getStrCryTypeKorean(keys[1]),
                   style: const TextStyle(
                     fontSize: 13,
                   )),
-              const SizedBox(height: 10),
-              Text(keys[2],
+              const SizedBox(height: 13),
+              Text(getStrCryTypeKorean(keys[2]),
                   style: const TextStyle(
                     fontSize: 13,
                   )),

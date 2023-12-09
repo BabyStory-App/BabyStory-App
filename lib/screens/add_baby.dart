@@ -117,7 +117,7 @@ class _AddBabyScreenState extends State<AddBabyScreen> {
                     child: SingleChildScrollView(
                       child: Padding(
                         padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height / 2 - 132,
+                          top: MediaQuery.of(context).size.height / 4,
                           bottom: 12,
                           left: 24,
                           right: 24,
@@ -142,7 +142,7 @@ class _AddBabyScreenState extends State<AddBabyScreen> {
                                     '이름: ',
                                     style: TextStyle(
                                         color: ColorProps.textgray,
-                                        fontSize: 16,
+                                        fontSize: 15,
                                         fontWeight: FontWeight.normal),
                                   ),
                                 ),
@@ -168,7 +168,7 @@ class _AddBabyScreenState extends State<AddBabyScreen> {
                                     '성별: ',
                                     style: TextStyle(
                                         color: ColorProps.textgray,
-                                        fontSize: 16,
+                                        fontSize: 15,
                                         fontWeight: FontWeight.normal),
                                   ),
                                 ),
@@ -207,7 +207,7 @@ class _AddBabyScreenState extends State<AddBabyScreen> {
                                     '혈액형: ',
                                     style: TextStyle(
                                         color: ColorProps.textgray,
-                                        fontSize: 16,
+                                        fontSize: 15,
                                         fontWeight: FontWeight.normal),
                                   ),
                                 ),
@@ -246,7 +246,7 @@ class _AddBabyScreenState extends State<AddBabyScreen> {
                                     '생년월일: ',
                                     style: TextStyle(
                                         color: ColorProps.textgray,
-                                        fontSize: 16,
+                                        fontSize: 15,
                                         fontWeight: FontWeight.normal),
                                   ),
                                 ),
@@ -284,29 +284,20 @@ class _AddBabyScreenState extends State<AddBabyScreen> {
                               ],
                             ),
                             // Button to create new baby object
-                            const SizedBox(height: 20),
-                            SizedBox(
+                            const SizedBox(height: 60),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4),
+                                color: ColorProps.bgBrown,
+                              ),
                               width: double.infinity,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: ColorProps.bgBrown,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  // create new baby object
-                                  // add baby object to baby list
-                                  // pop screen
-                                },
-                                child: TextButton(
-                                  onPressed: () => addNewBaby(),
-                                  child: const Text('아기 추가하기',
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: ColorProps.lightblack,
-                                          fontWeight: FontWeight.w600)),
-                                ),
+                              child: TextButton(
+                                onPressed: () => addNewBaby(),
+                                child: const Text('아기 추가하기',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: ColorProps.lightblack,
+                                        fontWeight: FontWeight.w600)),
                               ),
                             ),
                           ],

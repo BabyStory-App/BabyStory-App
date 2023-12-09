@@ -55,7 +55,7 @@ class _SettingScreenState extends State<SettingScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                'Setting',
+                '설정',
                 style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -73,7 +73,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 borderRadius: BorderRadius.circular(5),
               ),
             ),
-            child: const Text('Logout',
+            child: const Text('로그 아웃',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,

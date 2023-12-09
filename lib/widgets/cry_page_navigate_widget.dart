@@ -31,7 +31,7 @@ class CryPageNavigateWidget extends StatelessWidget {
               child: Padding(
             padding: EdgeInsets.only(bottom: 6),
             child: Text(
-              '울음 보관소',
+              '울음 저장소',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 22,

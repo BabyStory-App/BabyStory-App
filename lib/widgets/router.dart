@@ -42,7 +42,7 @@ class _NavBarRouterState extends State<NavBarRouter> {
                   Icons.home_outlined,
                   color: Colors.black87,
                 ),
-                label: 'Home',
+                label: '울음 분석',
                 labelStyle: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -52,14 +52,14 @@ class _NavBarRouterState extends State<NavBarRouter> {
                   Icons.face_retouching_natural_rounded,
                   color: Colors.black87,
                 ),
-                label: 'Baby',
+                label: '울음 감지',
                 labelStyle: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87)),
             CurvedNavigationBarItem(
                 child: Icon(Icons.perm_identity, color: Colors.black87),
-                label: 'Profile',
+                label: '프로필',
                 labelStyle: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,

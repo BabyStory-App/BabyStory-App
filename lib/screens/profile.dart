@@ -43,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        'Profile',
+                        '프로필',
                         style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,

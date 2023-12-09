@@ -61,7 +61,7 @@ class _BabyInfoCardState extends State<BabyInfoCard> {
                     '이름: ',
                     style: TextStyle(
                         color: ColorProps.textgray,
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.normal),
                   ),
                 ),
@@ -86,7 +86,7 @@ class _BabyInfoCardState extends State<BabyInfoCard> {
                     '성별: ',
                     style: TextStyle(
                         color: ColorProps.textgray,
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.normal),
                   ),
                 ),
@@ -124,7 +124,7 @@ class _BabyInfoCardState extends State<BabyInfoCard> {
                     '혈액형: ',
                     style: TextStyle(
                         color: ColorProps.textgray,
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.normal),
                   ),
                 ),
@@ -163,7 +163,7 @@ class _BabyInfoCardState extends State<BabyInfoCard> {
                     '생년월일: ',
                     style: TextStyle(
                         color: ColorProps.textgray,
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.normal),
                   ),
                 ),

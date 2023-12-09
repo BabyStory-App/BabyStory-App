@@ -79,7 +79,7 @@ class _CryResultWidgetState extends State<CryResultWidget> {
             ),
           ),
           const SizedBox(height: 32),
-          Text(info.raw.state,
+          Text(getStrCryTypeKorean(info.raw.state, desc: true),
               style: const TextStyle(
                 fontSize: 30,
               )),
@@ -174,14 +174,14 @@ class DetailInfoRender {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(keys[0],
+              Text(getStrCryTypeKorean(keys[0]),
                   style: const TextStyle(
-                    fontSize: 17,
+                    fontSize: 15,
                   )),
-              const SizedBox(height: 4),
-              Text(keys[1],
+              const SizedBox(height: 9),
+              Text(getStrCryTypeKorean(keys[1]),
                   style: const TextStyle(
-                    fontSize: 17,
+                    fontSize: 15,
                   )),
             ],
           ),
