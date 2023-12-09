@@ -52,7 +52,7 @@ class _CryInspectMainState extends State<CryInspectMain> {
                     ),
                   ),
               child: const CryPageNavigateWidget()),
-          const SizedBox(height: 52),
+          const SizedBox(height: 40),
           chart1(widget.inspectData["cry_freq_hour"].cast<int>()),
           const SizedBox(height: 52),
           chart2(

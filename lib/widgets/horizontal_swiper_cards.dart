@@ -58,7 +58,7 @@ Widget _indicator(BuildContext context, bool showIndicator, int totalLength,
 
   return Column(
     children: [
-      const SizedBox(height: 16),
+      const SizedBox(height: 8),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: List<Widget>.generate(totalLength, (int index) {

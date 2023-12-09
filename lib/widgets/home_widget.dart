@@ -3,6 +3,7 @@ import 'package:babystory/apis/cry_api.dart';
 import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/models/baby.dart';
 import 'package:babystory/models/parent.dart';
+import 'package:babystory/screens/cry_detect.dart';
 import 'package:babystory/utils/color.dart';
 import 'package:babystory/widgets/cry_inspect_main.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -78,13 +79,53 @@ class _HomeWidgetState extends State<HomeWidget> {
           ],
         ),
         const SizedBox(
-          height: 48,
+          height: 36,
         ),
         FutureBuilder(
           future: _cryApi.inspect(baby: widget.babies[0]),
           builder: (getBabyContext, getBabiesSnapshot) {
             if (getBabiesSnapshot.hasData &&
                 getBabiesSnapshot.connectionState == ConnectionState.done) {
+              if (getBabiesSnapshot.data!.isEmpty) {
+                return Column(
+                  children: [
+                    const SizedBox(height: 120),
+                    const Text(
+                      '울음을 들려주세요!',
+                      style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: ColorProps.textBlack),
+                    ),
+                    const SizedBox(
+                      height: 48,
+                    ),
+                    const Text(
+                      '아기의 울음 데이터를 분석해드립니다.',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: ColorProps.textBlack),
+                    ),
+                    const SizedBox(
+                      height: 48,
+                    ),
+                    ElevatedButton(
+                      onPressed: () =>
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => CryDetectScreen(
+                                    parent: widget.parent,
+                                  ))),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                      child: const Text('울음 감지하기'),
+                    ),
+                  ],
+                );
+              }
               return CryInspectMain(
                   selectedBaby: _selectedBaby,
                   inspectData: getBabiesSnapshot.data!);

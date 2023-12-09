@@ -39,8 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (getBabiesSnapshot.data!.isEmpty) {
                     return InspectBabyNotExist(parent: widget.parent);
                   }
-                  return HomeWidget(
-                      parent: widget.parent, babies: getBabiesSnapshot.data!);
+                  List<Baby> babies = getBabiesSnapshot.data as List<Baby>;
+                  babies = babies.reversed.toList();
+                  return HomeWidget(parent: widget.parent, babies: babies);
                 }
                 return const Center(child: CircularProgressIndicator());
               },

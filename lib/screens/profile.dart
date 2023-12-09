@@ -59,11 +59,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 18,
                   ),
                   UserProfileWidget(parent: widget.parent),
                   const SizedBox(
-                    height: 48,
+                    height: 18,
                   ),
                 ],
               ),
