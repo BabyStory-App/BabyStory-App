@@ -72,8 +72,6 @@ class _AddBabyScreenState extends State<AddBabyScreen> {
   @override
   void initState() {
     super.initState();
-    // print("inside add baby screen");
-    // widget.parent.printInfo();
   }
 
   @override

@@ -30,7 +30,6 @@ class ParentApi {
       if (json == null ||
           json['x-jwt'] == null ||
           json['x-jwt']['access_token'] == null) {
-        print('Jwt token not found');
         return null;
       }
       return json['x-jwt']['access_token'];

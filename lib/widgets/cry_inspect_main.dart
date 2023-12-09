@@ -34,8 +34,6 @@ class _CryInspectMainState extends State<CryInspectMain> {
   @override
   void initState() {
     super.initState();
-    print("inspect data");
-    print(widget.inspectData);
   }
 
   @override

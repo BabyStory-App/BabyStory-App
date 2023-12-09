@@ -75,7 +75,6 @@ class BabyApi {
         filePath: createBabyInput.photoUrl,
       );
       if (json == null) {
-        print("Get null response");
         return null;
       }
       return Baby.fromJson(json, parent);

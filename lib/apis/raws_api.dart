@@ -23,7 +23,6 @@ class RawsApi {
 
   static Future<String> getCry(String? audioId) async {
     try {
-      print("request cry: ${'$baseroot/raws/cry/${audioId ?? "sample"}'}");
       var response = await http.get(Uri.parse('$baseroot/raws/cry/$audioId'));
       if (response.statusCode == 200) {
         var bytes = response.bodyBytes;
@@ -37,11 +36,6 @@ class RawsApi {
 
         File file = File(fileDir);
         await file.writeAsBytes(bytes);
-
-        if (OsUtils.isFileExist(fileDir)) {
-          print("File save complated: $fileDir");
-          print(file.path);
-        }
 
         return fileDir;
       }

@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return InspectBabyNotExist(parent: widget.parent);
                   }
                   List<Baby> babies = getBabiesSnapshot.data as List<Baby>;
-                  // babies = babies.reversed.toList();
+                  babies = babies.reversed.toList();
                   return HomeWidget(parent: widget.parent, babies: babies);
                 }
                 return const Center(child: CircularProgressIndicator());

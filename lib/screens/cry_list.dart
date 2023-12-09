@@ -24,10 +24,8 @@ class _CryListScreenState extends State<CryListScreen> {
   CryApi cryApi = CryApi();
 
   Future<void> getCries() async {
-    print("requesting cries");
     cryStates = await cryApi.getCries(
         baby: widget.baby, startDate: startDate, endDate: endDate);
-    print('received ${cryStates.length} cry states');
     setState(() {
       cryStates;
       cryStates[0].printInfo();
@@ -36,7 +34,6 @@ class _CryListScreenState extends State<CryListScreen> {
 
   @override
   void initState() {
-    print("init cry list screen");
     super.initState();
     getCries();
   }

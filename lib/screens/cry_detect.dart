@@ -50,7 +50,6 @@ class _CryDetectScreenState extends State<CryDetectScreen> {
     setState(() {
       cryState = value;
       if (cryState != null) {
-        print(cryState!.getPredictMap(limit: 2));
         // alertBabyCry(context, cryState!);
       }
     });

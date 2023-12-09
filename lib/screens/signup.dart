@@ -53,10 +53,6 @@ class _SignupScreenState extends State<SignupScreen> {
         if (isCreated != null) {
           var prefs = await SharedPreferences.getInstance();
           await prefs.setString('x-jwt', isCreated);
-
-          print("get saved jwt token");
-          print(prefs.getString('x-jwt'));
-          print("move to home!");
           moveToHome();
         }
       }
