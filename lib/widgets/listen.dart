@@ -171,8 +171,6 @@ class _ListenWigetState extends State<ListenWiget>
 
     startForegroundService();
     bool hasDetected = await _record.waitSound(filePath, () => isListening);
-    // await Future.delayed(const Duration(seconds: 1));
-    // bool hasDetected = true;
 
     if (hasDetected && listenState == 'listening') {
       _noti.showNotification('Hear-is', '아이가 울고 있어요! 원인을 분석중입니다...');

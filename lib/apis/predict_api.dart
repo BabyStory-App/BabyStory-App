@@ -26,6 +26,8 @@ class PredictApi {
       }
       return CryState.fromJson(json);
     } catch (e) {
+      print("Error on PredictApi");
+      print(e);
       debugPrintStack();
       throw "Error on PredictApi";
     }
