@@ -16,28 +16,39 @@ class AuthServices {
     // await signOut();
     // return null;
     User? user = _firebaseAuth.currentUser;
-    if (user == null) {
-      await signOut();
-      return null;
-    }
-
-    var token = await _parentApi.getJwtToken(uid: user.uid);
-    if (token == null) {
-      return null;
-    }
-
-    var prefs = await SharedPreferences.getInstance();
-    await prefs.setString('x-jwt', token);
-
+    print("User: $user");
+    await Future.delayed(const Duration(milliseconds: 100));
     return Parent(
-      uid: user.uid,
-      email: user.email!,
-      nickname: user.displayName ?? 'User',
+      uid: 'uid1',
+      email: 'email1',
+      nickname: 'nickname1',
       signInMethod: SignInMethod.email,
-      photoURL: user.photoURL,
-      emailVerified: user.emailVerified,
-      jwt: token,
+      photoURL: "photoURL1",
+      emailVerified: true,
+      jwt: 'jwt1',
     );
+    // if (user == null) {
+    //   await signOut();
+    //   return null;
+    // }
+
+    // var token = await _parentApi.getJwtToken(uid: user.uid);
+    // if (token == null) {
+    //   return null;
+    // }
+
+    // var prefs = await SharedPreferences.getInstance();
+    // await prefs.setString('x-jwt', token);
+
+    // return Parent(
+    //   uid: user.uid,
+    //   email: user.email!,
+    //   nickname: user.displayName ?? 'User',
+    //   signInMethod: SignInMethod.email,
+    //   photoURL: user.photoURL,
+    //   emailVerified: user.emailVerified,
+    //   jwt: token,
+    // );
   }
 
   Parent _getMyUserFromFirebaseUser(

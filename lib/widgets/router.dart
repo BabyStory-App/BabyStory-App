@@ -1,14 +1,9 @@
 import 'package:babystory/models/parent.dart';
-import 'package:babystory/screens/cry_detect.dart';
-import 'package:babystory/screens/home.dart';
-import 'package:babystory/screens/profile.dart';
 import 'package:babystory/services/auth.dart';
-import 'package:babystory/utils/color.dart';
-import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
-import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class NavBarRouter extends StatefulWidget {
   const NavBarRouter({super.key});
@@ -20,83 +15,92 @@ class NavBarRouter extends StatefulWidget {
 
 class _NavBarRouterState extends State<NavBarRouter> {
   late Parent parent;
-
-  int _page = 0;
-  final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+  var controller = PersistentTabController(initialIndex: 0);
   final AuthServices _auth = AuthServices();
 
   @override
   Widget build(BuildContext context) {
     // for fullscreen
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-
-    return Scaffold(
-        backgroundColor: ColorProps.bgWhite,
-        bottomNavigationBar: CurvedNavigationBar(
-          height: 64,
-          key: _bottomNavigationKey,
-          index: 0,
-          items: const [
-            CurvedNavigationBarItem(
-                child: Icon(
-                  Icons.home_outlined,
-                  color: Colors.black87,
+    return FutureBuilder(
+      future: _auth.getUser(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData &&
+            snapshot.connectionState == ConnectionState.done) {
+          // snapshot.data!.printUserinfo();
+          return PersistentTabView(
+            context,
+            navBarStyle: NavBarStyle.style3,
+            screens: [
+              Container(
+                color: Colors.white,
+                child: const Center(
+                  child: Text('Home Screen'),
                 ),
-                label: '울음 분석',
-                labelStyle: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87)),
-            CurvedNavigationBarItem(
-                child: Icon(
-                  Icons.face_retouching_natural_rounded,
-                  color: Colors.black87,
+              ),
+              Container(
+                color: Colors.white,
+                child: const Center(
+                  child: Text('Cry detect Screen'),
                 ),
-                label: '울음 감지',
-                labelStyle: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87)),
-            CurvedNavigationBarItem(
-                child: Icon(Icons.perm_identity, color: Colors.black87),
-                label: '프로필',
-                labelStyle: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87)),
-          ],
-          color: ColorProps.bgPink,
-          buttonBackgroundColor: ColorProps.bgBlue,
-          backgroundColor:
-              _page == 1 ? ColorProps.orangeYellow : ColorProps.bgWhite,
-          animationCurve: Curves.easeInOut,
-          animationDuration: const Duration(milliseconds: 400),
-          onTap: (index) {
-            setState(() {
-              _page = index;
-            });
-          },
-          letIndexChange: (index) => true,
-        ),
-        body: FutureBuilder(
-          future: _auth.getUser(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData &&
-                snapshot.connectionState == ConnectionState.done) {
-              // snapshot.data!.printUserinfo();
-              return IndexedStack(
-                index: _page,
-                children: [
-                  HomeScreen(parent: snapshot.data!),
-                  CryDetectScreen(parent: snapshot.data!),
-                  ProfileScreen(parent: snapshot.data!),
-                ],
-              );
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-        ));
+              ),
+              Container(
+                color: Colors.white,
+                child: const Center(
+                  child: Text('Buy Screen'),
+                ),
+              ),
+              Container(
+                color: Colors.white,
+                child: const Center(
+                  child: Text('AI doctor Screen'),
+                ),
+              ),
+              Container(
+                color: Colors.white,
+                child: const Center(
+                  child: Text('Setting Screen'),
+                ),
+              ),
+            ],
+            items: [
+              PersistentBottomNavBarItem(
+                icon: const Icon(Icons.home),
+                title: 'Home',
+                activeColorPrimary: CupertinoColors.activeBlue,
+                inactiveColorPrimary: CupertinoColors.systemGrey,
+              ),
+              PersistentBottomNavBarItem(
+                icon: const Icon(Icons.hearing),
+                title: 'Cry detect',
+                activeColorPrimary: CupertinoColors.activeBlue,
+                inactiveColorPrimary: CupertinoColors.systemGrey,
+              ),
+              PersistentBottomNavBarItem(
+                icon: const Icon(Icons.shopping_cart),
+                title: 'Buy',
+                activeColorPrimary: CupertinoColors.activeBlue,
+                inactiveColorPrimary: CupertinoColors.systemGrey,
+              ),
+              PersistentBottomNavBarItem(
+                icon: const Icon(Icons.medical_services),
+                title: 'AI doctor',
+                activeColorPrimary: CupertinoColors.activeBlue,
+                inactiveColorPrimary: CupertinoColors.systemGrey,
+              ),
+              PersistentBottomNavBarItem(
+                icon: const Icon(Icons.settings),
+                title: 'Setting',
+                activeColorPrimary: CupertinoColors.activeBlue,
+                inactiveColorPrimary: CupertinoColors.systemGrey,
+              ),
+            ],
+          );
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 }

@@ -1,9 +1,9 @@
-import 'package:babystory/models/baby.dart';
-
 enum SignInMethod {
   email,
   google,
 }
+
+class Baby {}
 
 List<String> SignInMethodList = SignInMethod.values.map((e) => e.name).toList();
 
