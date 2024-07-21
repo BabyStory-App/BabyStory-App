@@ -23,9 +23,8 @@ class AuthServices {
       email: 'email1',
       nickname: 'nickname1',
       signInMethod: SignInMethod.email,
-      photoURL: "photoURL1",
+      photoId: "photoId1",
       emailVerified: true,
-      jwt: 'jwt1',
     );
     // if (user == null) {
     //   await signOut();
@@ -45,9 +44,8 @@ class AuthServices {
     //   email: user.email!,
     //   nickname: user.displayName ?? 'User',
     //   signInMethod: SignInMethod.email,
-    //   photoURL: user.photoURL,
+    //   photoId: user.photoURL,
     //   emailVerified: user.emailVerified,
-    //   jwt: token,
     // );
   }
 
@@ -58,7 +56,7 @@ class AuthServices {
       email: user.email!,
       nickname: user.displayName ?? nickname ?? '',
       signInMethod: signInMethod ?? SignInMethod.email,
-      photoURL: user.photoURL,
+      photoId: user.photoURL,
       emailVerified: user.emailVerified,
     );
   }

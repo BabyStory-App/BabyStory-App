@@ -1,4 +1,3 @@
-import 'package:babystory/models/parent.dart';
 import 'package:babystory/services/auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,6 @@ class NavBarRouter extends StatefulWidget {
 }
 
 class _NavBarRouterState extends State<NavBarRouter> {
-  late Parent parent;
   var controller = PersistentTabController(initialIndex: 0);
   final AuthServices _auth = AuthServices();
 

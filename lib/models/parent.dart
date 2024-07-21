@@ -1,65 +1,89 @@
+import 'package:babystory/enum/gender.dart';
+
 enum SignInMethod {
   email,
   google,
 }
 
-class Baby {}
-
 List<String> SignInMethodList = SignInMethod.values.map((e) => e.name).toList();
 
 class Parent {
   final String uid;
-  String email;
   String nickname;
+  String email;
   final SignInMethod signInMethod;
   bool emailVerified;
+  Gender gender;
 
-  String? photoURL;
-  List<Baby> babies;
+  String? name;
+  String? photoId;
   String? description;
-  String? jwt;
+  String? mainAddr;
+  String? subAddr;
 
   Parent({
     required this.uid,
-    required this.email,
     required this.nickname,
+    required this.email,
     required this.signInMethod,
     this.emailVerified = false,
-    this.photoURL,
-    this.babies = const [],
+    this.gender = Gender.unknown,
+    this.name,
+    this.photoId,
     this.description,
-    this.jwt,
-  }) {
-    babies = List<Baby>.empty();
-  }
+    this.mainAddr,
+    this.subAddr,
+  });
 
   // from json
   factory Parent.fromJson(Map<String, dynamic> json) {
     Map<String, dynamic> parent = json['parent'];
-    String jwt = json['x-jwt'];
     return Parent(
-      uid: parent['uid'],
-      email: parent['email'],
+      uid: parent['parent_id'],
       nickname: parent['nickname'],
+      email: parent['email'],
       signInMethod: SignInMethod.values.firstWhere(
           (e) => e.name == parent['signInMethod'],
           orElse: () => SignInMethod.email),
-      emailVerified: parent['emailVerified'],
-      photoURL: parent['photoId'],
-      babies: [],
+      emailVerified: parent['emailVerified'] == 1,
+      gender: matchGender(parent['gender']),
+      name: parent['name'],
+      photoId: parent['photoId'],
       description: parent['description'],
+      mainAddr: parent['mainAddr'],
+      subAddr: parent['subAddr'],
     );
+  }
+
+  // to json
+  Map<String, dynamic> toJson() {
+    return {
+      'parent_id': uid,
+      'nickname': nickname,
+      'email': email,
+      'signInMethod': signInMethod.name,
+      'emailVerified': emailVerified ? 1 : 0,
+      'gender': gender.index,
+      'name': name,
+      'photoId': photoId,
+      'description': description,
+      'mainAddr': mainAddr,
+      'subAddr': subAddr,
+    };
   }
 
   void printUserinfo() {
     print('uid: $uid');
-    print('email: $email');
     print('nickname: $nickname');
+    print('email: $email');
     print('signInMethod: $signInMethod');
-    print('photoURL: $photoURL');
     print('emailVerified: $emailVerified');
+    print('gender: $gender');
+    print('name: $name');
+    print('photoId: $photoId');
     print('description: $description');
-    print('jwt: $jwt');
+    print('mainAddr: $mainAddr');
+    print('subAddr: $subAddr');
   }
 
   void printInfo() {
