@@ -6,10 +6,20 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
+import 'package:flutter/services.dart';
 
 Logger logger = Logger();
 
 Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 상태바의 배경색을 흰색으로, 텍스트와 아이콘 색상을 검정색으로 설정
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.white, // 상태바의 배경색
+    statusBarIconBrightness: Brightness.dark, // 상태바 아이콘 색상 (Android)
+    statusBarBrightness: Brightness.dark, // 상태바 텍스트 색상 (iOS)
+  ));
+
   await dotenv.load(fileName: '.env');
   await Firebase.initializeApp(
       options: await DefaultFirebaseOptions().defaultOptions());
@@ -26,7 +36,7 @@ class MyApp extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const NavBarRouter();
+            return const SafeArea(child: NavBarRouter());
           }
           return const LoginScreen();
         },

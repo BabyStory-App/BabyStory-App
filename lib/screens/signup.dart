@@ -93,7 +93,7 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     // for fullscreen
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
     return Scaffold(
       backgroundColor: ColorProps.bgWhite,
       body: Stack(

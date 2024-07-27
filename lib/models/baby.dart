@@ -5,37 +5,37 @@ class Baby {
   final String obn; // 태명
   String? name;
   Gender gender;
-  DateTime? birthDate;
-  String? bloodType;
+  DateTime birthDate;
+  String bloodType;
   double? cm;
   double? kg;
   String? photoId;
+  String? description;
 
-  Baby({
-    required this.id,
-    required this.obn,
-    this.name,
-    this.gender = Gender.unknown,
-    this.birthDate,
-    this.bloodType,
-    this.cm,
-    this.kg,
-    this.photoId,
-  });
+  Baby(
+      {required this.id,
+      required this.obn,
+      this.name,
+      this.gender = Gender.unknown,
+      required this.birthDate,
+      required this.bloodType,
+      this.cm,
+      this.kg,
+      this.photoId,
+      this.description});
 
   factory Baby.fromJson(Map<String, dynamic> json) {
     return Baby(
-      id: json['baby_id'],
-      obn: json['obn'],
-      name: json['name'],
-      gender: matchGender(json['gender']),
-      birthDate:
-          json['birthDate'] != null ? DateTime.parse(json['birthDate']) : null,
-      bloodType: json['bloodType'],
-      cm: json['cm'] != null ? (json['cm'] as num).toDouble() : null,
-      kg: json['kg'] != null ? (json['kg'] as num).toDouble() : null,
-      photoId: json['photoId'],
-    );
+        id: json['baby_id'],
+        obn: json['obn'],
+        name: json['name'],
+        gender: matchGender(json['gender']),
+        birthDate: DateTime.parse(json['birthDate']),
+        bloodType: json['bloodType'],
+        cm: json['cm'] != null ? (json['cm'] as num).toDouble() : null,
+        kg: json['kg'] != null ? (json['kg'] as num).toDouble() : null,
+        photoId: json['photoId'],
+        description: json['description']);
   }
 
   Map<String, dynamic> toJson() {
@@ -44,11 +44,12 @@ class Baby {
       'obn': obn,
       'name': name,
       'gender': gender.index,
-      'birthDate': birthDate?.toIso8601String(),
+      'birthDate': birthDate.toIso8601String(),
       'bloodType': bloodType,
       'cm': cm,
       'kg': kg,
       'photoId': photoId,
+      'description': description
     };
   }
 }

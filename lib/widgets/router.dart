@@ -1,3 +1,5 @@
+import 'package:babystory/screens/setting.dart';
+import 'package:babystory/screens/setting_friends.dart';
 import 'package:babystory/services/auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +15,13 @@ class NavBarRouter extends StatefulWidget {
 }
 
 class _NavBarRouterState extends State<NavBarRouter> {
-  var controller = PersistentTabController(initialIndex: 0);
+  var controller = PersistentTabController(initialIndex: 4);
   final AuthServices _auth = AuthServices();
 
   @override
   Widget build(BuildContext context) {
     // for fullscreen
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
     return FutureBuilder(
       future: _auth.getUser(),
       builder: (context, snapshot) {
@@ -28,6 +30,7 @@ class _NavBarRouterState extends State<NavBarRouter> {
           // snapshot.data!.printUserinfo();
           return PersistentTabView(
             context,
+            controller: controller,
             navBarStyle: NavBarStyle.style3,
             screens: [
               Container(
@@ -54,12 +57,8 @@ class _NavBarRouterState extends State<NavBarRouter> {
                   child: Text('AI doctor Screen'),
                 ),
               ),
-              Container(
-                color: Colors.white,
-                child: const Center(
-                  child: Text('Setting Screen'),
-                ),
-              ),
+              const Setting(key: ValueKey('Setting')),
+              // SettingFriends(type: 'myFriends'),
             ],
             items: [
               PersistentBottomNavBarItem(
