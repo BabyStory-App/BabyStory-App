@@ -1,7 +1,7 @@
 import 'package:babystory/enum/gender.dart';
 import 'package:babystory/models/baby.dart';
 import 'package:babystory/screens/setting_friends.dart';
-import 'package:babystory/screens/setting_story.dart';
+import 'package:babystory/screens/story_list.dart';
 import 'package:babystory/services/auth.dart';
 import 'package:babystory/widgets/baby_card.dart';
 import 'package:babystory/widgets/iconRowItem.dart';
@@ -108,7 +108,7 @@ class _SettingState extends State<Setting> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                const SettingStory(type: "myStory")))),
+                                const StoryList(pageTitle: "나의 이야기")))),
                 const SizedBox(height: 10),
                 IconRowItem(
                     icon: Icons.bookmark,
@@ -117,7 +117,7 @@ class _SettingState extends State<Setting> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                const SettingStory(type: "savedStory")))),
+                                const StoryList(pageTitle: "내가 저장한 이야기")))),
                 const SizedBox(height: 10),
                 IconRowItem(
                     icon: Icons.history,
@@ -126,7 +126,7 @@ class _SettingState extends State<Setting> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                const SettingStory(type: "readStory")))),
+                                const StoryList(pageTitle: "내가 읽은 이야기")))),
                 const SizedBox(height: 10),
                 IconRowItem(
                     icon: Icons.favorite,
@@ -135,7 +135,7 @@ class _SettingState extends State<Setting> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                const SettingStory(type: "LikedStory")))),
+                                const StoryList(pageTitle: "내가 좋아한 이야기")))),
                 const SizedBox(height: 28),
                 const SessionTitle1(title: "짝꿍과 친구"),
                 const SizedBox(height: 10),

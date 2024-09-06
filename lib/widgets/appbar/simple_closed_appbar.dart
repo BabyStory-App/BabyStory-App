@@ -7,12 +7,12 @@ class SimpleClosedAppBar extends StatelessWidget
   const SimpleClosedAppBar({super.key, required this.title});
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 0.15);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 253, 253, 253),
       elevation: 0, // Removes the shadow
       leading: Padding(
         padding: const EdgeInsets.only(top: 10),
@@ -36,6 +36,13 @@ class SimpleClosedAppBar extends StatelessWidget
       ),
       centerTitle: true, // Center the title
       toolbarHeight: 54,
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(0.15),
+        child: Container(
+          color: Colors.grey, // border color
+          height: 0.15, // border height
+        ),
+      ),
     );
   }
 }

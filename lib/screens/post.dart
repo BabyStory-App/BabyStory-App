@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class SettingStory extends StatelessWidget {
-  final String type;
-  const SettingStory({super.key, required this.type});
+class PostScreen extends StatelessWidget {
+  final int id;
+  const PostScreen({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {

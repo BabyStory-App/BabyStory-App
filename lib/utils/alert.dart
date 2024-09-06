@@ -44,8 +44,8 @@ class Alert {
     required BuildContext context,
     required String title,
     required String content,
-    Function? onAccept,
-    Function? onCancel,
+    Future<void> Function()? onAccept,
+    Future<void> Function()? onCancel,
     String acceptText = '확인',
     String cancelText = '취소',
   }) async {

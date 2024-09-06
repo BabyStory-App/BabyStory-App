@@ -2,6 +2,7 @@ import 'package:babystory/providers/parent.dart';
 import 'package:babystory/screens/edit_parent_profile.dart';
 import 'package:babystory/screens/setting.dart';
 import 'package:babystory/screens/setting_friends.dart';
+import 'package:babystory/screens/story_list.dart';
 import 'package:babystory/services/auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,8 +62,7 @@ class _NavBarRouterState extends State<NavBarRouter> {
                   child: Text('AI doctor Screen'),
                 ),
               ),
-              // const Setting(key: ValueKey('Setting')),
-              SettingFriends(type: 'myFriends'),
+              const Setting(key: ValueKey('Setting')),
             ],
             items: [
               PersistentBottomNavBarItem(
