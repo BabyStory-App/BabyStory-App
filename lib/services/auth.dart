@@ -25,6 +25,8 @@ class AuthServices {
       signInMethod: SignInMethod.email,
       photoId: "photoId1",
       emailVerified: true,
+      description:
+          "안녕하세요 저는 아크하드입니다. 새봄과 다운, 두 명의 아이를 키우고 있어요. 사랑과 기쁨과 행복을 주는 아이들 덕분에 행복하게 살고 있담니다.",
     );
     // if (user == null) {
     //   await signOut();

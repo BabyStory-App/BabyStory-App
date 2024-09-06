@@ -1,19 +1,16 @@
+import 'package:babystory/providers/parent.dart';
+import 'package:babystory/screens/edit_parent_profile.dart';
 import 'package:babystory/widgets/setting_profile_overview_status.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:provider/provider.dart';
 
 class SettingProfileOverview extends StatelessWidget {
   const SettingProfileOverview({super.key});
 
-  void shareProfile() {
-    print("Share Profile");
-  }
-
-  void editProfile() {
-    print("Edit Profile");
-  }
-
   @override
   Widget build(BuildContext context) {
+    final parent = context.read<ParentProvider>().parent;
     return Column(
       children: [
         const Row(
@@ -21,7 +18,7 @@ class SettingProfileOverview extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text("아크하드",
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: Colors.black87)),
@@ -42,16 +39,18 @@ class SettingProfileOverview extends StatelessWidget {
             const Row(
               children: [
                 SettingProfileOverviewStatus(name: "짝꿍", count: 23),
-                const SizedBox(width: 20),
+                SizedBox(width: 20),
                 SettingProfileOverviewStatus(name: "친구들", count: 58),
-                const SizedBox(width: 20),
+                SizedBox(width: 20),
                 SettingProfileOverviewStatus(name: "이야기", count: 23),
               ],
             ),
             Row(
               children: [
                 OutlinedButton(
-                    onPressed: shareProfile,
+                    onPressed: () {
+                      Share.share(parent?.description ?? parent?.email ?? "");
+                    },
                     style: OutlinedButton.styleFrom(
                         minimumSize: Size.zero,
                         padding: const EdgeInsets.symmetric(
@@ -67,7 +66,11 @@ class SettingProfileOverview extends StatelessWidget {
                   width: 8,
                 ),
                 OutlinedButton(
-                    onPressed: editProfile,
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                EditParentProfile(parent: parent!))),
                     style: OutlinedButton.styleFrom(
                         minimumSize: Size.zero,
                         padding: const EdgeInsets.symmetric(

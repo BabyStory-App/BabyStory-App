@@ -1,3 +1,5 @@
+import 'package:babystory/providers/parent.dart';
+import 'package:babystory/screens/edit_parent_profile.dart';
 import 'package:babystory/screens/setting.dart';
 import 'package:babystory/screens/setting_friends.dart';
 import 'package:babystory/services/auth.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:provider/provider.dart';
 
 class NavBarRouter extends StatefulWidget {
   const NavBarRouter({super.key});
@@ -27,6 +30,7 @@ class _NavBarRouterState extends State<NavBarRouter> {
       builder: (context, snapshot) {
         if (snapshot.hasData &&
             snapshot.connectionState == ConnectionState.done) {
+          context.read<ParentProvider>().setParent(snapshot.data!);
           // snapshot.data!.printUserinfo();
           return PersistentTabView(
             context,
@@ -57,8 +61,8 @@ class _NavBarRouterState extends State<NavBarRouter> {
                   child: Text('AI doctor Screen'),
                 ),
               ),
-              const Setting(key: ValueKey('Setting')),
-              // SettingFriends(type: 'myFriends'),
+              // const Setting(key: ValueKey('Setting')),
+              SettingFriends(type: 'myFriends'),
             ],
             items: [
               PersistentBottomNavBarItem(

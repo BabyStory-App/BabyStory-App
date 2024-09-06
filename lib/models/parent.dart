@@ -72,6 +72,10 @@ class Parent {
     };
   }
 
+  String getGenderSting() {
+    return gender.toString().split('.').last;
+  }
+
   void printUserinfo() {
     print('uid: $uid');
     print('nickname: $nickname');

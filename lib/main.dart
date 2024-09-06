@@ -1,14 +1,13 @@
 import 'package:babystory/firebase_options.dart';
+import 'package:babystory/providers/parent.dart';
 import 'package:babystory/screens/login.dart';
 import 'package:babystory/widgets/router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:logger/logger.dart';
 import 'package:flutter/services.dart';
-
-Logger logger = Logger();
+import 'package:provider/provider.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +22,14 @@ Future main() async {
   await dotenv.load(fileName: '.env');
   await Firebase.initializeApp(
       options: await DefaultFirebaseOptions().defaultOptions());
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ParentProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

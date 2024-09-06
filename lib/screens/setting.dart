@@ -2,6 +2,7 @@ import 'package:babystory/enum/gender.dart';
 import 'package:babystory/models/baby.dart';
 import 'package:babystory/screens/setting_friends.dart';
 import 'package:babystory/screens/setting_story.dart';
+import 'package:babystory/services/auth.dart';
 import 'package:babystory/widgets/baby_card.dart';
 import 'package:babystory/widgets/iconRowItem.dart';
 import 'package:babystory/widgets/session_title1.dart';
@@ -17,6 +18,7 @@ class Setting extends StatefulWidget {
 
 // https://raisingchildren.net.au/__data/assets/image/0023/47741/baby-behaviour-and-awarenessnarrow.jpg
 class _SettingState extends State<Setting> {
+  final AuthServices _authServices = AuthServices();
   List<Baby> babies = [
     Baby(
         id: "asdafasdas-dasd-awdasd-asda",
@@ -154,6 +156,32 @@ class _SettingState extends State<Setting> {
                         MaterialPageRoute(
                             builder: (context) =>
                                 SettingFriends(type: "myFriends")))),
+                const SizedBox(height: 20),
+                Center(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _authServices.signOut();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(174, 204, 55, 55),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6.0),
+                        ),
+                      ),
+                      child: const Text(
+                        '로그아웃',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 12),
               ],
             ),
