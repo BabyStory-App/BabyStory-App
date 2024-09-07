@@ -1,3 +1,4 @@
+import 'package:babystory/utils/alert.dart';
 import 'package:babystory/widgets/appbar/simple_closed_appbar.dart';
 import 'package:babystory/widgets/input/label_dropdown1.dart';
 import 'package:babystory/widgets/input/label_input1.dart';
@@ -20,6 +21,16 @@ class _EditParentProfileState extends State<EditParentProfile> {
 
   Future<void> updateProfile<T extends Object?>(String key, T value) async {
     print("Update profile");
+  }
+
+  void deleteUser() {
+    Alert.confirmAlert(
+        context: context,
+        title: "정말로 삭제하시겠습니까?",
+        content: "이 과정은 되돌릴 수 없습니다.",
+        onAccept: () async {
+          print("Delete user confirmed");
+        });
   }
 
   @override
@@ -114,6 +125,30 @@ class _EditParentProfileState extends State<EditParentProfile> {
                     hint: "상세 주소를 입력해주세요",
                     value: widget.parent.subAddr ?? "",
                     onFocusOut: (value) => updateProfile('subAddr', value)),
+                const SizedBox(height: 20),
+                Center(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: deleteUser,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(174, 204, 55, 55),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6.0),
+                        ),
+                      ),
+                      child: const Text(
+                        '회원 탈퇴',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
