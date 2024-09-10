@@ -41,9 +41,7 @@ class _EditParentProfileState extends State<EditParentProfile> {
       setState(() {
         _image = File(pickedFile.path);
       });
-      await addNewPhoto(_image!); // 비동기 작업에서는 BuildContext를 직접 사용하지 않음
-    } else {
-      print('No image selected.');
+      await addNewPhoto(_image!);
     }
   }
 
@@ -67,7 +65,6 @@ class _EditParentProfileState extends State<EditParentProfile> {
         alertFailedUploadImage();
       }
     } catch (e) {
-      print('Error uploading photo: $e');
       alertFailedUploadImage();
     }
   }
@@ -102,7 +99,7 @@ class _EditParentProfileState extends State<EditParentProfile> {
   }
 
   Future<void> updateProfile<T extends Object?>(String key, T value) async {
-    print("UpdateProfile { $key: $value }");
+    // print("UpdateProfile { $key: $value }");
     final parent = getParentFromProvider();
 
     Parent newParent;
@@ -134,7 +131,6 @@ class _EditParentProfileState extends State<EditParentProfile> {
     }
 
     context.read<ParentProvider>().updateParent(newParent);
-    print("Update local parent infio");
     newParent.printInfo();
     await updateServerProfile(newParent, key, value);
   }
@@ -145,7 +141,6 @@ class _EditParentProfileState extends State<EditParentProfile> {
     if (value is Gender) {
       body['gender'] = genderToInt(value);
     }
-    print("Send To Server $body");
     var response = await httpUtils.put(
       url: '/parent/',
       headers: {
@@ -155,7 +150,6 @@ class _EditParentProfileState extends State<EditParentProfile> {
           ? {'photoId': 'remove_photoId'}
           : body,
     );
-    print(response);
     if (response == null || response['success'] != 200) {
       alertFailedUpdateProfile();
     }

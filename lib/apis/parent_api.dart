@@ -77,8 +77,8 @@ class ParentApi {
       );
       return parent;
     } catch (e) {
-      print("GetParent Error");
-      print(e);
+      debugPrint("GetParent Error");
+      debugPrint(e.toString());
       return null;
     }
   }

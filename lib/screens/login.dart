@@ -62,8 +62,6 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    print("loginWithEmailAndPassword");
-
     AuthError? authError = await _authServices.loginWithEmailAndPassword(
         email: email, password: password);
     await checkErrorAndNavigate(authError, password);
@@ -76,7 +74,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> checkErrorAndNavigate(
       AuthError? authError, String password) async {
-    print("checkErrorAndNavigate");
     if (checkAuthError(authError)) {
       Parent? parent = _authServices.user;
       if (parent != null) {

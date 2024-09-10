@@ -73,7 +73,6 @@ class HttpUtils {
     body ??= {};
     try {
       var uri = Uri.parse('$baseroot$url');
-      print("Request: $baseroot$url");
       final response = await http.put(uri,
           headers: {
             'Content-Type': 'application/json',
@@ -82,7 +81,6 @@ class HttpUtils {
             ...headers,
           },
           body: jsonEncode(body));
-      print("Response: ${response.body}");
       if (response.statusCode == 200 || response.statusCode == 201) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       }
@@ -110,7 +108,6 @@ class HttpUtils {
         })
         ..fields.addAll(fields);
 
-      print("FilePath: $filePath");
       if (filePath != null) {
         request.files.add(
           await http.MultipartFile.fromPath('file', filePath),
@@ -124,8 +121,6 @@ class HttpUtils {
       }
       return null;
     } catch (e) {
-      print("Get error on postMultipart");
-      print(e);
       return null;
     }
   }

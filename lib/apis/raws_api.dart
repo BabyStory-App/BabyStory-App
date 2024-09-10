@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:babystory/utils/os.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:path_provider/path_provider.dart';
@@ -8,7 +9,6 @@ class RawsApi {
   static String baseroot = dotenv.env['API_BASE_ROOT'] ?? '';
 
   static String getProfileLink(String? fileId) {
-    print("FileId: $fileId");
     if (fileId != null && fileId.contains('http')) {
       return fileId;
     }
@@ -39,7 +39,7 @@ class RawsApi {
       }
       return '';
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return '';
     }
   }
