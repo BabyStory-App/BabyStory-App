@@ -44,12 +44,14 @@ class _SignupScreenState extends State<SignupScreen> {
         MaterialPageRoute(builder: (context) => NavBarRouter()));
   }
 
-  Future<void> checkErrorAndNavigate(AuthError? authError) async {
+  Future<void> checkErrorAndNavigate(
+      AuthError? authError, String password) async {
     if (checkAuthError(authError)) {
       Parent? parent = _authServices.user;
       if (parent != null) {
         parent.printUserinfo();
-        var isCreated = await _parentApi.createParent(parent: parent);
+        var isCreated =
+            await _parentApi.createParent(parent: parent, password: password);
         if (isCreated != null) {
           var prefs = await SharedPreferences.getInstance();
           await prefs.setString('x-jwt', isCreated);
@@ -82,12 +84,12 @@ class _SignupScreenState extends State<SignupScreen> {
 
     AuthError? authError = await _authServices.signupWithEmailAndPassword(
         email: email, nickname: nickname, password: password);
-    checkErrorAndNavigate(authError);
+    checkErrorAndNavigate(authError, password);
   }
 
   Future<void> signupWithGoogle() async {
     AuthError? authError = await _authServices.signinWithGoogle();
-    checkErrorAndNavigate(authError);
+    checkErrorAndNavigate(authError, 'google-auth');
   }
 
   @override

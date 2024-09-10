@@ -10,18 +10,23 @@ class SettingProfileOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parent = context.read<ParentProvider>().parent;
+    final parent = context.watch<ParentProvider>().parent;
     return Column(
       children: [
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("아크하드",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87)),
+            TextButton(
+              onPressed: () {
+                parent?.printInfo();
+              },
+              child: Text("아크하드",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87)),
+            ),
             CircleAvatar(
               radius: 28,
               backgroundImage: NetworkImage(
@@ -69,8 +74,7 @@ class SettingProfileOverview extends StatelessWidget {
                     onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                EditParentProfile(parent: parent!))),
+                            builder: (context) => const EditParentProfile())),
                     style: OutlinedButton.styleFrom(
                         minimumSize: Size.zero,
                         padding: const EdgeInsets.symmetric(

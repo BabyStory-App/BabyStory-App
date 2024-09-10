@@ -54,12 +54,40 @@ class HttpUtils {
             ...headers,
           },
           body: jsonEncode(body));
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         return jsonDecode(utf8.decode(response.bodyBytes));
       }
       return null;
     } catch (e) {
-      debugPrintStack();
+      debugPrint(e.toString());
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> put({
+    required String url,
+    Map<String, String>? headers,
+    Map<String, dynamic>? body,
+  }) async {
+    headers ??= {};
+    body ??= {};
+    try {
+      var uri = Uri.parse('$baseroot$url');
+      print("Request: $baseroot$url");
+      final response = await http.put(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            // HttpHeaders.acceptCharsetHeader: 'utf-8',
+            ...headers,
+          },
+          body: jsonEncode(body));
+      print("Response: ${response.body}");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return jsonDecode(utf8.decode(response.bodyBytes));
+      }
+      return null;
+    } catch (e) {
       debugPrint(e.toString());
       return null;
     }
@@ -82,6 +110,7 @@ class HttpUtils {
         })
         ..fields.addAll(fields);
 
+      print("FilePath: $filePath");
       if (filePath != null) {
         request.files.add(
           await http.MultipartFile.fromPath('file', filePath),
@@ -95,7 +124,6 @@ class HttpUtils {
       }
       return null;
     } catch (e) {
-      debugPrintStack();
       print("Get error on postMultipart");
       print(e);
       return null;

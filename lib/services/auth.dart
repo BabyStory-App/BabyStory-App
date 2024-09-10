@@ -13,42 +13,23 @@ class AuthServices {
   Parent? get user => _user;
 
   Future<Parent?> getUser() async {
-    // await signOut();
-    // return null;
     User? user = _firebaseAuth.currentUser;
-    print("User: $user");
-    await Future.delayed(const Duration(milliseconds: 100));
-    return Parent(
-      uid: 'uid1',
-      email: 'email1',
-      nickname: 'nickname1',
-      signInMethod: SignInMethod.email,
-      photoId: "photoId1",
-      emailVerified: true,
-      description:
-          "안녕하세요 저는 아크하드입니다. 새봄과 다운, 두 명의 아이를 키우고 있어요. 사랑과 기쁨과 행복을 주는 아이들 덕분에 행복하게 살고 있담니다.",
-    );
-    // if (user == null) {
-    //   await signOut();
-    //   return null;
-    // }
+    if (user == null) {
+      await signOut();
+      return null;
+    }
+    var parent = await _parentApi.getParent(uid: user.uid);
+    if (parent == null) {
+      await signOut();
+      return null;
+    }
 
-    // var token = await _parentApi.getJwtToken(uid: user.uid);
-    // if (token == null) {
-    //   return null;
-    // }
+    parent.printInfo();
 
-    // var prefs = await SharedPreferences.getInstance();
-    // await prefs.setString('x-jwt', token);
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setString('x-jwt', parent.jwt!);
 
-    // return Parent(
-    //   uid: user.uid,
-    //   email: user.email!,
-    //   nickname: user.displayName ?? 'User',
-    //   signInMethod: SignInMethod.email,
-    //   photoId: user.photoURL,
-    //   emailVerified: user.emailVerified,
-    // );
+    return parent;
   }
 
   Parent _getMyUserFromFirebaseUser(
@@ -140,6 +121,8 @@ class AuthServices {
         code: error.code,
       );
       return authError;
+    } catch (e) {
+      print("Error on loginWithEmailAndPassword: $e");
     }
   }
 

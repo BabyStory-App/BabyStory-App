@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void moveToHome() {
     if (!mounted) return;
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => NavBarRouter()));
+        MaterialPageRoute(builder: (context) => const NavBarRouter()));
   }
 
   Future<void> loginWithEmailAndPassword() async {
@@ -62,22 +62,27 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
+    print("loginWithEmailAndPassword");
+
     AuthError? authError = await _authServices.loginWithEmailAndPassword(
         email: email, password: password);
-    await checkErrorAndNavigate(authError);
+    await checkErrorAndNavigate(authError, password);
   }
 
   Future<void> loginWithGoogle() async {
     AuthError? authError = await _authServices.loginWithGoogle();
-    await checkErrorAndNavigate(authError);
+    await checkErrorAndNavigate(authError, 'google-auth');
   }
 
-  Future<void> checkErrorAndNavigate(AuthError? authError) async {
+  Future<void> checkErrorAndNavigate(
+      AuthError? authError, String password) async {
+    print("checkErrorAndNavigate");
     if (checkAuthError(authError)) {
       Parent? parent = _authServices.user;
       if (parent != null) {
-        parent.printUserinfo();
-        var isCreated = await _parentApi.createParent(parent: parent);
+        // parent.printUserinfo();
+        var isCreated =
+            await _parentApi.login(parent: parent, password: password);
         if (isCreated != null) {
           var prefs = await SharedPreferences.getInstance();
           await prefs.setString('x-jwt', isCreated);

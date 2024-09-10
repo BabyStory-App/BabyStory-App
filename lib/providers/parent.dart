@@ -18,6 +18,8 @@ class ParentProvider with ChangeNotifier {
   void updateParent(Parent parent) {
     _parent = parent;
     notifyListeners();
+    print("Parent updated: $_parent");
+    _parent?.printInfo();
   }
 
   void updateParentWithouthNotify(Parent parent) {
