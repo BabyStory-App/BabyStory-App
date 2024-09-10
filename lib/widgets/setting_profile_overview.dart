@@ -1,16 +1,76 @@
+import 'package:babystory/apis/raws_api.dart';
+import 'package:babystory/models/parent.dart';
 import 'package:babystory/providers/parent.dart';
 import 'package:babystory/screens/edit_parent_profile.dart';
+import 'package:babystory/utils/http.dart';
 import 'package:babystory/widgets/setting_profile_overview_status.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:provider/provider.dart';
 
-class SettingProfileOverview extends StatelessWidget {
+class SettingProfileOverview extends StatefulWidget {
   const SettingProfileOverview({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<SettingProfileOverview> createState() => _SettingProfileOverviewState();
+}
+
+class _SettingProfileOverviewState extends State<SettingProfileOverview> {
+  final HttpUtils httpUtils = HttpUtils();
+  int mateCount = 0;
+  int friendCount = 0;
+  int myStoryCount = 0;
+
+  Parent getParentFromProvider() {
+    final parent = context.read<ParentProvider>().parent;
+    if (parent == null) {
+      throw Exception('Parent is null');
+    }
+    return parent;
+  }
+
+  Parent watchParentFromProvider() {
     final parent = context.watch<ParentProvider>().parent;
+    if (parent == null) {
+      throw Exception('Parent is null');
+    }
+    return parent;
+  }
+
+  Future<Map<String, int?>> getParentOverview() async {
+    final parent = getParentFromProvider();
+    var json = await httpUtils.get(
+        url: '/setting/overview',
+        headers: {'Authorization': 'Bearer ${parent.jwt}'});
+    if (json == null) {
+      return {
+        "mateCount": 0,
+        "friendCount": 0,
+        "myStoryCount": 0,
+      };
+    }
+    return {
+      "mateCount": json['data']['mateCount'],
+      "friendCount": json['data']['friendCount'],
+      "myStoryCount": json['data']['myStoryCount']
+    };
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getParentOverview().then((value) {
+      setState(() {
+        mateCount = value["mateCount"] ?? 0;
+        friendCount = value["friendCount"] ?? 0;
+        myStoryCount = value["myStoryCount"] ?? 0;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final parent = watchParentFromProvider();
     return Column(
       children: [
         Row(
@@ -19,18 +79,18 @@ class SettingProfileOverview extends StatelessWidget {
           children: [
             TextButton(
               onPressed: () {
-                parent?.printInfo();
+                parent.printInfo();
               },
-              child: Text("아크하드",
-                  style: TextStyle(
+              child: Text(parent.nickname,
+                  style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
                       color: Colors.black87)),
             ),
             CircleAvatar(
               radius: 28,
-              backgroundImage: NetworkImage(
-                  "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"),
+              backgroundImage:
+                  NetworkImage(RawsApi.getProfileLink(parent.photoId)),
             ),
           ],
         ),
@@ -41,13 +101,13 @@ class SettingProfileOverview extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Row(
+            Row(
               children: [
-                SettingProfileOverviewStatus(name: "짝꿍", count: 23),
-                SizedBox(width: 20),
-                SettingProfileOverviewStatus(name: "친구들", count: 58),
-                SizedBox(width: 20),
-                SettingProfileOverviewStatus(name: "이야기", count: 23),
+                SettingProfileOverviewStatus(name: "짝꿍", count: mateCount),
+                const SizedBox(width: 20),
+                SettingProfileOverviewStatus(name: "친구들", count: friendCount),
+                const SizedBox(width: 20),
+                SettingProfileOverviewStatus(name: "이야기", count: myStoryCount),
               ],
             ),
             Row(

@@ -1,8 +1,8 @@
-import 'package:babystory/models/parent.dart';
+import 'package:babystory/screens/setting_friends.dart';
 import 'package:flutter/material.dart';
 
 class FriendListItem extends StatelessWidget {
-  final Parent parent;
+  final SettingFriendItem parent;
   final bool displayAddButton;
   final bool isMate;
 
@@ -82,7 +82,7 @@ class FriendListItem extends StatelessWidget {
                     print("On Click");
                   },
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(width: 0.7, color: Colors.blue),
+                    side: const BorderSide(width: 0.7, color: Colors.blue),
                     backgroundColor: isMate ? Colors.blue : Colors.white,
                     minimumSize: Size.zero,
                     padding: const EdgeInsets.only(

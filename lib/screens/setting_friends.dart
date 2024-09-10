@@ -1,53 +1,113 @@
+import 'package:babystory/providers/parent.dart';
+import 'package:babystory/utils/http.dart';
+import 'package:flutter/material.dart';
 import 'package:babystory/models/parent.dart';
 import 'package:babystory/widgets/app_bar1.dart';
 import 'package:babystory/widgets/friend_list_item.dart';
-import 'package:flutter/material.dart';
-import 'dart:math';
+import 'package:provider/provider.dart';
 
-class SettingFriends extends StatelessWidget {
+class SettingFriends extends StatefulWidget {
   final String type;
-  final parents = [
-    Parent(
-        uid: '1',
-        nickname: '정다운1',
-        email: 'wjdekdns1@email.com',
-        signInMethod: SignInMethod.email,
-        photoId: "0023/47741/baby-behaviour-and-awarenessnarrow.jpg",
-        description: "두 아이를 키우고 있는 엄마가 쓰는 따뜻하고도 소박한 일상 이야기."),
-    Parent(
-        uid: '2',
-        nickname: '정다운2',
-        email: 'wjdekdns1@email.com',
-        signInMethod: SignInMethod.email,
-        photoId: "0023/47741/baby-behaviour-and-awarenessnarrow.jpg",
-        description: "두 아이를 키우고 있는 엄마가 쓰는 따뜻하고도 소박한 일상 이야기."),
-    Parent(
-        uid: '3',
-        nickname: '정다운3',
-        email: 'wjdekdns1@email.com',
-        signInMethod: SignInMethod.email,
-        photoId: "0023/47741/baby-behaviour-and-awarenessnarrow.jpg",
-        description: "두 아이를 키우고 있는 엄마가 쓰는 따뜻하고도 소박한 일상 이야기."),
-    Parent(
-        uid: '4',
-        nickname: '정다운4',
-        email: 'wjdekdns1@email.com',
-        signInMethod: SignInMethod.email,
-        photoId: "0023/47741/baby-behaviour-and-awarenessnarrow.jpg",
-        description: "두 아이를 키우고 있는 엄마가 쓰는 따뜻하고도 소박한 일상 이야기."),
-    Parent(
-        uid: '5',
-        nickname: '정다운5',
-        email: 'wjdekdns1@email.com',
-        signInMethod: SignInMethod.email,
-        photoId: "0023/47741/baby-behaviour-and-awarenessnarrow.jpg",
-        description: "두 아이를 키우고 있는 엄마가 쓰는 따뜻하고도 소박한 일상 이야기."),
-  ];
 
-  SettingFriends({super.key, required this.type});
+  const SettingFriends({super.key, required this.type});
+
+  @override
+  State<SettingFriends> createState() => _SettingFriendsState();
+}
+
+class SettingFriendItem {
+  final String uid;
+  final String nickname;
+  final String? photoId;
+  final String? description;
+  final bool? isMate;
+
+  SettingFriendItem({
+    required this.uid,
+    required this.nickname,
+    this.photoId,
+    this.description,
+    this.isMate,
+  });
+}
+
+class _SettingFriendsState extends State<SettingFriends> {
+  final HttpUtils httpUtils = HttpUtils();
+  List<SettingFriendItem> parents = [];
+  bool isLoading = false;
+  bool hasMore = true;
+  int currentPage = 0;
+  final int pageSize = 10;
+  final ScrollController _scrollController = ScrollController();
+
+  Parent getParentFromProvider() {
+    final parent = context.read<ParentProvider>().parent;
+    if (parent == null) {
+      throw Exception('Parent is null');
+    }
+    return parent;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchFriends();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent &&
+          !isLoading &&
+          hasMore) {
+        _fetchFriends();
+      }
+    });
+  }
+
+  Future<void> _fetchFriends() async {
+    if (isLoading) return;
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final parent = getParentFromProvider();
+      final response = await httpUtils.get(
+          url:
+              '/setting/${widget.type == 'myMates' ? 'mymates' : 'myfriends'}/$currentPage',
+          headers: {'Authorization': 'Bearer ${parent.jwt}'});
+      print("Response: ");
+      print(response);
+
+      if (response['status'] == 'success') {
+        final List<SettingFriendItem> fetchedParents =
+            (response['parents'] as List)
+                .map((item) => SettingFriendItem(
+                      uid: item['parent_id'],
+                      nickname: item['nickname'],
+                      photoId: item['photoId'],
+                      description: item['description'],
+                      isMate: item['isMate'],
+                    ))
+                .toList();
+
+        setState(() {
+          currentPage += 1;
+          hasMore = fetchedParents.length == pageSize;
+          parents.addAll(fetchedParents);
+        });
+      } else {
+        throw Exception('Failed to load friends');
+      }
+    } catch (error) {
+      print('Error fetching friends: $error');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   String getHeaderTitle() {
-    return type == 'myMates' ? '나의 짝꿍' : '나의 친구들';
+    return widget.type == 'myMates' ? '나의 짝꿍' : '나의 친구들';
   }
 
   void handleMenuSelection(String value) {
@@ -72,16 +132,31 @@ class SettingFriends extends StatelessWidget {
         ],
         onMenuSelected: handleMenuSelection,
       ),
-      body: ListView.separated(
-        itemCount: parents.length,
-        itemBuilder: (BuildContext context, int index) => FriendListItem(
-            parent: parents[index],
-            displayAddButton: type != 'myMates',
-            isMate: Random().nextBool()),
-        separatorBuilder: (BuildContext context, int index) {
-          return const Divider();
-        },
-      ),
+      body: parents.isEmpty && isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.separated(
+              controller: _scrollController,
+              itemCount: parents.length + (hasMore ? 1 : 0),
+              itemBuilder: (BuildContext context, int index) {
+                if (index == parents.length) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return FriendListItem(
+                  parent: parents[index],
+                  displayAddButton: widget.type != 'myMates',
+                  isMate: parents[index].isMate ?? true,
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const Divider();
+              },
+            ),
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }

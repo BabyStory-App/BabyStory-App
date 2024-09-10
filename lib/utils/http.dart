@@ -21,6 +21,7 @@ class HttpUtils {
     querys ??= {};
     try {
       var uri = Uri.parse('$baseroot$url');
+      print("Request: $baseroot$url");
       final response = await http.get(uri, headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
