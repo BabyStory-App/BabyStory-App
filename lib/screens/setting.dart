@@ -146,7 +146,7 @@ class _SettingState extends State<Setting> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                SettingFriends(type: "myMates")))),
+                                const SettingFriends(type: "myMates")))),
                 const SizedBox(height: 10),
                 IconRowItem(
                     icon: Icons.subscriptions_rounded,
@@ -155,7 +155,7 @@ class _SettingState extends State<Setting> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                SettingFriends(type: "myFriends")))),
+                                const SettingFriends(type: "myFriends")))),
                 const SizedBox(height: 20),
                 Center(
                   child: SizedBox(
