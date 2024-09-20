@@ -1,6 +1,8 @@
 import 'package:babystory/providers/parent.dart';
 import 'package:babystory/screens/edit_baby_profile.dart';
 import 'package:babystory/screens/edit_parent_profile.dart';
+import 'package:babystory/screens/post.dart';
+import 'package:babystory/screens/post_main.dart';
 import 'package:babystory/screens/setting.dart';
 import 'package:babystory/screens/setting_friends.dart';
 import 'package:babystory/screens/story_list.dart';
@@ -20,7 +22,7 @@ class NavBarRouter extends StatefulWidget {
 }
 
 class _NavBarRouterState extends State<NavBarRouter> {
-  var controller = PersistentTabController(initialIndex: 4);
+  var controller = PersistentTabController(initialIndex: 0);
   final AuthServices _auth = AuthServices();
 
   @override
@@ -39,12 +41,8 @@ class _NavBarRouterState extends State<NavBarRouter> {
             controller: controller,
             navBarStyle: NavBarStyle.style3,
             screens: [
-              Container(
-                color: Colors.white,
-                child: const Center(
-                  child: Text('Home Screen'),
-                ),
-              ),
+              // const PostMainScreen(),
+              const PostScreen(id: 1),
               Container(
                 color: Colors.white,
                 child: const Center(
