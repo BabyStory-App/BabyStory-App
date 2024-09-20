@@ -1,39 +1,38 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-class LabelInput1 extends StatefulWidget {
+class LabelNumInput1 extends StatefulWidget {
   final String label;
   final String? hint;
-  final String value;
+  final double value;
   final double labelWidth;
-  final Function(String)? onFocusOut; // 포커스 해제 시 수행할 함수
+  final bool intOnly; // 정수 입력만 받을지 여부
+  final Function(num)? onFocusOut; // 포커스 해제 시 수행할 함수
   final Duration debounceDuration; // 타이머 시간 설정
-  final List<TextInputFormatter>? inputFormatters;
 
-  const LabelInput1(
-      {super.key,
-      required this.label,
-      this.hint,
-      this.value = '',
-      this.labelWidth = 70,
-      this.onFocusOut, // onFocusOut 함수 인자 추가
-      this.debounceDuration = const Duration(seconds: 2), // 디폴트 2초 후 실행
-      this.inputFormatters});
+  const LabelNumInput1({
+    super.key,
+    required this.label,
+    this.hint,
+    this.value = 0.0,
+    this.labelWidth = 70,
+    this.intOnly = false, // 기본적으로 double을 받으나, intOnly 옵션으로 정수 입력 가능
+    this.onFocusOut, // onFocusOut 함수 인자 추가
+    this.debounceDuration = const Duration(seconds: 2), // 디폴트 2초 후 실행
+  });
 
   @override
-  State<LabelInput1> createState() => _LabelInput1State();
+  State<LabelNumInput1> createState() => _LabelNumInput1State();
 }
 
-class _LabelInput1State extends State<LabelInput1> {
+class _LabelNumInput1State extends State<LabelNumInput1> {
   late TextEditingController _controller;
-  Timer? _debounceTimer; // 타이머 변수
+  Timer? _debounceTimer;
 
   @override
   void initState() {
     super.initState();
-    // Initialize the controller
-    _controller = TextEditingController(text: widget.value);
+    _controller = TextEditingController(text: widget.value.toString());
   }
 
   void _onTextChanged(String newValue) {
@@ -42,10 +41,26 @@ class _LabelInput1State extends State<LabelInput1> {
       _debounceTimer!.cancel();
     }
 
+    // 숫자만 입력받도록 처리
+    String filteredValue = widget.intOnly
+        ? newValue.replaceAll(RegExp(r'[^0-9]'), '') // 정수만 허용
+        : newValue.replaceAll(RegExp(r'[^0-9.]'), ''); // 소수 허용
+
+    // 텍스트 필드의 값을 필터링된 값으로 업데이트
+    if (_controller.text != filteredValue) {
+      _controller.value = TextEditingValue(
+        text: filteredValue,
+        selection: TextSelection.collapsed(offset: filteredValue.length),
+      );
+    }
+
     // 새로운 타이머 시작
     _debounceTimer = Timer(widget.debounceDuration, () {
-      if (widget.onFocusOut != null) {
-        widget.onFocusOut!(newValue); // 타이머가 만료되면 onFocusOut 호출
+      if (widget.onFocusOut != null && filteredValue.isNotEmpty) {
+        num parsedValue = widget.intOnly
+            ? int.parse(filteredValue)
+            : double.parse(filteredValue);
+        widget.onFocusOut!(parsedValue); // 타이머 만료 시 onFocusOut 호출
       }
     });
   }
@@ -78,13 +93,12 @@ class _LabelInput1State extends State<LabelInput1> {
               controller: _controller,
               style: const TextStyle(
                   fontSize: 14, color: Colors.black, height: 1.5),
-              onChanged: _onTextChanged, // 텍스트 변경 시 호출
-              minLines: 1,
-              maxLines: null,
-              keyboardType: TextInputType.multiline,
-              inputFormatters: widget.inputFormatters,
+              onChanged: _onTextChanged,
+              keyboardType: TextInputType.numberWithOptions(
+                decimal: !widget.intOnly, // 소수점 입력 여부를 intOnly에 따라 결정
+              ),
               decoration: InputDecoration(
-                hintText: widget.value.isEmpty ? widget.hint : null,
+                hintText: widget.value == 0 ? widget.hint : null,
                 hintStyle: TextStyle(
                   fontSize: 13,
                   color: Colors.black.withOpacity(0.6),
@@ -112,5 +126,7 @@ class _LabelInput1State extends State<LabelInput1> {
     super.dispose();
   }
 
-  String get value => _controller.text;
+  num get value => widget.intOnly
+      ? int.tryParse(_controller.text) ?? widget.value.toInt()
+      : double.tryParse(_controller.text) ?? widget.value;
 }

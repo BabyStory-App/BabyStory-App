@@ -1,4 +1,5 @@
 import 'package:babystory/providers/parent.dart';
+import 'package:babystory/screens/edit_baby_profile.dart';
 import 'package:babystory/screens/edit_parent_profile.dart';
 import 'package:babystory/screens/setting.dart';
 import 'package:babystory/screens/setting_friends.dart';

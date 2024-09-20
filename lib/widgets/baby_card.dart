@@ -1,3 +1,4 @@
+import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/models/baby.dart';
 import 'package:babystory/utils/date.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +24,8 @@ class BabyCard extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 28,
-              backgroundImage: NetworkImage(
-                  "https://raisingchildren.net.au/__data/assets/image/${baby.photoId}"),
+              backgroundImage:
+                  NetworkImage(RawsApi.getBabyProfileLink(baby.photoId)),
             ),
             const SizedBox(height: 14),
             Text(
@@ -38,7 +39,7 @@ class BabyCard extends StatelessWidget {
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text(baby.description ?? '',
+              child: Text(baby.obn,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                   style: const TextStyle(fontSize: 11, color: Colors.black87)),

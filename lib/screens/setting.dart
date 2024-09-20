@@ -1,13 +1,18 @@
 import 'package:babystory/enum/gender.dart';
 import 'package:babystory/models/baby.dart';
+import 'package:babystory/models/parent.dart';
+import 'package:babystory/providers/parent.dart';
+import 'package:babystory/screens/edit_baby_profile.dart';
 import 'package:babystory/screens/setting_friends.dart';
 import 'package:babystory/screens/story_list.dart';
 import 'package:babystory/services/auth.dart';
+import 'package:babystory/utils/http.dart';
 import 'package:babystory/widgets/baby_card.dart';
 import 'package:babystory/widgets/iconRowItem.dart';
 import 'package:babystory/widgets/session_title1.dart';
 import 'package:babystory/widgets/setting_profile_overview.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -18,39 +23,44 @@ class Setting extends StatefulWidget {
 
 // https://raisingchildren.net.au/__data/assets/image/0023/47741/baby-behaviour-and-awarenessnarrow.jpg
 class _SettingState extends State<Setting> {
+  final HttpUtils httpUtils = HttpUtils();
   final AuthServices _authServices = AuthServices();
-  List<Baby> babies = [
-    Baby(
-        id: "asdafasdas-dasd-awdasd-asda",
-        obn: "obn1",
-        name: "정새봄",
-        gender: Gender.male,
-        birthDate: DateTime.parse("20240102"),
-        bloodType: "AB+",
-        description: '무럭 무럭 자라는 우리 첫째 아이. 항상 블록을 가지고 정겹게 놀고 있는 아이.',
-        photoId: "0023/47741/baby-behaviour-and-awarenessnarrow.jpg"),
-    Baby(
-        id: "asdafasdas-dasd-awdaagfafgsd-asda",
-        obn: "obn1",
-        name: "정다운",
-        gender: Gender.male,
-        birthDate: DateTime.parse("20231031"),
-        bloodType: "B+",
-        description: '사랑과 기쁨과 행복을 주는 하나 밖에 없는 우리 둘째 아이. 항상 웃음이 끊이질 않아요.',
-        photoId: "0023/47741/baby-behaviour-and-awarenessnarrow.jpg"),
-    Baby(
-        id: "asdafagagasdas-dasd-awdasd-asda",
-        obn: "obn1",
-        name: "정단테",
-        gender: Gender.male,
-        birthDate: DateTime.parse("20230501"),
-        bloodType: "AB+",
-        description: '서울 중앙에 있는 펜트하우스 최상층에서 살고 있는 우리 막내 아이. 항상 높은 곳을 향해.',
-        photoId: "0023/47741/baby-behaviour-and-awarenessnarrow.jpg"),
-  ];
+  List<Baby> babies = [];
 
   void createNewBaby() {
-    print("CreateNewBaby");
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const EditBabyProfile()));
+  }
+
+  Parent getParentFromProvider() {
+    final parent = context.read<ParentProvider>().parent;
+    if (parent == null) {
+      throw Exception('Parent is null');
+    }
+    return parent;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchBabies();
+  }
+
+  Future<void> _fetchBabies() async {
+    try {
+      final parent = getParentFromProvider();
+      var json = await httpUtils.get(
+          url: '/baby', headers: {'Authorization': 'Bearer ${parent.jwt}'});
+      if (json == null) {
+        return;
+      }
+      var res = json['baby'] ?? [];
+      babies =
+          res.map<Baby>((baby) => Baby.fromJson(baby)).toList().cast<Baby>();
+      setState(() {});
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   @override
@@ -82,7 +92,16 @@ class _SettingState extends State<Setting> {
                           scrollDirection: Axis.horizontal,
                           itemCount: babies.length,
                           itemBuilder: (BuildContext context, int index) =>
-                              BabyCard(baby: babies[index]),
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                EditBabyProfile(
+                                                    baby: babies[index])));
+                                  },
+                                  child: BabyCard(baby: babies[index])),
                           separatorBuilder: (BuildContext ctx, int idx) =>
                               const SizedBox(width: 20),
                         ),

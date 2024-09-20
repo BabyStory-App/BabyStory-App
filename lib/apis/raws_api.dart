@@ -15,6 +15,13 @@ class RawsApi {
     return "$baseroot/raws/profile/${fileId ?? 'default_profile_image'}";
   }
 
+  static String getBabyProfileLink(String? fileId) {
+    if (fileId != null && fileId.contains('http')) {
+      return fileId;
+    }
+    return "$baseroot/raws/baby/profile/${fileId ?? 'default_profile_image'}";
+  }
+
   static String getCryLink(String? audioId) {
     return "request cry: ${'$baseroot/raws/cry/${audioId ?? "sample"}'}";
   }
