@@ -1,3 +1,4 @@
+import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/models/parent.dart';
 import 'package:babystory/models/post.dart';
 import 'package:babystory/providers/parent.dart';
@@ -6,6 +7,7 @@ import 'package:babystory/utils/alert.dart';
 import 'package:babystory/utils/http.dart';
 import 'package:babystory/widgets/app_bar1.dart';
 import 'package:babystory/widgets/appbar/appbar2.dart';
+import 'package:babystory/widgets/storyItem/leftImg.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -60,7 +62,7 @@ class _StoryListState extends State<StoryList> {
   List<int> selectedItemIds = [];
   bool isLoading = false;
   bool hasMore = true;
-  int currentPage = 1;
+  int currentPage = 0;
   final int pageSize = 10;
   final ScrollController _scrollController = ScrollController();
 
@@ -276,30 +278,49 @@ class _StoryListState extends State<StoryList> {
             }
             final story = stories[index];
             return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PostScreen(id: story.id),
-                  ),
-                );
-              },
+              onTap: isSelecting
+                  ? () {
+                      toggleSelection(stories[index].id);
+                    }
+                  : () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PostScreen(id: story.id),
+                        ),
+                      );
+                    },
+              onLongPress: () => handleStoryLongPress(index),
               child: Row(
                 children: [
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: isSelecting
+                        ? Checkbox(
+                            key: ValueKey<int>(stories[index].id),
+                            value: selectedItemIds.contains(stories[index].id),
+                            onChanged: (value) {
+                              toggleSelection(stories[index].id);
+                            },
+                          )
+                        : const SizedBox.shrink(), // 선택 모드가 아닐 때는 빈 공간
+                  ),
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: ListTile(
-                        leading: story.photoId != null
-                            ? Image.network(
-                                story.photoId!,
-                                width: 50,
-                                height: 50,
-                                fit: BoxFit.cover,
-                              )
-                            : null,
-                        title: Text(story.title),
-                        subtitle: Text(story.contentPreview),
+                    child: AnimatedContainer(
+                      duration:
+                          const Duration(milliseconds: 300), // 애니메이션 시간 설정
+                      curve: Curves.easeInOut, // 자연스러운 애니메이션 곡선 설정
+                      padding: EdgeInsets.only(
+                          left: isSelecting ? 0 : 0), // 선택 모드일 때는 패딩 없음
+                      margin: EdgeInsets.only(
+                          left: isSelecting ? 10 : 0), // 선택 모드일 때만 왼쪽 여백 추가
+                      child: StoryItemLeftImg(
+                        title: stories[index].title,
+                        description: stories[index].contentPreview,
+                        img: stories[index].photoId,
+                        heart: stories[index].pHeart,
+                        comment: stories[index].pComment,
+                        date: stories[index].createTime,
                       ),
                     ),
                   ),

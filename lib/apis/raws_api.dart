@@ -9,17 +9,33 @@ class RawsApi {
   static String baseroot = dotenv.env['API_BASE_ROOT'] ?? '';
 
   static String getProfileLink(String? fileId) {
-    if (fileId != null && fileId.contains('http')) {
-      return fileId;
-    }
-    return "$baseroot/raws/profile/${fileId ?? 'default_profile_image'}";
+    return RawsApi.imageURL(fileId, 'raws/profile', 'default_profile_image');
   }
 
   static String getBabyProfileLink(String? fileId) {
+    return RawsApi.imageURL(
+        fileId, 'raws/baby/profile', 'default_profile_image');
+  }
+
+  static String getPostLink(String? fileId) {
+    var link =
+        RawsApi.imageURL(fileId, 'raws/post/photo', 'default_post_image');
+    print('link: $link');
+    return link;
+  }
+
+  static String imageURL(
+      String? fileId, String middlePath, String defaultPath) {
     if (fileId != null && fileId.contains('http')) {
       return fileId;
     }
-    return "$baseroot/raws/baby/profile/${fileId ?? 'default_profile_image'}";
+    if (fileId == null) {
+      return "$baseroot/$middlePath/$defaultPath";
+    }
+    if (fileId.contains('.')) {
+      return "$baseroot/$middlePath/${fileId.split('.').first}";
+    }
+    return "$baseroot/$middlePath/$fileId";
   }
 
   static String getCryLink(String? audioId) {

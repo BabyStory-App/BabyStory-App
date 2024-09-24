@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/utils/date.dart';
 import 'package:flutter/material.dart';
 
@@ -35,14 +36,15 @@ class StoryItemLeftImg extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             ),
-            const SizedBox(height: 4),
-            Text(
-              description ?? "",
-              style:
-                  TextStyle(fontSize: 12, color: Colors.black.withOpacity(0.6)),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-            ),
+            if (description != null) const SizedBox(height: 4),
+            if (description != null)
+              Text(
+                description ?? "",
+                style: TextStyle(
+                    fontSize: 12, color: Colors.black.withOpacity(0.6)),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
             const SizedBox(height: 6),
             SizedBox(
               height: 20,
@@ -53,7 +55,7 @@ class StoryItemLeftImg extends StatelessWidget {
                   const Icon(Icons.favorite_border,
                       size: 12, color: Colors.redAccent),
                   const SizedBox(width: 3),
-                  Text(heart.toString(),
+                  Text(heart == null ? "0" : heart.toString(),
                       style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
@@ -67,7 +69,7 @@ class StoryItemLeftImg extends StatelessWidget {
                   const SizedBox(width: 4),
                   Padding(
                     padding: const EdgeInsets.only(top: 1),
-                    child: Text(comment.toString(),
+                    child: Text(comment == null ? "0" : comment.toString(),
                         style: const TextStyle(
                             fontSize: 11,
                             color: Colors.blue,
@@ -90,13 +92,13 @@ class StoryItemLeftImg extends StatelessWidget {
             )
           ],
         )),
-        if (Random().nextBool() && img != null)
+        if (img != null)
           Padding(
             padding: const EdgeInsets.only(left: 16),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.network(
-                img!,
+                RawsApi.getPostLink(img),
                 width: 72,
                 height: 72,
                 fit: BoxFit.cover,

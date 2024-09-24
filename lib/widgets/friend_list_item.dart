@@ -1,17 +1,23 @@
+import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/screens/setting_friends.dart';
 import 'package:flutter/material.dart';
 
-class FriendListItem extends StatelessWidget {
+class FriendListItem extends StatefulWidget {
   final SettingFriendItem parent;
   final bool displayAddButton;
-  final bool isMate;
+  bool isMate;
 
-  const FriendListItem(
+  FriendListItem(
       {super.key,
       required this.parent,
       this.displayAddButton = false,
       this.isMate = false});
 
+  @override
+  State<FriendListItem> createState() => _FriendListItemState();
+}
+
+class _FriendListItemState extends State<FriendListItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,24 +32,37 @@ class FriendListItem extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 20,
-                backgroundImage: NetworkImage(
-                    "https://raisingchildren.net.au/__data/assets/image/${parent.photoId}"),
+                backgroundColor: Colors.grey, // 이미지 로드 실패 시 사용할 기본 배경색
+                child: ClipOval(
+                  child: Image.network(
+                    RawsApi.getProfileLink(widget.parent.photoId),
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: Colors.grey, // 에러 시 회색으로 채우기
+                        child: const Icon(Icons.person,
+                            color: Colors.white), // 에러 시 기본 아이콘 표시 (선택 사항)
+                      );
+                    },
+                  ),
+                ),
               ),
               const SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    parent.nickname,
+                    widget.parent.nickname,
                     style: const TextStyle(
                         fontSize: 13, fontWeight: FontWeight.bold),
                   ),
-                  if (parent.description != null) const SizedBox(height: 2),
-                  if (parent.description != null)
+                  if (widget.parent.description != null)
+                    const SizedBox(height: 2),
+                  if (widget.parent.description != null)
                     Container(
                       width: MediaQuery.of(context).size.width * 0.5,
                       child: Text(
-                        parent.description!,
+                        widget.parent.description!,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                             fontSize: 11, color: Colors.black54),
@@ -76,14 +95,17 @@ class FriendListItem extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              if (displayAddButton)
+              if (widget.displayAddButton)
                 OutlinedButton(
                   onPressed: () {
                     print("On Click");
+                    setState(() {
+                      widget.isMate = !widget.isMate;
+                    });
                   },
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(width: 0.7, color: Colors.blue),
-                    backgroundColor: isMate ? Colors.blue : Colors.white,
+                    backgroundColor: widget.isMate ? Colors.blue : Colors.white,
                     minimumSize: Size.zero,
                     padding: const EdgeInsets.only(
                         left: 4, right: 8, top: 3, bottom: 3),
@@ -91,13 +113,14 @@ class FriendListItem extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(isMate ? Icons.check_rounded : Icons.add,
-                          size: 18, color: isMate ? Colors.white : Colors.blue),
+                      Icon(widget.isMate ? Icons.check_rounded : Icons.add,
+                          size: 18,
+                          color: widget.isMate ? Colors.white : Colors.blue),
                       const SizedBox(width: 2),
                       Text(
                         "친구",
                         style: TextStyle(
-                          color: isMate ? Colors.white : Colors.blue,
+                          color: widget.isMate ? Colors.white : Colors.blue,
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                         ),

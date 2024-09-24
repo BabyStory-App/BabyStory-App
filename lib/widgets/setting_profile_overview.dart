@@ -88,9 +88,21 @@ class _SettingProfileOverviewState extends State<SettingProfileOverview> {
                       color: Colors.black87)),
             ),
             CircleAvatar(
-              radius: 28,
-              backgroundImage:
-                  NetworkImage(RawsApi.getProfileLink(parent.photoId)),
+              radius: 20,
+              backgroundColor: Colors.grey, // 이미지 로드 실패 시 사용할 기본 배경색
+              child: ClipOval(
+                child: Image.network(
+                  RawsApi.getProfileLink(parent.photoId),
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey, // 에러 시 회색으로 채우기
+                      child: const Icon(Icons.person,
+                          color: Colors.white), // 에러 시 기본 아이콘 표시 (선택 사항)
+                    );
+                  },
+                ),
+              ),
             ),
           ],
         ),

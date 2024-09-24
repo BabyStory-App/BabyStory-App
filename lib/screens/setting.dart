@@ -21,7 +21,6 @@ class Setting extends StatefulWidget {
   State<Setting> createState() => _SettingState();
 }
 
-// https://raisingchildren.net.au/__data/assets/image/0023/47741/baby-behaviour-and-awarenessnarrow.jpg
 class _SettingState extends State<Setting> {
   final HttpUtils httpUtils = HttpUtils();
   final AuthServices _authServices = AuthServices();
@@ -51,6 +50,7 @@ class _SettingState extends State<Setting> {
       final parent = getParentFromProvider();
       var json = await httpUtils.get(
           url: '/baby', headers: {'Authorization': 'Bearer ${parent.jwt}'});
+      print("Response Baby: $json");
       if (json == null) {
         return;
       }
