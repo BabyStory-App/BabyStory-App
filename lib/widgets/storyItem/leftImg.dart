@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/utils/date.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +8,7 @@ class StoryItemLeftImg extends StatelessWidget {
   final String? img;
   final int? heart;
   final int? comment;
-  final DateTime date;
+  final String? info;
 
   const StoryItemLeftImg(
       {super.key,
@@ -19,7 +17,7 @@ class StoryItemLeftImg extends StatelessWidget {
       this.img,
       this.heart = 0,
       this.comment = 0,
-      required this.date});
+      this.info});
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +37,8 @@ class StoryItemLeftImg extends StatelessWidget {
             if (description != null) const SizedBox(height: 4),
             if (description != null)
               Text(
-                description ?? "",
-                style: TextStyle(
-                    fontSize: 12, color: Colors.black.withOpacity(0.6)),
+                description!.replaceAll('\n', ''),
+                style: const TextStyle(fontSize: 11, color: Colors.grey),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
@@ -76,17 +73,20 @@ class StoryItemLeftImg extends StatelessWidget {
                             fontWeight: FontWeight.w500)),
                   ),
                   const SizedBox(width: 4),
-                  const Text("|",
-                      style: TextStyle(
-                          color: Colors.black45, fontWeight: FontWeight.bold)),
-                  const SizedBox(width: 4),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 2),
-                    child: Text(timeAgo(date),
+                  if (info != null)
+                    const Text("|",
                         style: TextStyle(
-                            fontSize: 11,
-                            color: Colors.black.withOpacity(0.6))),
-                  ),
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold)),
+                  const SizedBox(width: 4),
+                  if (info != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 2),
+                      child: Text(info!,
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.black.withOpacity(0.6))),
+                    ),
                 ],
               ),
             )
@@ -95,13 +95,21 @@ class StoryItemLeftImg extends StatelessWidget {
         if (img != null)
           Padding(
             padding: const EdgeInsets.only(left: 16),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                RawsApi.getPostLink(img),
-                width: 72,
-                height: 72,
-                fit: BoxFit.cover,
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                    color: Colors.grey.withOpacity(0.6),
+                    width: 0.5), // 원하는 색상과 두께로 설정
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  RawsApi.getPostLink(img),
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),

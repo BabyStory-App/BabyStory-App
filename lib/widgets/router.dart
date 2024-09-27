@@ -41,8 +41,7 @@ class _NavBarRouterState extends State<NavBarRouter> {
             controller: controller,
             navBarStyle: NavBarStyle.style3,
             screens: [
-              // const PostMainScreen(),
-              const PostScreen(id: 1),
+              const PostMainScreen(),
               Container(
                 color: Colors.white,
                 child: const Center(

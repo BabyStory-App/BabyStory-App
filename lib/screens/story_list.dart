@@ -4,6 +4,7 @@ import 'package:babystory/models/post.dart';
 import 'package:babystory/providers/parent.dart';
 import 'package:babystory/screens/post.dart';
 import 'package:babystory/utils/alert.dart';
+import 'package:babystory/utils/date.dart';
 import 'package:babystory/utils/http.dart';
 import 'package:babystory/widgets/app_bar1.dart';
 import 'package:babystory/widgets/appbar/appbar2.dart';
@@ -123,10 +124,10 @@ class _StoryListState extends State<StoryList> {
                 reveal: PostReveal.closed,
                 parentId: "",
                 createTime: DateTime.parse(post['createTime']),
-                pHeart: post['heart'],
-                pScript: post['script'],
-                pView: post['view'],
-                pComment: post['comment'],
+                pHeart: post['pHeart'],
+                pScript: post['pScript'],
+                pView: post['pView'],
+                pComment: post['pComment'],
                 hashList: post['hashList'],
                 photoId: post['photo_id'],
                 contentPreview: post['contentPreview'],
@@ -320,7 +321,7 @@ class _StoryListState extends State<StoryList> {
                         img: stories[index].photoId,
                         heart: stories[index].pHeart,
                         comment: stories[index].pComment,
-                        date: stories[index].createTime,
+                        info: timeAgo(stories[index].createTime),
                       ),
                     ),
                   ),

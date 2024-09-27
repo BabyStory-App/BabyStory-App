@@ -13,8 +13,10 @@ class RawsApi {
   }
 
   static String getBabyProfileLink(String? fileId) {
-    return RawsApi.imageURL(
-        fileId, 'raws/baby/profile', 'default_profile_image');
+    var link =
+        RawsApi.imageURL(fileId, 'raws/baby/profile', 'default_profile_image');
+    // print('link: $link');
+    return link;
   }
 
   static String getPostLink(String? fileId) {
