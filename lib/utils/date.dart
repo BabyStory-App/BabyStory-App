@@ -22,17 +22,30 @@ int calculateMonthsUntilBirth(DateTime birthDate) {
 
 String timeAgo(DateTime dateTime) {
   final now = DateTime.now();
-  final difference = now.difference(dateTime);
+  Duration difference = now.difference(dateTime);
 
-  if (difference.inDays > 0) {
-    return '${difference.inDays}일 전';
-  } else if (difference.inHours > 0) {
-    return '${difference.inHours}시간 전';
-  } else if (difference.inMinutes > 0) {
+  // 1시간 이내일 경우 분 단위 반환
+  if (difference.inMinutes < 60) {
     return '${difference.inMinutes}분 전';
-  } else {
-    return '방금 전';
   }
+  // 1일 이내일 경우 시간 단위 반환
+  else if (difference.inHours < 24) {
+    return '${difference.inHours}시간 전';
+  }
+  // 1달 이내일 경우 일 단위 반환
+  else if (difference.inDays < 30) {
+    return '${difference.inDays}일 전';
+  }
+  // 1달 이상일 경우 달 단위 반환
+  else {
+    int months = (difference.inDays / 30).floor();
+    return '$months달 전';
+  }
+}
+
+String timeAgoString(String dateTimeString) {
+  DateTime inputTime = DateTime.parse(dateTimeString);
+  return timeAgo(inputTime);
 }
 
 DateTime generateRandomDateTimeWithinOneMonth() {
