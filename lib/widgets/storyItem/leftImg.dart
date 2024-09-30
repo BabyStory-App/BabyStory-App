@@ -2,6 +2,37 @@ import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/utils/date.dart';
 import 'package:flutter/material.dart';
 
+class StoryItemLeftImgData {
+  final int? id;
+  final String title;
+  final String? description;
+  final String? img;
+  final int? heart;
+  final int? comment;
+  final String? info;
+
+  StoryItemLeftImgData(
+      {required this.title,
+      this.id,
+      this.description,
+      this.img,
+      this.heart = 0,
+      this.comment = 0,
+      this.info});
+
+  factory StoryItemLeftImgData.fromJson(Map<String, dynamic> json) {
+    return StoryItemLeftImgData(
+      id: json['postid'],
+      title: json['title'],
+      description: json['desc'],
+      img: json['photoId'],
+      heart: json['pHeart'],
+      comment: json['comment'],
+      info: json['author_name'],
+    );
+  }
+}
+
 class StoryItemLeftImg extends StatelessWidget {
   final String title;
   final String? description;

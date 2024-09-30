@@ -47,6 +47,8 @@ class HttpUtils {
     body ??= {};
     try {
       var uri = Uri.parse('$baseroot$url');
+      print("Request URL: $baseroot$url");
+      print("Request Body: $body");
       final response = await http.post(uri,
           headers: {
             'Content-Type': 'application/json',
