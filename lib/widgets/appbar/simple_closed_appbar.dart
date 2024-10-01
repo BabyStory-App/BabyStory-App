@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 class SimpleClosedAppBar extends StatelessWidget
     implements PreferredSizeWidget {
   final String title;
+  final IconData? icon;
 
-  const SimpleClosedAppBar({super.key, required this.title});
+  const SimpleClosedAppBar(
+      {super.key, required this.title, this.icon = Icons.close});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight + 0.15);
@@ -17,7 +19,7 @@ class SimpleClosedAppBar extends StatelessWidget
       leading: Padding(
         padding: const EdgeInsets.only(top: 10),
         child: IconButton(
-          icon: const Icon(Icons.close, color: Colors.grey),
+          icon: Icon(icon, color: Colors.grey),
           onPressed: () {
             Navigator.pop(context);
           },

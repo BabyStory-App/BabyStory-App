@@ -1,6 +1,7 @@
 import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/models/parent.dart';
 import 'package:babystory/providers/parent.dart';
+import 'package:babystory/screens/post_profile.dart';
 import 'package:babystory/utils/date.dart';
 import 'package:babystory/utils/http.dart';
 import 'package:babystory/widgets/button/focusable_icon_button.dart';
@@ -154,10 +155,20 @@ class _PostScreenState extends State<PostScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            CircleAvatar(
-                              radius: 10,
-                              backgroundImage: NetworkImage(
-                                  RawsApi.getProfileLink(parent.photoId)),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PostProfileScreen(
+                                            parentId: data['creater']
+                                                ['parentId'])));
+                              },
+                              child: CircleAvatar(
+                                radius: 10,
+                                backgroundImage: NetworkImage(
+                                    RawsApi.getProfileLink(parent.photoId)),
+                              ),
                             ),
                             const SizedBox(width: 12),
                             Text(
@@ -215,36 +226,48 @@ class _PostScreenState extends State<PostScreen> {
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  CircleAvatar(
-                                    radius: 22,
-                                    backgroundImage: NetworkImage(
-                                      RawsApi.getProfileLink(
-                                          data['creater']['photoId']),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              PostProfileScreen(
+                                                  parentId: data['creater']
+                                                      ['parentId'])));
+                                },
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 22,
+                                      backgroundImage: NetworkImage(
+                                        RawsApi.getProfileLink(
+                                            data['creater']['photoId']),
+                                      ),
                                     ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(data['creater']['nickname'],
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600,
-                                          )),
-                                      const SizedBox(height: 3),
-                                      Text(
-                                          '친구 ${data['creater']['status']['friendCount']} · 이야기 ${data['creater']['status']['myStoryCount']}',
-                                          style: TextStyle(
-                                              color:
-                                                  Colors.black.withOpacity(0.6),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400)),
-                                    ],
-                                  ),
-                                ],
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(data['creater']['nickname'],
+                                            style: const TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600,
+                                            )),
+                                        const SizedBox(height: 3),
+                                        Text(
+                                            '친구 ${data['creater']['status']['friendCount']} · 이야기 ${data['creater']['status']['myStoryCount']}',
+                                            style: TextStyle(
+                                                color: Colors.black
+                                                    .withOpacity(0.6),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400)),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             const SizedBox(height: 12),

@@ -37,7 +37,6 @@ class _PostSearchState extends State<PostSearchScreen> {
     super.initState();
     parent = getParentFromProvider();
     searchWord = widget.searchWord;
-    searchWord = "아기";
     moreMethod = widget.moreMethod;
 
     if (searchWord != null) {

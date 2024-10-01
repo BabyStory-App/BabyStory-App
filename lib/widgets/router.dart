@@ -3,6 +3,7 @@ import 'package:babystory/screens/edit_baby_profile.dart';
 import 'package:babystory/screens/edit_parent_profile.dart';
 import 'package:babystory/screens/post.dart';
 import 'package:babystory/screens/post_main.dart';
+import 'package:babystory/screens/post_profile.dart';
 import 'package:babystory/screens/post_search.dart';
 import 'package:babystory/screens/setting.dart';
 import 'package:babystory/screens/setting_friends.dart';
@@ -42,8 +43,7 @@ class _NavBarRouterState extends State<NavBarRouter> {
             controller: controller,
             navBarStyle: NavBarStyle.style3,
             screens: [
-              // const PostMainScreen(),
-              const PostSearchScreen(),
+              const PostMainScreen(),
               Container(
                 color: Colors.white,
                 child: const Center(

@@ -1,6 +1,7 @@
 import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/models/parent.dart';
 import 'package:babystory/screens/post.dart';
+import 'package:babystory/screens/post_search.dart';
 import 'package:babystory/widgets/border_circle_avatar.dart';
 import 'package:flutter/material.dart';
 
@@ -106,12 +107,22 @@ class _PostMainBannerState extends State<PostMainBanner> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 2),
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.white,
-                    size: 24,
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const PostSearchScreen()));
+                    },
+                    icon: const Icon(
+                      Icons.search,
+                      color: Colors.white,
+                      size: 24,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),

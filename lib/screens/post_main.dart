@@ -75,7 +75,8 @@ class _PostMainScreenState extends State<PostMainScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => PostSearchScreen()));
+                              builder: (context) => const PostSearchScreen(
+                                  moreMethod: 'friend')));
                     },
                     setBorderBottom: false,
                   ),
@@ -93,7 +94,8 @@ class _PostMainScreenState extends State<PostMainScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PostSearchScreen()));
+                                builder: (context) => const PostSearchScreen(
+                                    moreMethod: 'friend_read')));
                       }),
                   const UtilDivider(paddingTop: 12),
                   const DescTitle(
@@ -109,7 +111,8 @@ class _PostMainScreenState extends State<PostMainScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PostSearchScreen()));
+                                builder: (context) => const PostSearchScreen(
+                                    moreMethod: 'neighbor')));
                       }),
                   const UtilDivider(paddingTop: 12),
                   const SizedBox(height: 20),

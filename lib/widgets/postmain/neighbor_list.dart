@@ -1,3 +1,4 @@
+import 'package:babystory/screens/post_profile.dart';
 import 'package:babystory/widgets/profile_card.dart';
 import 'package:flutter/material.dart';
 
@@ -20,8 +21,17 @@ class PostmainNeighborList extends StatelessWidget {
             children: data!
                 .map((neighbor) => Container(
                       margin: const EdgeInsets.only(right: 16),
-                      child: ProfileCard(
-                          parent: ProfileCardData.fromJson(neighbor)),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PostProfileScreen(
+                                      parentId: neighbor['parent_id'])));
+                        },
+                        child: ProfileCard(
+                            parent: ProfileCardData.fromJson(neighbor)),
+                      ),
                     ))
                 .toList(),
           ),
