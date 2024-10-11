@@ -4,9 +4,16 @@ class SimpleClosedAppBar extends StatelessWidget
     implements PreferredSizeWidget {
   final String title;
   final IconData? icon;
+  final IconData? rightIcon;
+  final VoidCallback? rightIconAction;
 
-  const SimpleClosedAppBar(
-      {super.key, required this.title, this.icon = Icons.close});
+  const SimpleClosedAppBar({
+    super.key,
+    required this.title,
+    this.icon = Icons.close,
+    this.rightIcon,
+    this.rightIconAction,
+  });
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight + 0.15);
@@ -38,6 +45,16 @@ class SimpleClosedAppBar extends StatelessWidget
       ),
       centerTitle: true, // Center the title
       toolbarHeight: 54,
+      actions: [
+        if (rightIcon != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 10, right: 10),
+            child: IconButton(
+              icon: Icon(rightIcon, color: Colors.grey),
+              onPressed: rightIconAction ?? () {},
+            ),
+          ),
+      ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(0.15),
         child: Container(

@@ -138,7 +138,7 @@ class _PostScreenState extends State<PostScreen> {
                                         .split(',')
                                         .map((word) => '#$word')
                                         .join(' ')
-                                    : '',
+                                    : data['creater']['descript'],
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,

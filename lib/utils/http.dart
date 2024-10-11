@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:path/path.dart'; // For basename
+import 'package:http_parser/http_parser.dart'; // For MediaType
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -114,6 +116,46 @@ class HttpUtils {
       if (filePath != null) {
         request.files.add(
           await http.MultipartFile.fromPath('file', filePath),
+        );
+      }
+
+      var response = await request.send();
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseData = await response.stream.bytesToString();
+        return jsonDecode(responseData);
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> postMultiImages({
+    required String url,
+    Map<String, String>? headers,
+    Map<String, String>? fields,
+    required List<File> images,
+  }) async {
+    headers ??= {};
+    fields ??= {};
+
+    try {
+      var uri = Uri.parse('$baseroot$url');
+
+      var request = http.MultipartRequest('POST', uri)
+        ..headers.addAll({
+          'Accept': 'application/json',
+          ...headers,
+        })
+        ..fields.addAll(fields);
+
+      for (int i = 0; i < images.length; i++) {
+        var stream = http.ByteStream(images[i].openRead());
+        var length = await images[i].length();
+        request.files.add(
+          http.MultipartFile('fileList', stream, length,
+              filename: basename(images[i].path),
+              contentType: MediaType('image', images[i].path.split('.').last)),
         );
       }
 

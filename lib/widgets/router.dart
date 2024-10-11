@@ -1,18 +1,9 @@
 import 'package:babystory/providers/parent.dart';
-import 'package:babystory/screens/comment.dart';
-import 'package:babystory/screens/edit_baby_profile.dart';
-import 'package:babystory/screens/edit_parent_profile.dart';
-import 'package:babystory/screens/post.dart';
 import 'package:babystory/screens/post_main.dart';
-import 'package:babystory/screens/post_profile.dart';
-import 'package:babystory/screens/post_search.dart';
 import 'package:babystory/screens/setting.dart';
-import 'package:babystory/screens/setting_friends.dart';
-import 'package:babystory/screens/story_list.dart';
 import 'package:babystory/services/auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
 
