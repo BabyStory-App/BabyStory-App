@@ -69,3 +69,7 @@ DateTime generateRandomDateTimeWithinOneMonth() {
     seconds: randomSeconds,
   ));
 }
+
+String formatDateTime(DateTime dateTime) {
+  return '${dateTime.month}월 ${dateTime.day}일, ${dateTime.year}';
+}
