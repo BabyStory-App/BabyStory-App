@@ -133,8 +133,9 @@ class _PostScreenState extends State<PostScreen> {
                               ),
                               const SizedBox(height: 6),
                               Text(
-                                data['hashList'] != null
-                                    ? data['hashList']
+                                data['hashList'] != null &&
+                                        data['hashList'] != ''
+                                    ? '' // data['hashList']
                                         .split(',')
                                         .map((word) => '#$word')
                                         .join(' ')

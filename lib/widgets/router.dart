@@ -1,4 +1,5 @@
 import 'package:babystory/providers/parent.dart';
+import 'package:babystory/screens/cry_detect.dart';
 import 'package:babystory/screens/post_main.dart';
 import 'package:babystory/screens/setting.dart';
 import 'package:babystory/services/auth.dart';
@@ -16,7 +17,7 @@ class NavBarRouter extends StatefulWidget {
 }
 
 class _NavBarRouterState extends State<NavBarRouter> {
-  var controller = PersistentTabController(initialIndex: 0);
+  var controller = PersistentTabController(initialIndex: 1);
   final AuthServices _auth = AuthServices();
 
   @override
@@ -36,12 +37,7 @@ class _NavBarRouterState extends State<NavBarRouter> {
             navBarStyle: NavBarStyle.style3,
             screens: [
               const PostMainScreen(),
-              Container(
-                color: Colors.white,
-                child: const Center(
-                  child: Text('Cry detect Screen'),
-                ),
-              ),
+              const CryDetectScreen(),
               Container(
                 color: Colors.white,
                 child: const Center(
