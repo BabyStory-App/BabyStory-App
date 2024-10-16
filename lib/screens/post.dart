@@ -1,3 +1,4 @@
+import 'package:babystory/apis/friend_api.dart';
 import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/models/parent.dart';
 import 'package:babystory/providers/parent.dart';
@@ -22,6 +23,7 @@ class PostScreen extends StatefulWidget {
 
 class _PostScreenState extends State<PostScreen> {
   final HttpUtils httpUtils = HttpUtils();
+  final FriendApi friendApi = FriendApi();
   late Parent parent;
   late Future<Map<String, dynamic>> fetchDataFuture;
   int? pHeart;
@@ -135,11 +137,14 @@ class _PostScreenState extends State<PostScreen> {
                               Text(
                                 data['hashList'] != null &&
                                         data['hashList'] != ''
-                                    ? '' // data['hashList']
+                                    ? data['hashList']
+                                        .toString()
                                         .split(',')
                                         .map((word) => '#$word')
                                         .join(' ')
-                                    : data['creater']['descript'],
+                                    : data['creater']['description'] ??
+                                        formatDateTime(
+                                            data['creater']['createTime']),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
@@ -173,12 +178,23 @@ class _PostScreenState extends State<PostScreen> {
                                 ),
                               ),
                               const SizedBox(width: 12),
-                              Text(
-                                '${data['creater']['nickname']} · 조회수 ${data['pView']} · ${timeAgoString(data['createTime'])}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              PostProfileScreen(
+                                                  parentId: data['creater']
+                                                      ['parentId'])));
+                                },
+                                child: Text(
+                                  '${data['creater']['nickname']} · 조회수 ${data['pView']} · ${timeAgoString(data['createTime'])}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
                               ),
                             ],
@@ -238,37 +254,49 @@ class _PostScreenState extends State<PostScreen> {
                                                     parentId: data['creater']
                                                         ['parentId'])));
                                   },
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 22,
-                                        backgroundImage: NetworkImage(
-                                          RawsApi.getProfileLink(
-                                              data['creater']['photoId']),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PostProfileScreen(
+                                                      parentId: data['creater']
+                                                          ['parentId'])));
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 22,
+                                          backgroundImage: NetworkImage(
+                                            RawsApi.getProfileLink(
+                                                data['creater']['photoId']),
+                                          ),
                                         ),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(data['creater']['nickname'],
-                                              style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600,
-                                              )),
-                                          const SizedBox(height: 3),
-                                          Text(
-                                              '친구 ${data['creater']['status']['friendCount']} · 이야기 ${data['creater']['status']['myStoryCount']}',
-                                              style: TextStyle(
-                                                  color: Colors.black
-                                                      .withOpacity(0.6),
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w400)),
-                                        ],
-                                      ),
-                                    ],
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Text(data['creater']['nickname'],
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w600,
+                                                )),
+                                            const SizedBox(height: 3),
+                                            Text(
+                                                '친구 ${data['creater']['status']['friendCount']} · 이야기 ${data['creater']['status']['myStoryCount']}',
+                                                style: TextStyle(
+                                                    color: Colors.black
+                                                        .withOpacity(0.6),
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w400)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -300,7 +328,10 @@ class _PostScreenState extends State<PostScreen> {
                                     label: '친구',
                                     color: const Color(0xff608CFF),
                                     onPressed: (isFocused) {
-                                      // TODO: Implement friend feature
+                                      friendApi.toggleFriend(
+                                          jwt: parent.jwt!,
+                                          friendUid: data['creater']
+                                              ['parentId']);
                                     },
                                     focusIcon: Icons.check,
                                     initFocusState: true,

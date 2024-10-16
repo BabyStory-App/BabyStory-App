@@ -1,6 +1,7 @@
 import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/models/parent.dart';
 import 'package:babystory/screens/post.dart';
+import 'package:babystory/screens/post_profile.dart';
 import 'package:babystory/screens/post_search.dart';
 import 'package:babystory/widgets/border_circle_avatar.dart';
 import 'package:flutter/material.dart';
@@ -126,13 +127,22 @@ class _PostMainBannerState extends State<PostMainBanner> {
                   ),
                 ),
                 const SizedBox(width: 12),
-                BorderCircleAvatar(
-                    image: widget.parent.photoId != null
-                        ? NetworkImage(
-                                RawsApi.getProfileLink(widget.parent.photoId))
-                            as ImageProvider<Object>
-                        : const AssetImage(
-                            'assets/images/default_profile_image.jpeg')),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PostProfileScreen(
+                                parentId: widget.parent.uid)));
+                  },
+                  child: BorderCircleAvatar(
+                      image: widget.parent.photoId != null
+                          ? NetworkImage(
+                                  RawsApi.getProfileLink(widget.parent.photoId))
+                              as ImageProvider<Object>
+                          : const AssetImage(
+                              'assets/images/default_profile_image.jpeg')),
+                ),
               ],
             ),
           ),

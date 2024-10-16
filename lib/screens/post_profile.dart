@@ -2,6 +2,7 @@ import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/models/parent.dart';
 import 'package:babystory/providers/parent.dart';
 import 'package:babystory/screens/post.dart';
+import 'package:babystory/utils/alert.dart';
 import 'package:babystory/utils/http.dart';
 import 'package:babystory/widgets/appbar/simple_closed_appbar.dart';
 import 'package:babystory/widgets/button/focusable_icon_button.dart';
@@ -11,6 +12,26 @@ import 'package:babystory/widgets/title/desc_title.dart';
 import 'package:babystory/widgets/utils/divider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+class PostProfileParent {
+  final String parentId;
+  final String? photoId;
+  final String parentName;
+  final String? parentDesc;
+  final int mateCount;
+  final int friendCount;
+  final int myStoryCount;
+
+  PostProfileParent({
+    required this.parentId,
+    required this.photoId,
+    required this.parentName,
+    required this.parentDesc,
+    this.mateCount = 0,
+    this.friendCount = 0,
+    this.myStoryCount = 0,
+  });
+}
 
 class PostProfileScreen extends StatefulWidget {
   final String parentId;
@@ -23,64 +44,65 @@ class PostProfileScreen extends StatefulWidget {
 
 class _PostProfileScreenState extends State<PostProfileScreen> {
   final HttpUtils httpUtils = HttpUtils();
-  late Parent parent;
-  late Future<Map<String, dynamic>> fetchDataFuture;
+  late Parent me;
+  late Future<bool> fetchDataFuture;
+  late List<StoryItemLeftImgData> posts = [];
+  late PostProfileParent parent;
 
   @override
   void initState() {
     super.initState();
-    parent = getParentFromProvider();
+    me = getParentFromProvider();
     fetchDataFuture = fetchData();
   }
 
   Parent getParentFromProvider() {
-    final parent = context.read<ParentProvider>().parent;
-    if (parent == null) {
+    final me = context.read<ParentProvider>().parent;
+    if (me == null) {
       throw Exception('Parent is null');
     }
-    return parent;
+    return me;
   }
 
-  Future<Map<String, dynamic>> fetchData() async {
+  void alertAndPop() {
+    Alert.alert(
+        context: context, title: "문제가 발생했습니다.", content: "잠시후에 다시 시도해주세요.");
+    Navigator.pop(context);
+  }
+
+  Future<bool> fetchData() async {
     try {
-      var json = await Future.delayed(const Duration(seconds: 1), () {
-        return {
-          'parent': {
-            'parentId': 'P001',
-            'parentName': '아크하드',
-            "parentDesc":
-                "밤에 먹는 맥주가 제일 맛있는데 살이 찐단 말이지... 그런데 치킨을 사왔는데 또 안먹을 수도 없고...",
-            'photoId': 'P001',
-            'mateCount': 1,
-            'friendCount': 2,
-            'myStoryCount': 3,
-          },
-          'posts': [
-            {
-              'postid': 4,
-              'title': 'title',
-              'photoId': '4-1',
-              'author_name': 'author_name',
-              'desc': 'desc',
-              'pHeart': 5,
-              'comment': 6,
-            },
-            {
-              'postid': 4,
-              'title': 'title',
-              'photoId': '4-1',
-              'author_name': 'author_name',
-              'desc': 'desc',
-              'pHeart': 5,
-              'comment': 6,
-            }
-          ]
-        };
-      });
-      return json;
+      var res = await httpUtils.get(
+          url: '/post/poster/profile/${widget.parentId}',
+          headers: {'Authorization': 'Bearer ${me.jwt ?? ''}'});
+
+      if (res == null) {
+        alertAndPop();
+        return false;
+      }
+      if (res['parent'] == null || res['posts'] == null) {
+        alertAndPop();
+        return false;
+      }
+
+      parent = PostProfileParent(
+        parentId: res['parent']['parentId'],
+        photoId: res['parent']['photoId'],
+        parentName: res['parent']['parentName'],
+        parentDesc: res['parent']['parentDesc'],
+        mateCount: res['parent']['mateCount'],
+        friendCount: res['parent']['friendCount'],
+        myStoryCount: res['parent']['myStoryCount'],
+      );
+
+      posts = (res['posts'] as List)
+          .map((e) => StoryItemLeftImgData.fromJson(e))
+          .toList();
+
+      return true;
     } catch (e) {
       debugPrint(e.toString());
-      return {}; // 에러가 발생하면 빈 맵을 반환하여 오류를 방지합니다.
+      return false;
     }
   }
 
@@ -91,16 +113,14 @@ class _PostProfileScreenState extends State<PostProfileScreen> {
         title: "프로필",
         icon: Icons.arrow_back_ios_new,
       ),
-      body: FutureBuilder<Map<String, dynamic>>(
+      body: FutureBuilder<bool>(
         future: fetchDataFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            final data = snapshot.data!;
-            final posts = data['posts'] as List;
+          } else if (snapshot.hasData && snapshot.data! == true) {
             return Column(
               children: [
                 // Profile Header
@@ -111,7 +131,7 @@ class _PostProfileScreenState extends State<PostProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        data['parent']['parentName'],
+                        parent.parentName,
                         style: const TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.w500,
@@ -123,7 +143,7 @@ class _PostProfileScreenState extends State<PostProfileScreen> {
                         backgroundColor: Colors.grey,
                         child: ClipOval(
                           child: Image.network(
-                            RawsApi.getProfileLink(data['parent']['photoId']),
+                            RawsApi.getProfileLink(parent.photoId),
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               return Container(
@@ -154,17 +174,17 @@ class _PostProfileScreenState extends State<PostProfileScreen> {
                         children: [
                           SettingProfileOverviewStatus(
                             name: "짝꿍",
-                            count: data['parent']['mateCount'],
+                            count: parent.mateCount,
                           ),
                           const SizedBox(width: 20),
                           SettingProfileOverviewStatus(
                             name: "친구들",
-                            count: data['parent']['friendCount'],
+                            count: parent.friendCount,
                           ),
                           const SizedBox(width: 20),
                           SettingProfileOverviewStatus(
                             name: "이야기",
-                            count: data['parent']['myStoryCount'],
+                            count: parent.myStoryCount,
                           ),
                         ],
                       ),
@@ -196,12 +216,12 @@ class _PostProfileScreenState extends State<PostProfileScreen> {
                 ),
 
                 // Profile Description
-                if (data['parent']['parentDesc'] != null) ...[
-                  const SizedBox(height: 12),
+                if (parent.parentDesc != null) ...[
+                  const SizedBox(height: 18),
                   Padding(
                     padding: const EdgeInsets.only(left: 24, right: 24),
                     child: Text(
-                      data['parent']['parentDesc'],
+                      parent.parentDesc!,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -211,14 +231,13 @@ class _PostProfileScreenState extends State<PostProfileScreen> {
                     ),
                   ),
                 ],
-                const UtilDivider(paddingTop: 24, paddingBottom: 4),
+                const UtilDivider(paddingTop: 20, paddingBottom: 8),
 
                 DescTitle(
                     setBorderBottom: true,
-                    title: "${data['parent']['parentName'] ?? '작성자'}의 이야기",
-                    desc:
-                        "${data['parent']['parentName'] ?? '작성자'}의 이야기를 들어보아요."),
-                const SizedBox(height: 8),
+                    title: "${parent.parentName}의 이야기",
+                    desc: "${parent.parentName}의 이야기를 들어보아요."),
+                const SizedBox(height: 12),
                 // Posts List
                 Expanded(
                   child: ListView.separated(
@@ -228,7 +247,7 @@ class _PostProfileScreenState extends State<PostProfileScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => PostScreen(
-                              id: posts[index]['postid'],
+                              id: posts[index].id!,
                             ),
                           ),
                         );
@@ -237,12 +256,12 @@ class _PostProfileScreenState extends State<PostProfileScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 4),
                         child: StoryItemLeftImg(
-                          title: posts[index]['title'],
-                          description: posts[index]['desc'],
-                          img: posts[index]['photoId'],
-                          heart: posts[index]['pHeart'],
-                          comment: posts[index]['comment'],
-                          info: posts[index]['author_name'],
+                          title: posts[index].title,
+                          description: posts[index].description,
+                          img: posts[index].img,
+                          heart: posts[index].heart,
+                          comment: posts[index].comment,
+                          info: posts[index].info,
                         ),
                       ),
                     ),
