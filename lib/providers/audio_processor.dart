@@ -26,8 +26,9 @@ class AudioProcessor {
 
     if (hasDetected && isListening()) {
       _notificationService.showNotification(
-          'Hear-is', '아이가 울고 있어요! 원인을 분석중입니다...');
+          'BabyStory', '아이가 울고 있어요! 원인을 분석중입니다...');
       onAnalysisStarted();
+      await Future.delayed(const Duration(seconds: 1));
       try {
         onAnalysisComplete(filePath);
       } catch (e) {

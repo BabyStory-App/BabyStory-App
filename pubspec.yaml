@@ -68,6 +68,7 @@ dependencies:
   provider: ^6.1.2
   http_parser: ^4.0.2
   path: ^1.8.3
+  uuid: ^4.2.2
 
 dev_dependencies:
   flutter_test:

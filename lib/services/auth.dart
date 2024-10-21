@@ -132,6 +132,7 @@ class AuthServices {
 
   Future<void> signOut() async {
     try {
+      print("Sign out Method has been called");
       await _firebaseAuth.signOut();
       await GoogleSignIn().signOut();
     } catch (e) {

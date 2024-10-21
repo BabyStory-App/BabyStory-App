@@ -189,7 +189,9 @@ class _CryDetectWidgetState extends State<CryDetectScreen>
     if (json == null) {
       return;
     }
-    CryState predictState = CryState.fromJson(json);
+    print("cry detect res: $json");
+    CryState predictState = CryState.fromPredictMap(json);
+    predictState.printBabyState();
 
     // Stop the rotation and update the state
     setListenStateWithRef(ListenState.done);
@@ -214,102 +216,105 @@ class _CryDetectWidgetState extends State<CryDetectScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: const Color.fromARGB(255, 246, 246, 246),
         body: Stack(
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-            color: ColorProps.orangeYellow,
-          ),
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                getTitle(listenState),
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(247, 242, 211, 244),
               ),
-              const SizedBox(height: 10),
-              Stack(
-                alignment: Alignment.center,
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.1),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  AvatarGlow(
-                    animate: [ListenState.listening, ListenState.crying]
-                        .contains(listenState),
-                    endRadius: 160.0,
-                    glowColor: Colors.red.shade400,
-                    duration: const Duration(milliseconds: 2000),
-                    curve: Curves.easeInOut,
-                    child: GestureDetector(
-                      onTap: toggleListening,
-                      child: Material(
-                        shape: const CircleBorder(),
-                        elevation: 8,
-                        child: Container(
-                          padding: const EdgeInsets.all(15),
-                          height: 150,
-                          width: 150,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color.fromRGBO(255, 199, 110, 0.851),
-                          ),
-                          child: Transform.scale(
-                            scale:
-                                _scaleAnimation.value * _bounceAnimation.value,
-                            child: mainSvg,
+                  Text(
+                    getTitle(listenState),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      AvatarGlow(
+                        animate: [ListenState.listening, ListenState.crying]
+                            .contains(listenState),
+                        endRadius: 160.0,
+                        glowColor: Colors.red.shade400,
+                        duration: const Duration(milliseconds: 2000),
+                        curve: Curves.easeInOut,
+                        child: GestureDetector(
+                          onTap: toggleListening,
+                          child: Material(
+                            shape: const CircleBorder(),
+                            elevation: 8,
+                            child: Container(
+                              padding: const EdgeInsets.all(15),
+                              height: 150,
+                              width: 150,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color.fromARGB(255, 252, 252, 252),
+                              ),
+                              child: Transform.scale(
+                                scale: _scaleAnimation.value *
+                                    _bounceAnimation.value,
+                                child: mainSvg,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                      if (listenState == ListenState.analysing)
+                        RotationTransition(
+                          turns: _rotationController,
+                          child: CustomPaint(
+                            painter: CircleHollowPainter(),
+                          ),
+                        ),
+                    ],
                   ),
-                  if (listenState == ListenState.analysing)
-                    RotationTransition(
-                      turns: _rotationController,
-                      child: CustomPaint(
-                        painter: CircleHollowPainter(),
-                      ),
-                    ),
+                  const SizedBox(height: 60),
                 ],
               ),
-              const SizedBox(height: 60),
-            ],
-          ),
-        ),
-        Positioned(
-          bottom: 110,
-          right: 0,
-          child: BoldCenterRoundedButton(
-            areaHeight: 66,
-            areaWidthRatio: 0.88,
-            text: "울음 기록 보기",
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const CryRecordScreen()));
-            },
-          ),
-        ),
-        Positioned(
-          bottom: 30,
-          right: 0,
-          child: BoldCenterRoundedButton(
-            areaHeight: 66,
-            areaWidthRatio: 0.88,
-            text: "울음 분석 보기",
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const CryAnalystScreen()));
-            },
-          ),
-        ),
-      ],
-    ));
+            ),
+            // Positioned(
+            //   bottom: 110,
+            //   right: 0,
+            //   child: BoldCenterRoundedButton(
+            //     areaHeight: 66,
+            //     areaWidthRatio: 0.88,
+            //     text: "울음 기록 보기",
+            //     onPressed: () {
+            //       Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //               builder: (context) => const CryRecordScreen()));
+            //     },
+            //   ),
+            // ),
+            // Positioned(
+            //   bottom: 30,
+            //   right: 0,
+            //   child: BoldCenterRoundedButton(
+            //     areaHeight: 66,
+            //     areaWidthRatio: 0.88,
+            //     text: "울음 분석 보기",
+            //     onPressed: () {
+            //       Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //               builder: (context) => const CryAnalystScreen()));
+            //     },
+            //   ),
+            // ),
+          ],
+        ));
   }
 }

@@ -1,4 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'dart:math';
+
+int generateRandomInt() {
+  Random random = Random();
+  int sign = random.nextBool() ? 1 : -1;
+  return sign * random.nextInt(pow(2, 31) as int);
+}
 
 enum CryIntensity { low, medium, high }
 
@@ -10,7 +17,10 @@ String getCryIntensityKorean(CryIntensity intensity) {
   return CryIntensityKoreanList[CryIntensityList.indexOf(intensity.name)];
 }
 
-CryIntensity getCryIntensityFromString(String intensity) {
+CryIntensity getCryIntensityFromString(String? intensity) {
+  if (intensity == null) {
+    return CryIntensity.medium;
+  }
   switch (intensity) {
     case 'low':
       return CryIntensity.low;
@@ -96,15 +106,24 @@ class CryState {
   });
 
   CryState.fromJson(Map<String, dynamic> json) {
-    print("received json: ");
-    print(json);
-    time = DateTime.parse(json['time']);
+    time = json['time'] != null ? DateTime.parse(json['time']) : DateTime.now();
     predictMap = _getTypeFromStateMap(json['predictMap']);
     type = getCryTypeFromString(predictMap.keys.toList()[0]);
     intensity = getCryIntensityFromString(json['intensity']);
-    audioURL = json['audioId'];
-    duration = json['duration'];
-    id = json['id'];
+    audioURL = json['audioId'] ?? 'tempAudioURL';
+    duration = json['duration'] ?? 2;
+    id = json['id'] ?? generateRandomInt();
+  }
+
+  CryState.fromPredictMap(Map<String, dynamic> inputPredictMap) {
+    time = DateTime.now();
+    predictMap = _getTypeFromStateMap(
+        inputPredictMap); // Assign the value correctly to the instance variable
+    type = getCryTypeFromString(predictMap.keys.toList()[0]);
+    intensity = CryIntensity.medium;
+    audioURL = 'tempAudioURL';
+    duration = 2;
+    id = generateRandomInt();
   }
 
   //return type of CryState as String

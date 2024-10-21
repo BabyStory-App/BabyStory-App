@@ -1,5 +1,7 @@
+import 'package:babystory/models/cry_state.dart';
 import 'package:babystory/providers/parent.dart';
 import 'package:babystory/screens/cry_detect.dart';
+import 'package:babystory/screens/cry_result.dart';
 import 'package:babystory/screens/post_main.dart';
 import 'package:babystory/screens/setting.dart';
 import 'package:babystory/services/auth.dart';
@@ -38,6 +40,24 @@ class _NavBarRouterState extends State<NavBarRouter> {
             screens: [
               const PostMainScreen(),
               const CryDetectScreen(),
+              // CryResultScreen(
+              //     cryState: CryState.fromJson({
+              //   'time': DateTime.now().toIso8601String(),
+              //   'predictMap': {
+              //     'diaper': 0.76,
+              //     'sad': 0.12,
+              //     'hungry': 0.04,
+              //     'sleepy': 0.03,
+              //     'awake': 0.02,
+              //     'uncomfortable': 0.02,
+              //     'hug': 0.01,
+              //   },
+              //   'type': 'diaper',
+              //   'intensity': 'medium',
+              //   'audioURL': 'tempFilePath',
+              //   'duration': 2.0,
+              //   'id': 1,
+              // })),
               Container(
                 color: Colors.white,
                 child: const Center(
