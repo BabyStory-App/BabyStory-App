@@ -4,14 +4,20 @@ class SimpleClosedAppBar extends StatelessWidget
     implements PreferredSizeWidget {
   final String title;
   final IconData? icon;
+  final Color? iconColor;
+  final VoidCallback? iconAction;
   final IconData? rightIcon;
+  final Color? rightIconColor;
   final VoidCallback? rightIconAction;
 
   const SimpleClosedAppBar({
     super.key,
     required this.title,
     this.icon = Icons.close,
+    this.iconColor = Colors.grey,
+    this.iconAction,
     this.rightIcon,
+    this.rightIconColor = Colors.grey,
     this.rightIconAction,
   });
 
@@ -26,10 +32,11 @@ class SimpleClosedAppBar extends StatelessWidget
       leading: Padding(
         padding: const EdgeInsets.only(top: 10),
         child: IconButton(
-          icon: Icon(icon, color: Colors.grey),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          icon: Icon(icon, color: iconColor),
+          onPressed: iconAction ??
+              () {
+                Navigator.pop(context);
+              },
         ),
       ),
       title: Padding(
@@ -50,7 +57,7 @@ class SimpleClosedAppBar extends StatelessWidget
           Padding(
             padding: const EdgeInsets.only(top: 10, right: 10),
             child: IconButton(
-              icon: Icon(rightIcon, color: Colors.grey),
+              icon: Icon(rightIcon, color: rightIconColor),
               onPressed: rightIconAction ?? () {},
             ),
           ),
