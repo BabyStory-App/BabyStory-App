@@ -3,9 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class AiDoctorChatList extends StatefulWidget {
-  final Parent parent;
-
-  const AiDoctorChatList({Key? key, required this.parent}) : super(key: key);
+  const AiDoctorChatList({Key? key}) : super(key: key);
 
   @override
   State<AiDoctorChatList> createState() => _AiDoctorChatListState();

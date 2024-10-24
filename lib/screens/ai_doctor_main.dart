@@ -1,5 +1,6 @@
 import 'package:babystory/models/parent.dart';
 import 'package:babystory/providers/parent.dart';
+import 'package:babystory/screens/ai_doctor_chat.dart';
 import 'package:babystory/screens/ai_doctor_chatlist.dart';
 import 'package:babystory/widgets/ai_doctor/recommand_card.dart';
 import 'package:babystory/widgets/appbar/simple_closed_appbar.dart';
@@ -51,8 +52,7 @@ class _AiDoctorMainState extends State<AiDoctorMain> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              AiDoctorChatList(parent: parent)));
+                          builder: (context) => const AiDoctorChatList()));
                 }),
             const SizedBox(height: 8),
             SizedBox(
@@ -69,8 +69,16 @@ class _AiDoctorMainState extends State<AiDoctorMain> {
                         cardData: recommandCardDataList[index])),
               ),
             ),
-            Image.asset(
-              'assets/ai_doctor_botton.png',
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AiDoctorChatScreen()));
+              },
+              child: Image.asset(
+                'assets/ai_doctor_botton.png',
+              ),
             )
           ],
         ),
