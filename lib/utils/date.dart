@@ -73,3 +73,29 @@ DateTime generateRandomDateTimeWithinOneMonth() {
 String formatDateTime(DateTime dateTime) {
   return '${dateTime.month}월 ${dateTime.day}일, ${dateTime.year}';
 }
+
+String formatDateTimeBarKorean(DateTime dateTime) {
+  int year = dateTime.year;
+  int month = dateTime.month;
+  int day = dateTime.day;
+  int hour = dateTime.hour;
+  int minute = dateTime.minute;
+
+  // 오전/오후 결정
+  String amPm = '오전';
+  int displayHour = hour;
+  if (hour >= 12) {
+    amPm = '오후';
+    if (hour > 12) {
+      displayHour = hour - 12;
+    }
+  }
+  if (displayHour == 0) {
+    displayHour = 12;
+  }
+
+  // 분을 두 자리로 표시
+  String minuteStr = minute.toString().padLeft(2, '0');
+
+  return '$year년 $month월 $day일 | $amPm $displayHour시 $minuteStr분';
+}

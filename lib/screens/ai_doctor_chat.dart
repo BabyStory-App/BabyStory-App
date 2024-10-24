@@ -231,7 +231,7 @@ class _AiDoctorChatScreenState extends State<AiDoctorChatScreen> {
             children: [
               Expanded(
                 child: chatBubbles.isEmpty
-                    ? const Center(child: CircularProgressIndicator())
+                    ? const SizedBox()
                     : ListView.builder(
                         controller: _scrollController,
                         itemCount: chatBubbles.length,

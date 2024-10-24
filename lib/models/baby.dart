@@ -39,8 +39,10 @@ class Baby {
         obn: json['obn'],
         name: json['name'],
         gender: matchGender(json['gender']),
-        birthDate: DateTime.parse(json['birthDate']),
-        bloodType: json['bloodType'],
+        birthDate: json['birthDate'] != null
+            ? DateTime.parse(json['birthDate'])
+            : DateTime.now(),
+        bloodType: json['bloodType'] ?? 'Unknown',
         cm: json['cm'] != null ? (json['cm'] as num).toDouble() : null,
         kg: json['kg'] != null ? (json['kg'] as num).toDouble() : null,
         photoId: json['photoId']);

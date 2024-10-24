@@ -1,9 +1,6 @@
-import 'package:babystory/models/cry_state.dart';
 import 'package:babystory/providers/parent.dart';
-import 'package:babystory/screens/ai_doctor_chat.dart';
 import 'package:babystory/screens/ai_doctor_main.dart';
 import 'package:babystory/screens/cry_detect.dart';
-import 'package:babystory/screens/cry_result.dart';
 import 'package:babystory/screens/post_main.dart';
 import 'package:babystory/screens/setting.dart';
 import 'package:babystory/services/auth.dart';
@@ -48,8 +45,7 @@ class _NavBarRouterState extends State<NavBarRouter> {
                   child: Text('Buy Screen'),
                 ),
               ),
-              // const AiDoctorMain(),
-              const AiDoctorChatScreen(chatroomId: 1),
+              const AiDoctorMain(),
               const Setting(key: ValueKey('Setting')),
             ],
             items: [

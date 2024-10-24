@@ -52,7 +52,8 @@ class _AiDoctorMainState extends State<AiDoctorMain> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const AiDoctorChatList()));
+                          builder: (context) =>
+                              const AiDoctorChatListScreen()));
                 }),
             const SizedBox(height: 8),
             SizedBox(
