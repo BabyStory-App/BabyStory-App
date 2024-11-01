@@ -13,7 +13,8 @@ class PostmainPostList extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PostScreen(id: data[index]['postid']),
+            builder: (context) =>
+                PostScreen(id: data[index]['postid'] ?? data[index]['post_id']),
           ),
         );
       },

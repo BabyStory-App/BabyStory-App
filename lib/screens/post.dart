@@ -1,4 +1,5 @@
-import 'package:babystory/apis/friend_api.dart';
+import 'package:babystory/apis/friend_active.dart';
+import 'package:babystory/apis/post_active.dart';
 import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/models/parent.dart';
 import 'package:babystory/providers/parent.dart';
@@ -23,17 +24,18 @@ class PostScreen extends StatefulWidget {
 
 class _PostScreenState extends State<PostScreen> {
   final HttpUtils httpUtils = HttpUtils();
-  final FriendApi friendApi = FriendApi();
   late Parent parent;
   late Future<Map<String, dynamic>> fetchDataFuture;
+  late FriendActive friendActiveApi;
   int? pHeart;
   int? pComment;
   int? pScript;
+  bool hasAlert = false;
+  bool isFriend = false;
 
   @override
   void initState() {
     super.initState();
-    // Initialize parent and fetchDataFuture directly in initState
     parent = getParentFromProvider();
     fetchDataFuture = fetchData();
   }
@@ -51,10 +53,31 @@ class _PostScreenState extends State<PostScreen> {
       var json = await httpUtils.get(
           url: '/post/${widget.id}',
           headers: {'Authorization': 'Bearer ${parent.jwt}'});
+      friendActiveApi = FriendActive(
+          jwt: parent.jwt!, friendUid: json['creater']['parentId']);
+      var value = await friendActiveApi.getAlertAndFriendStatus();
+      setState(() {
+        hasAlert = value[0];
+        isFriend = value[1];
+      });
       return json ?? {};
     } catch (e) {
       debugPrint(e.toString());
       return {}; // Return an empty map to prevent errors
+    }
+  }
+
+  void toggleFriendActiveState(String type) {
+    if (type == 'alert') {
+      friendActiveApi.toggleAlert();
+      setState(() {
+        hasAlert = !hasAlert;
+      });
+    } else if (type == 'friend') {
+      friendActiveApi.toggleFriend();
+      setState(() {
+        isFriend = !isFriend;
+      });
     }
   }
 
@@ -70,6 +93,7 @@ class _PostScreenState extends State<PostScreen> {
             return Center(child: Text("Error: ${snapshot.error}"));
           } else if (snapshot.hasData) {
             final data = snapshot.data!;
+            print("Response post data: $data");
             return Stack(children: [
               SingleChildScrollView(
                 child: Column(
@@ -174,7 +198,8 @@ class _PostScreenState extends State<PostScreen> {
                                 child: CircleAvatar(
                                   radius: 10,
                                   backgroundImage: NetworkImage(
-                                      RawsApi.getProfileLink(parent.photoId)),
+                                      RawsApi.getProfileLink(
+                                          data['creater']['parentId'])),
                                 ),
                               ),
                               const SizedBox(width: 12),
@@ -189,7 +214,7 @@ class _PostScreenState extends State<PostScreen> {
                                                       ['parentId'])));
                                 },
                                 child: Text(
-                                  '${data['creater']['nickname']} · 조회수 ${data['pView']} · ${timeAgoString(data['createTime'])}',
+                                  '${data['creater']['nickname']} · 조회수 ${data['pView'] ?? 1} · ${timeAgoString(data['createTime'])}',
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 14,
@@ -316,25 +341,23 @@ class _PostScreenState extends State<PostScreen> {
                                 children: [
                                   FocusableIconButton(
                                     icon: Icons.notifications_none_outlined,
+                                    initFocusState: hasAlert,
                                     label: '알림',
                                     color: const Color(0xff608CFF),
                                     onPressed: (isFocused) {
-                                      // TODO: Implement notification feature
+                                      toggleFriendActiveState('alert');
                                     },
                                   ),
                                   const SizedBox(width: 16),
                                   FocusableIconButton(
                                     icon: Icons.add,
+                                    initFocusState: isFriend,
                                     label: '친구',
                                     color: const Color(0xff608CFF),
                                     onPressed: (isFocused) {
-                                      friendApi.toggleFriend(
-                                          jwt: parent.jwt!,
-                                          friendUid: data['creater']
-                                              ['parentId']);
+                                      toggleFriendActiveState('friend');
                                     },
                                     focusIcon: Icons.check,
-                                    initFocusState: true,
                                   ),
                                 ],
                               ),
@@ -367,6 +390,7 @@ class _PostScreenState extends State<PostScreen> {
                     pHeart: data['pHeart'] ?? 0,
                     pComment: data['pComment'] ?? 0,
                     pScript: data['pScript'] ?? 0,
+                    jwt: parent.jwt!,
                   ),
                 ),
               ),
@@ -422,19 +446,61 @@ class _PostScreenState extends State<PostScreen> {
   }
 }
 
-class HeartCommentScriptWidget extends StatelessWidget {
+class HeartCommentScriptWidget extends StatefulWidget {
   final int postId;
   final int pHeart;
   final int pComment;
   final int pScript;
+  final String jwt;
 
   const HeartCommentScriptWidget({
-    Key? key,
+    super.key,
     required this.postId,
     required this.pHeart,
     required this.pComment,
     required this.pScript,
-  }) : super(key: key);
+    required this.jwt,
+  });
+
+  @override
+  State<HeartCommentScriptWidget> createState() =>
+      _HeartCommentScriptWidgetState();
+}
+
+class _HeartCommentScriptWidgetState extends State<HeartCommentScriptWidget> {
+  late PostActive postActiveApi;
+  bool hasHeart = false;
+  bool hasScript = false;
+  bool initHeart = false;
+  bool initScript = false;
+
+  @override
+  void initState() {
+    super.initState();
+    postActiveApi = PostActive(jwt: widget.jwt, postId: widget.postId);
+    postActiveApi.getHeartAndScriptStatus().then((status) {
+      setState(() {
+        hasHeart = status[0];
+        initHeart = status[0];
+        hasScript = status[1];
+        initScript = status[1];
+      });
+    });
+  }
+
+  void toggleState(String type) {
+    if (type == 'heart') {
+      postActiveApi.toggleHeart();
+      setState(() {
+        hasHeart = !hasHeart;
+      });
+    } else if (type == 'script') {
+      postActiveApi.toggleScript();
+      setState(() {
+        hasScript = !hasScript;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -445,14 +511,24 @@ class HeartCommentScriptWidget extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                // TODO: Implement like feature
+                toggleState("heart");
               },
               child: Row(children: [
-                const Icon(Icons.favorite_outlined,
-                    color: Colors.red, size: 20),
+                hasHeart
+                    ? const Icon(Icons.favorite_outlined,
+                        color: Colors.red, size: 20)
+                    : const Icon(Icons.favorite_border,
+                        color: Colors.grey, size: 20),
                 const SizedBox(width: 4),
                 Text(
-                  pHeart.toString(),
+                  (hasHeart
+                          ? initHeart
+                              ? widget.pHeart
+                              : widget.pHeart + 1
+                          : initHeart
+                              ? widget.pHeart - 1
+                              : widget.pHeart)
+                      .toString(),
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
@@ -470,7 +546,8 @@ class HeartCommentScriptWidget extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CommentScreen(postId: postId)));
+                        builder: (context) =>
+                            CommentScreen(postId: widget.postId)));
               },
               child: Row(children: [
                 const Icon(
@@ -480,7 +557,7 @@ class HeartCommentScriptWidget extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  pComment.toString(),
+                  widget.pComment.toString(),
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w400,
@@ -489,9 +566,7 @@ class HeartCommentScriptWidget extends StatelessWidget {
               ]),
             ),
             IconButton(
-                onPressed: () {
-                  // TODO: Implement share feature
-                },
+                onPressed: () {},
                 icon: const Icon(Icons.share, color: Colors.grey, size: 18)),
           ],
         ),
@@ -499,16 +574,28 @@ class HeartCommentScriptWidget extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                // TODO: Implement script feature
+                toggleState("script");
               },
               child: Row(children: [
-                const Icon(
-                  Icons.bookmark,
-                  color: Colors.grey,
-                ),
+                hasScript
+                    ? const Icon(
+                        Icons.bookmark,
+                        color: Colors.yellow,
+                      )
+                    : const Icon(
+                        Icons.bookmark,
+                        color: Colors.grey,
+                      ),
                 const SizedBox(width: 2),
                 Text(
-                  pScript.toString(),
+                  (hasScript
+                          ? initScript
+                              ? widget.pScript
+                              : widget.pScript + 1
+                          : initScript
+                              ? widget.pScript - 1
+                              : widget.pScript)
+                      .toString(),
                   style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,

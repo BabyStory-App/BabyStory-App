@@ -23,9 +23,9 @@ class PostMainBannerData {
 
   factory PostMainBannerData.fromJson(Map<String, dynamic> json) {
     return PostMainBannerData(
-      id: json['postid'],
+      id: json['postid'] ?? json['post_id'],
       title: json['title'],
-      photoId: json['photoId'],
+      photoId: json['photoId'] ?? json['photo_id'],
       authorName: json['author_name'],
       desc: json['desc'] ?? "",
     );

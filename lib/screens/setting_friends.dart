@@ -34,6 +34,7 @@ class SettingFriendItem {
 class _SettingFriendsState extends State<SettingFriends> {
   final HttpUtils httpUtils = HttpUtils();
   List<SettingFriendItem> parents = [];
+  late Parent parent;
   bool isLoading = false;
   bool hasMore = true;
   int currentPage = 0;
@@ -48,9 +49,22 @@ class _SettingFriendsState extends State<SettingFriends> {
     return parent;
   }
 
+  void toggleFriend(String friendUid) async {
+    try {
+      await httpUtils.post(url: '/friend/', headers: {
+        'Authorization': 'Bearer ${parent.jwt}'
+      }, body: {
+        'friend': friendUid,
+      });
+    } catch (e) {
+      debugPrint('Error toggling friend: $e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    parent = getParentFromProvider();
     _fetchFriends();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -69,13 +83,10 @@ class _SettingFriendsState extends State<SettingFriends> {
     });
 
     try {
-      final parent = getParentFromProvider();
       final response = await httpUtils.get(
           url:
               '/setting/${widget.type == 'myMates' ? 'mymates' : 'myfriends'}/$currentPage',
           headers: {'Authorization': 'Bearer ${parent.jwt}'});
-      print("Response: ");
-      print(response);
 
       if (response['status'] == 'success') {
         final List<SettingFriendItem> fetchedParents =
@@ -118,6 +129,9 @@ class _SettingFriendsState extends State<SettingFriends> {
 
   @override
   Widget build(BuildContext context) {
+    for (var i = 0; i < parents.length; i++) {
+      print('${parents[i].nickname}: ${parents[i].isMate}');
+    }
     return Scaffold(
       appBar: AppBar1(
         title: getHeaderTitle(),
@@ -144,7 +158,10 @@ class _SettingFriendsState extends State<SettingFriends> {
                 return FriendListItem(
                   parent: parents[index],
                   displayAddButton: widget.type != 'myMates',
-                  isMate: parents[index].isMate ?? true,
+                  isMate: parents[index].isMate ?? false,
+                  onAddButtonClicked: (String friendUid) {
+                    toggleFriend(friendUid);
+                  },
                 );
               },
               separatorBuilder: (BuildContext context, int index) {

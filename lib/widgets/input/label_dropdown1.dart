@@ -28,6 +28,8 @@ class _LabelDropdown1State extends State<LabelDropdown1> {
   @override
   void initState() {
     super.initState();
+    print("widget.value: ${widget.value}");
+    print("widget.options: ${widget.options}");
     _selectedValue = widget.value ?? widget.options.first;
   }
 

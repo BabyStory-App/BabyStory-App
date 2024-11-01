@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 class FriendListItem extends StatefulWidget {
   final SettingFriendItem parent;
   final bool displayAddButton;
+  final Function(String)? onAddButtonClicked;
   bool isMate;
 
   FriendListItem(
       {super.key,
       required this.parent,
       this.displayAddButton = false,
+      this.onAddButtonClicked,
       this.isMate = false});
 
   @override
@@ -98,7 +100,9 @@ class _FriendListItemState extends State<FriendListItem> {
               if (widget.displayAddButton)
                 OutlinedButton(
                   onPressed: () {
-                    print("On Click");
+                    if (widget.onAddButtonClicked != null) {
+                      widget.onAddButtonClicked!(widget.parent.uid);
+                    }
                     setState(() {
                       widget.isMate = !widget.isMate;
                     });

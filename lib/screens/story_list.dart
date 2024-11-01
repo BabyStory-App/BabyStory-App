@@ -138,6 +138,9 @@ class _StoryListState extends State<StoryList> {
         hasMore = stories.length == pageSize;
         stories.addAll(postPreviewList);
       });
+      for (var post in postPreviewList) {
+        print('${post.title}: ${post.photoId}');
+      }
     } else {
       alertFail();
     }

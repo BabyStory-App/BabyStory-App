@@ -48,7 +48,7 @@ class _PostMainScreenState extends State<PostMainScreen> {
       return json ?? {};
     } catch (e) {
       debugPrint(e.toString());
-      return {}; // 에러가 발생하면 빈 맵을 반환하여 오류를 방지합니다.
+      return {};
     }
   }
 

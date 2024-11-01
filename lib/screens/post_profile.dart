@@ -1,3 +1,4 @@
+import 'package:babystory/apis/friend_active.dart';
 import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/models/parent.dart';
 import 'package:babystory/providers/parent.dart';
@@ -24,7 +25,7 @@ class PostProfileParent {
 
   PostProfileParent({
     required this.parentId,
-    required this.photoId,
+    this.photoId,
     required this.parentName,
     required this.parentDesc,
     this.mateCount = 0,
@@ -48,6 +49,9 @@ class _PostProfileScreenState extends State<PostProfileScreen> {
   late Future<bool> fetchDataFuture;
   late List<StoryItemLeftImgData> posts = [];
   late PostProfileParent parent;
+  late FriendActive friendActiveApi;
+  bool hasAlert = false;
+  bool isFriend = false;
 
   @override
   void initState() {
@@ -99,10 +103,31 @@ class _PostProfileScreenState extends State<PostProfileScreen> {
           .map((e) => StoryItemLeftImgData.fromJson(e))
           .toList();
 
+      friendActiveApi = FriendActive(jwt: me.jwt!, friendUid: parent.parentId);
+      var value = await friendActiveApi.getAlertAndFriendStatus();
+      setState(() {
+        hasAlert = value[0];
+        isFriend = value[1];
+      });
+
       return true;
     } catch (e) {
       debugPrint(e.toString());
       return false;
+    }
+  }
+
+  void toggleFriendActiveState(String type) {
+    if (type == 'alert') {
+      friendActiveApi.toggleAlert();
+      setState(() {
+        hasAlert = !hasAlert;
+      });
+    } else if (type == 'friend') {
+      friendActiveApi.toggleFriend();
+      setState(() {
+        isFriend = !isFriend;
+      });
     }
   }
 
@@ -188,29 +213,32 @@ class _PostProfileScreenState extends State<PostProfileScreen> {
                           ),
                         ],
                       ),
-                      Row(
-                        children: [
-                          FocusableIconButton(
-                            icon: Icons.notifications_none_outlined,
-                            label: '알림',
-                            color: const Color(0xff608CFF),
-                            onPressed: (isFocused) {
-                              // TODO: Implement notification feature
-                            },
-                          ),
-                          const SizedBox(width: 12),
-                          FocusableIconButton(
-                            icon: Icons.add,
-                            label: '친구',
-                            color: const Color(0xff608CFF),
-                            onPressed: (isFocused) {
-                              // TODO: Implement friend feature
-                            },
-                            focusIcon: Icons.check,
-                            initFocusState: true,
-                          ),
-                        ],
-                      ),
+                      me.uid == parent.parentId
+                          ? const SizedBox(width: 60)
+                          : Row(
+                              children: [
+                                FocusableIconButton(
+                                  icon: Icons.notifications_none_outlined,
+                                  label: '알림',
+                                  initFocusState: hasAlert,
+                                  color: const Color(0xff608CFF),
+                                  onPressed: (isFocused) {
+                                    toggleFriendActiveState('alert');
+                                  },
+                                ),
+                                const SizedBox(width: 12),
+                                FocusableIconButton(
+                                  icon: Icons.add,
+                                  label: '친구',
+                                  color: const Color(0xff608CFF),
+                                  initFocusState: isFriend,
+                                  onPressed: (isFocused) {
+                                    toggleFriendActiveState('friend');
+                                  },
+                                  focusIcon: Icons.check,
+                                ),
+                              ],
+                            ),
                     ],
                   ),
                 ),

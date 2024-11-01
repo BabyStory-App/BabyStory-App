@@ -25,7 +25,7 @@ class RowPostsViewData {
 
   factory RowPostsViewData.fromJson(Map<String, dynamic> json) {
     return RowPostsViewData(
-      id: json['postid'],
+      id: json['postid'] ?? json['post_id'],
       title: json['title'],
       photoId: json['photoId'],
       authorName: json['author_name'],
