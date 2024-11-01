@@ -1,6 +1,8 @@
 import 'package:babystory/providers/parent.dart';
 import 'package:babystory/screens/ai_doctor_main.dart';
+import 'package:babystory/screens/alert.dart';
 import 'package:babystory/screens/cry_detect.dart';
+import 'package:babystory/screens/diary.dart';
 import 'package:babystory/screens/post_main.dart';
 import 'package:babystory/screens/setting.dart';
 import 'package:babystory/services/auth.dart';
@@ -18,7 +20,7 @@ class NavBarRouter extends StatefulWidget {
 }
 
 class _NavBarRouterState extends State<NavBarRouter> {
-  var controller = PersistentTabController(initialIndex: 3);
+  var controller = PersistentTabController(initialIndex: 2);
   final AuthServices _auth = AuthServices();
 
   @override
@@ -36,17 +38,12 @@ class _NavBarRouterState extends State<NavBarRouter> {
             context,
             controller: controller,
             navBarStyle: NavBarStyle.style3,
-            screens: [
-              const PostMainScreen(),
-              const CryDetectScreen(),
-              Container(
-                color: Colors.white,
-                child: const Center(
-                  child: Text('Buy Screen'),
-                ),
-              ),
-              const AiDoctorMain(),
-              const Setting(key: ValueKey('Setting')),
+            screens: const [
+              PostMainScreen(key: ValueKey('PostMainScreen')),
+              CryDetectScreen(key: ValueKey('CryDetectScreen')),
+              DiaryScreen(key: ValueKey('DiaryScreen')),
+              AiDoctorMain(key: ValueKey('AiDoctorMain')),
+              Setting(key: ValueKey('Setting')),
             ],
             items: [
               PersistentBottomNavBarItem(
@@ -62,8 +59,8 @@ class _NavBarRouterState extends State<NavBarRouter> {
                 inactiveColorPrimary: CupertinoColors.systemGrey,
               ),
               PersistentBottomNavBarItem(
-                icon: const Icon(Icons.shopping_cart),
-                title: 'Buy',
+                icon: const Icon(Icons.edit_calendar),
+                title: 'Diary',
                 activeColorPrimary: CupertinoColors.activeBlue,
                 inactiveColorPrimary: CupertinoColors.systemGrey,
               ),

@@ -1,5 +1,6 @@
 import 'package:babystory/apis/raws_api.dart';
 import 'package:babystory/models/parent.dart';
+import 'package:babystory/screens/alert.dart';
 import 'package:babystory/screens/post.dart';
 import 'package:babystory/screens/post_profile.dart';
 import 'package:babystory/screens/post_search.dart';
@@ -117,16 +118,16 @@ class _PostMainBannerState extends State<PostMainBanner> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const PostSearchScreen()));
+                              builder: (context) => const AlertScreen()));
                     },
                     icon: const Icon(
-                      Icons.search,
+                      Icons.notifications_active_outlined,
                       color: Colors.white,
                       size: 24,
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 16),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
