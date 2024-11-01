@@ -12,7 +12,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SimpleClosedAppBar(title: "산모수첩"),
+      appBar: const SimpleClosedAppBar(title: "산모수첩", icon: null),
       body: Center(child: Text("산모수첩")),
     );
   }

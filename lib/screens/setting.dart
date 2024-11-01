@@ -7,6 +7,7 @@ import 'package:babystory/screens/setting_friends.dart';
 import 'package:babystory/screens/story_list.dart';
 import 'package:babystory/services/auth.dart';
 import 'package:babystory/utils/http.dart';
+import 'package:babystory/widgets/appbar/simple_closed_appbar.dart';
 import 'package:babystory/widgets/baby_card.dart';
 import 'package:babystory/widgets/iconRowItem.dart';
 import 'package:babystory/widgets/session_title1.dart';
@@ -66,6 +67,7 @@ class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const SimpleClosedAppBar(title: "설정", icon: null),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
