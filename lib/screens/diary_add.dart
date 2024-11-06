@@ -84,7 +84,8 @@ class _DiaryAddScreenState extends State<DiaryAddScreen> {
         onAccept: (dialogContext) async {
           Navigator.of(dialogContext).pushReplacement(
             MaterialPageRoute(
-              builder: (ctx) => DdayListScreen(diary: newDiary),
+              builder: (ctx) =>
+                  DdayListScreen(diary: newDiary, baby: widget.baby),
             ),
           );
         });
@@ -95,7 +96,8 @@ class _DiaryAddScreenState extends State<DiaryAddScreen> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => DdayListScreen(diary: newDiary)));
+            builder: (context) =>
+                DdayListScreen(diary: newDiary, baby: widget.baby)));
   }
 
   void _createDiary({bool isMotherDiary = false}) async {

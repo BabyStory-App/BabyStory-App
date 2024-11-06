@@ -1,8 +1,11 @@
+import 'package:babystory/models/baby.dart';
 import 'package:babystory/models/diary.dart';
 import 'package:babystory/models/parent.dart';
 import 'package:babystory/providers/parent.dart';
 import 'package:babystory/screens/dday.dart';
 import 'package:babystory/screens/dday_write.dart';
+import 'package:babystory/screens/hospital_diary_list.dart';
+import 'package:babystory/screens/milk_diary_list.dart';
 import 'package:babystory/utils/http.dart';
 import 'package:babystory/widgets/appbar/simple_closed_appbar.dart';
 import 'package:babystory/widgets/diary/diary_calendar.dart';
@@ -31,9 +34,10 @@ class DdayItem {
 }
 
 class DdayListScreen extends StatefulWidget {
-  Diary diary;
+  final Baby baby;
+  final Diary diary;
 
-  DdayListScreen({super.key, required this.diary});
+  const DdayListScreen({super.key, required this.diary, required this.baby});
 
   @override
   State<DdayListScreen> createState() => _DdayListScreenState();
@@ -47,6 +51,7 @@ class _DdayListScreenState extends State<DdayListScreen> {
   @override
   void initState() {
     super.initState();
+    widget.diary.printInfo();
     parent = getParentFromProvider();
     fetchDataFuture = fetchData();
   }
@@ -103,86 +108,129 @@ class _DdayListScreenState extends State<DdayListScreen> {
             if (data.isEmpty) {
               return requestWriteDiary(context);
             }
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: StickyGroupedListView<DdayItem, DateTime>(
-                elements: data,
-                groupBy: (DdayItem dday) =>
-                    DateTime(dday.createTime.year, dday.createTime.month),
-                groupSeparatorBuilder: (DdayItem dday) => Container(
-                  height: 48,
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 249, 249, 249),
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.black45,
-                        width: 1,
-                      ),
-                      top: BorderSide(
-                        color: Colors.black45,
-                        width: 0.5,
-                      ),
-                    ),
-                  ),
-                  padding: const EdgeInsets.only(left: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        '${dday.createTime.year}-${dday.createTime.month.toString().padLeft(2, '0')}',
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-                itemBuilder: (context, DdayItem dday) => GestureDetector(
+            return Stack(
+              children: [
+                GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DdayScreen(ddayId: dday.id)));
+                    if (widget.diary.born == false) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => widget.diary.born
+                                  ? MilkDiaryListScreen(
+                                      diaryId: widget.diary.id)
+                                  : HospitalDiaryListScreen(
+                                      diaryId: widget.diary.id,
+                                      baby: widget.baby)));
+                    }
                   },
                   child: Container(
-                    height: 62,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Colors.black12,
-                          width: 1,
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    color: widget.diary.born
+                        ? const Color.fromARGB(240, 255, 240, 240)
+                        : const Color.fromARGB(240, 240, 255, 240),
+                    height: 48,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(widget.diary.born ? "수유일지" : "산모수첩",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black54,
+                            )),
+                        const Icon(Icons.arrow_forward_ios_outlined,
+                            color: Colors.blue, size: 20)
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12, top: 48),
+                  child: StickyGroupedListView<DdayItem, DateTime>(
+                    elements: data,
+                    groupBy: (DdayItem dday) =>
+                        DateTime(dday.createTime.year, dday.createTime.month),
+                    groupSeparatorBuilder: (DdayItem dday) => Container(
+                      height: 48,
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 249, 249, 249),
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.black45,
+                            width: 1,
+                          ),
+                          top: BorderSide(
+                            color: Colors.black45,
+                            width: 0.5,
+                          ),
                         ),
                       ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 12),
+                      padding: const EdgeInsets.only(left: 16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            width: 40,
-                            child: Text(
-                                dday.createTime.day.toString().padLeft(2, '0'),
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color.fromARGB(156, 0, 0, 0))),
+                          Text(
+                            '${dday.createTime.year}-${dday.createTime.month.toString().padLeft(2, '0')}',
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                          const SizedBox(width: 8),
-                          Text(dday.title,
-                              style: const TextStyle(fontSize: 18)),
                         ],
                       ),
                     ),
+                    itemBuilder: (context, DdayItem dday) => GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    DdayScreen(ddayId: dday.id)));
+                      },
+                      child: Container(
+                        height: 62,
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.black12,
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 40,
+                                child: Text(
+                                    dday.createTime.day
+                                        .toString()
+                                        .padLeft(2, '0'),
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(156, 0, 0, 0))),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(dday.title,
+                                  style: const TextStyle(fontSize: 18)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    itemComparator: (DdayItem a, DdayItem b) =>
+                        b.createTime.compareTo(a.createTime),
+                    groupComparator: (DateTime a, DateTime b) => b.compareTo(a),
+                    order: StickyGroupedListOrder.ASC,
                   ),
-                ),
-                itemComparator: (DdayItem a, DdayItem b) =>
-                    b.createTime.compareTo(a.createTime),
-                groupComparator: (DateTime a, DateTime b) => b.compareTo(a),
-                order: StickyGroupedListOrder.ASC,
-              ),
+                )
+              ],
             );
           } else {
             return requestWriteDiary(context);

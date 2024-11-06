@@ -177,7 +177,8 @@ class _BabyDiaryListViewState extends State<BabyDiaryListView> {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 DdayListScreen(
-                                                    diary: diaries[index])));
+                                                    diary: diaries[index],
+                                                    baby: widget.baby)));
                                   },
                                   child: DiaryCard(diary: diaries[index])),
                           separatorBuilder: (BuildContext ctx, int idx) =>
