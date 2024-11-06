@@ -9,6 +9,7 @@ class SimpleClosedAppBar extends StatelessWidget
   final IconData? rightIcon;
   final Color? rightIconColor;
   final VoidCallback? rightIconAction;
+  final bool setBottomBorder;
 
   const SimpleClosedAppBar({
     super.key,
@@ -19,6 +20,7 @@ class SimpleClosedAppBar extends StatelessWidget
     this.rightIcon,
     this.rightIconColor = Colors.grey,
     this.rightIconAction,
+    this.setBottomBorder = true,
   });
 
   @override
@@ -62,13 +64,15 @@ class SimpleClosedAppBar extends StatelessWidget
             ),
           ),
       ],
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(0.15),
-        child: Container(
-          color: Colors.grey, // border color
-          height: 0.15, // border height
-        ),
-      ),
+      bottom: setBottomBorder
+          ? PreferredSize(
+              preferredSize: const Size.fromHeight(0.15),
+              child: Container(
+                color: Colors.grey, // border color
+                height: 0.15, // border height
+              ),
+            )
+          : null,
     );
   }
 }

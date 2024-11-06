@@ -47,6 +47,33 @@ class Alert {
     );
   }
 
+  static Future<void> asyncAlert({
+    required BuildContext context,
+    required String title,
+    required String content,
+    Future<void> Function(BuildContext dialogContext)? onAccept,
+  }) async {
+    onAccept ??= (context) async {};
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('확인'),
+              onPressed: () async {
+                await onAccept!(dialogContext);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
   static Future<void> confirmAlert({
     required BuildContext context,
     required String title,
@@ -80,6 +107,45 @@ class Alert {
                 onAccept!().then((value) {
                   Navigator.pop(context);
                 });
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  static Future<void> asyncConfirmAlert({
+    required BuildContext context,
+    required String title,
+    required String content,
+    Future<void> Function(BuildContext dialogContext)? onAccept,
+    Future<void> Function(BuildContext dialogContext)? onCancel,
+    String acceptText = '확인',
+    String cancelText = '취소',
+  }) async {
+    onAccept ??= (context) async {};
+    onCancel ??= (context) async {};
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: <Widget>[
+            TextButton(
+              child: Text(cancelText),
+              onPressed: () async {
+                await onCancel!(dialogContext)
+                    .then((value) => Navigator.pop(dialogContext));
+              },
+            ),
+            TextButton(
+              child: Text(acceptText),
+              onPressed: () async {
+                await onAccept!(dialogContext)
+                    .then((value) => Navigator.pop(dialogContext));
               },
             )
           ],

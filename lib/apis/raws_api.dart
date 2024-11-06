@@ -19,6 +19,20 @@ class RawsApi {
     return link;
   }
 
+  static String getDiaryCoverLink(String? fileId) {
+    var link =
+        RawsApi.imageURL(fileId, 'raws/diary/cover', 'default_profile_image');
+    // print('link: $link');
+    return link;
+  }
+
+  static String getDiaryImageLink(String? fileId) {
+    var link =
+        RawsApi.imageURL(fileId, 'raws/diary/photo', 'default_post_image');
+    // print('link: $link');
+    return link;
+  }
+
   static String getPostLink(String? fileId) {
     var link =
         RawsApi.imageURL(fileId, 'raws/post/photo', 'default_post_image');

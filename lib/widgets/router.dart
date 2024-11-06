@@ -2,6 +2,7 @@ import 'package:babystory/providers/parent.dart';
 import 'package:babystory/screens/ai_doctor_main.dart';
 import 'package:babystory/screens/alert.dart';
 import 'package:babystory/screens/cry_detect.dart';
+import 'package:babystory/screens/dday.dart';
 import 'package:babystory/screens/diary.dart';
 import 'package:babystory/screens/post_main.dart';
 import 'package:babystory/screens/setting.dart';
