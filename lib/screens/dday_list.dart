@@ -112,17 +112,15 @@ class _DdayListScreenState extends State<DdayListScreen> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    if (widget.diary.born == false) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => widget.diary.born
-                                  ? MilkDiaryListScreen(
-                                      diaryId: widget.diary.id)
-                                  : HospitalDiaryListScreen(
-                                      diaryId: widget.diary.id,
-                                      baby: widget.baby)));
-                    }
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => widget.diary.born
+                                ? MilkDiaryListScreen(
+                                    diaryId: widget.diary.id, baby: widget.baby)
+                                : HospitalDiaryListScreen(
+                                    diaryId: widget.diary.id,
+                                    baby: widget.baby)));
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12),

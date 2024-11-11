@@ -139,13 +139,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       totalContent = totalContent.replaceAll('![[tempPostId', '![[$postId');
 
       // 이미지 업로드
-      var imageJson = await httpUtils.postMultiImages(
-          url: '/post/photoUpload/$postId',
-          headers: {'Authorization': 'Bearer ${parent.jwt}'},
-          images: imageFiles);
-      if (imageJson == null || imageJson['success'] != true) {
-        debugPrint('upload image failed');
-        throw Exception('upload image failed');
+      if (imageFiles.isNotEmpty) {
+        var imageJson = await httpUtils.postMultiImages(
+            url: '/post/photoUpload/$postId',
+            headers: {'Authorization': 'Bearer ${parent.jwt}'},
+            images: imageFiles);
+        if (imageJson == null || imageJson['success'] != true) {
+          debugPrint('upload image failed');
+          throw Exception('upload image failed');
+        }
       }
       alertSuccessAndNavigate(postId);
     } catch (e) {

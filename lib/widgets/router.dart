@@ -21,7 +21,7 @@ class NavBarRouter extends StatefulWidget {
 }
 
 class _NavBarRouterState extends State<NavBarRouter> {
-  var controller = PersistentTabController(initialIndex: 2);
+  var controller = PersistentTabController(initialIndex: 0);
   final AuthServices _auth = AuthServices();
 
   @override

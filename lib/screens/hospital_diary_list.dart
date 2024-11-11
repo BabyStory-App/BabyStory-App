@@ -118,7 +118,7 @@ class _HospitalDiaryListScreenState extends State<HospitalDiaryListScreen> {
                 separatorBuilder: (BuildContext ctx, int idx) =>
                     const SizedBox(height: 12),
                 itemBuilder: (BuildContext context, int index) =>
-                    HostpitalDiaryItem(hospital: data[index]),
+                    HospitalDiaryItem(hospital: data[index]),
               ),
             );
           } else {
