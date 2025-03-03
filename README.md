@@ -1,4 +1,4 @@
-# babystory App
+# BabyStory App
 
 [BabyStory App](https://github.com/BabyStory-App)의 어플리케이션 레포지토리입니다.
 
